@@ -1,0 +1,121 @@
+{% load staticfiles %}
+<html>
+    <head>
+        <title>{% block title %}Home page{% endblock %}</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="{% static 'css/reg-style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <script src="{% static 'scripts/main.js' %}"></script>
+
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-inverse" role="navigation">
+          <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/">Tails..</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                {% if user.is_authenticated %}
+                      <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+                          <ul class="dropdown-menu" role="menu">
+                            <li><a href="/add-tail-view/">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">One more separated link</a></li>
+                          </ul>
+                        </li>
+                      </ul>
+                {% endif %}
+              <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+              </form>
+              <ul class="nav navbar-nav navbar-right">
+                  {% if not user.is_authenticated %}
+                    <li><p class="navbar-text">Already have an account?</p></li>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
+                        <ul id="login-dp" class="dropdown-menu">
+                            <li>
+                                 <div class="row">
+                                        <div class="col-md-12">
+                                            Login
+                                            <br>
+                                            <form class="form" role="form" method="post" action="{% url 'login' %}" accept-charset="UTF-8" id="login-form">
+                                                    {% csrf_token %}
+                                                    <div class="form-group">
+                                                         <label class="sr-only" for="id_username">Username</label>
+                                                         <input class="form-control" name="username" id="id_username" placeholder="Username" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                         <label class="sr-only" for="id_password">Password</label>
+                                                         <input type="password" class="form-control" name="password" id="id_password" placeholder="Password" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                         <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                                                    </div>
+                                                    <input type="hidden" name="next" value="{{ home }}" />
+                                             </form>
+                                        </div>
+                                        <div class="bottom text-center">
+                                            No account ? <a href="/registration"><b>Register</b></a>
+                                        </div>
+                                 </div>
+                            </li>
+                        </ul>
+                    </li>
+                  {% else %}
+                    <li><p class="navbar-text">Hello {{ user.username }}, welcome back</p></li>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Settings</b> <span class="caret"></span></a>
+                        <ul id="login-dp" class="dropdown-menu">
+                            <li>
+                                 <div class="row">
+                                        <div class="col-md-12">
+                                            Account ({{ user.username }})
+                                            <br>
+                                            <form class="form" role="form" method="post" action="{% url 'logout' %}" accept-charset="UTF-8" id="login-form">
+                                                    {% csrf_token %}
+                                                    <div class="bottom text-left">
+                                                        <a href="#"><b>Profile</b></a>
+                                                    </div>
+                                                    <div class="bottom text-left">
+                                                        <a href="#"><b>My tails</b></a>
+                                                    </div>
+                                                    <div class="form-group">
+                                            <button class="btn btn-primary btn-block" onclick="location.href={% url 'logout'%}">Logout</button>
+                                        </div>
+                                             </form>
+                                        </div>
+                                 </div>
+                            </li>
+                        </ul>
+                    </li>
+                  {% endif %}
+              </ul>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+        </nav>
+        {% block content %}{% endblock %}
+    </body>
+</html>
