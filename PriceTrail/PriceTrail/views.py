@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse
 import json
 from django.contrib.auth.decorators import login_required
-from TailedProducts.models import Product, ProductPrice, UserToProduct
+from TailedProducts.models import Product, ProductPrice, UserToProduct, DisplayProduct
 
 from spiders import GiantSpiders
 import httplib
@@ -117,5 +117,82 @@ def add_tail(request):
         data['pshop'] = 'emag'
     else:
         data['status'] = 'invalid'
+
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+@login_required
+def my_tails(request):
+    user_products = UserToProduct.objects.filter(user__exact=request.user.id).values('product_id')
+    products = Product.objects.filter(id__in=user_products)
+
+    display_products = []
+    idx = 1
+    for product in products:
+        prod = DisplayProduct()
+        prod.name = product.name
+        prod.url = product.url
+        prod.shop = product.shop
+        prod.id = product.id
+        prod.idx = idx
+        idx += 1
+        display_products.append(prod)
+
+        #TO DO: sort by time
+        product_prices = ProductPrice.objects.filter(product_id__exact=product.id)
+        if product_prices.count() > 1:
+            last_price = product_prices[0].price
+            for prod_price in product_prices:
+                price = prod_price.price
+                if last_price > price:
+                    prod.trend = "DESC"
+                elif last_price < price:
+                    prod.trend = "ASC"
+                else:
+                    prod.trend = "EQ"
+                prod.price = price
+                last_price = price
+        elif product_prices.count() == 1:
+            prod.price = product_prices[0].price
+        else:
+            prod.price = -1
+            prod.trend = "NO RECORD"
+
+    return render(request, 'my-tails.html', {'data': display_products})
+
+@login_required
+def delete_tail(request, id):
+    UserToProduct.objects.filter(product_id__exact=id, user_id__exact=request.user.id).delete()
+
+    remaining_user_products = UserToProduct.objects.filter(product_id__exact=id)
+    if remaining_user_products.count() == 0:
+        ProductPrice.objects.filter(product_id__exact=id).delete()
+        Product.objects.filter(id__exact=id).delete()
+    return redirect('get-tail')
+
+def poll_data(request):
+    data = []
+    monitored_products = Product.objects.all()
+    for product in monitored_products:
+        p_data = {}
+        shop = product.shop
+
+        if shop == 'emag':
+            spider = GiantSpiders.EmagSpider()
+            if httplib.OK == spider.req_product(product.url):
+                prod = spider.get_product()
+                price = prod.price
+
+                p_data['status'] = 'OK'
+                p_data['pname'] = prod.name
+
+                new_prod_price = ProductPrice()
+                new_prod_price.price = price
+                new_prod_price.product = product
+                new_prod_price.save()
+
+            else:
+                p_data['status'] = 'NOK'
+                p_data['pname'] = prod.name
+        data.append(p_data)
 
     return HttpResponse(json.dumps(data), content_type='application/json')

@@ -65,6 +65,22 @@ h1 a {
     color: red;
 }
 
+.glyphicon.glyphicon-hand-up {
+    font-size: 20px;
+    left: 10px;
+    top: 2px;
+}
+.glyphicon.glyphicon-hand-down {
+    font-size: 20px;
+    left: 10px;
+    top: 2px;
+}
+.glyphicon.glyphicon-hand-right {
+    font-size: 20px;
+    left: 10px;
+    top: 2px;
+}
+
 .input-group-addon.input-check{
     min-width: 50px;
 }

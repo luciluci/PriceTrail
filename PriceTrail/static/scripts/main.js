@@ -1,27 +1,28 @@
-// using jQuery
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            //var cookie = jQuery.trim(cookies[i]);
-            var cookie = cookies[i].trim()
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
+function deleteItem(itemId, token) {
+     var urlApi = "http://localhost:8006";
+
+    var payload = {
+    'csrfmiddlewaretoken': token,
+    'product-id': itemId
+    };
+
+    var data = new FormData();
+    data.append( "json", JSON.stringify( payload ) );
+
+    function validate(response) {
+        console.log(response);
     }
-    return cookieValue;
+
+    if (itemId) {
+        fetch(urlApi + '/delete-tail/1', {
+          method: 'GET'
+        })
+        .then(response => response.json())
+        .then(response => validate(response));
+    }
 }
-//var csrftoken = getCookie('csrftoken');
 
 function checkUrl(input, token) {
-
-    console.log('B:' + token)
-    token = getCookie("csrftoken")
-    console.log('A:' + token)
 
     var urlApi = "http://localhost:8006";
     document.getElementById("valid-item").style.display = "none";
@@ -69,13 +70,6 @@ function checkUrl(input, token) {
         fetch(urlApi + '/add-tail/', {
           method: 'POST',
           body: data
-//          credentials: 'include',
-//          headers: {
-//            'Accept': 'application/json',
-//            'X-Requested-With': 'XMLHttpRequest',
-//            'Content-Type': 'application/json',
-//            'X-CSRFToken': token
-//          }
         })
         .then(response => response.json())
         .then(response => validate(response));

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}My tails{% endblock %}
+
+{% block content %}
+
+  <h2>Products page {{ current_user }}</h2>
+  <div class="container">
+	<div class="row">
+	<br>
+        <div class="col-sm-10">
+            <div class="panel panel-primary">
+              <div class="panel-heading">Monitored products</div>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Trend</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for item in data %}
+                        <tr>
+                            <td>{{item.idx}}</td>
+                            <td>{{item.name}}</td>
+                            <td>{{item.price}}</td>
+                            {% if item.trend == "ASC" %}
+                            <td><span class="glyphicon glyphicon-hand-up text-danger"></span></td>
+                            {% elif item.trend == "DESC" %}
+                            <td><span class="glyphicon glyphicon-hand-down text-success"></span></td>
+                            {% else %}
+                            <td><span class="glyphicon glyphicon-hand-right text-info"></span></td>
+                            {% endif %}
+                            <td> <span class="glyphicon glyphicon-stats"></span> /
+                                <a href="/delete-tail/{{item.id}}"><span class="glyphicon glyphicon-trash"></span> </a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+	</div>
+</div>
+{% endblock %}
