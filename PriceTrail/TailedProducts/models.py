@@ -36,3 +36,8 @@ class DisplayProduct():
         return json.dumps(self, default=lambda o: o.__dict__,
                           sort_keys=True, indent=4)
 
+class DisplayDatePriceProduct():
+
+    def __init__(self, date, price):
+        self.date = date.strftime('%d, %b %Y')
+        self.price = price

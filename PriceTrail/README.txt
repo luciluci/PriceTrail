@@ -1,26 +1,21 @@
 TO DOs:
-* Create git repo from it(git init)
-* User should be able to display monitored products
-* User should be able to delete a product
-* Cron job for adding product prices
 
+* Add product unavailable functionality
+* add url to product title in pages so it can be accessed
+* when adding a product we should also erase/clear the input field
+* notify user by email when product price gets lowest/unavailable
 * add a product:
     * Add loading icon
     * Add err message
-* Add decorator to check if user is logged in
-*. Create endpoint for crawling data from:
-    emag
-* Capcha form for registration page
+
 * password reset
-2. Main page with:
+
+*. Main page with:
     * last tails added
     * most tails added
-3. Create Profile page
-4. Create "My tails" page
-5. Create Search functionality
-
-* integrate/login with FB account
-* Create browser add-on for the app
+*. Create Profile page
+* Create Search functionality
+* Capcha form for registration page
 
 MAIN PAGE:
 
@@ -31,6 +26,16 @@ MAIN PAGE:
         * receive notifications when the price drops
     *
 
-Functionalities:
+Features:
+1. Register/Login with Facebook
+2. Add afiliates for emag:
+    2.1. register as afiliate
+    2.2. add this functionality
+    2.3. investigate other afiliates..
+3. Create browser add-on for the app
+
+Functionalities used:
 1. Dropdown login:
     https://bootsnipp.com/snippets/featured/fancy-navbar-login-sign-in-form
+2. Cronjob
+    https://ole.michelsen.dk/blog/schedule-jobs-with-crontab-on-mac-osx.html

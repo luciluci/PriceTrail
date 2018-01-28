@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse
 import json
 from django.contrib.auth.decorators import login_required
-from TailedProducts.models import Product, ProductPrice, UserToProduct, DisplayProduct
+from TailedProducts.models import Product, ProductPrice, UserToProduct, DisplayProduct, DisplayDatePriceProduct
 
 from spiders import GiantSpiders
 import httplib
@@ -169,30 +169,17 @@ def delete_tail(request, id):
         Product.objects.filter(id__exact=id).delete()
     return redirect('get-tail')
 
-def poll_data(request):
-    data = []
-    monitored_products = Product.objects.all()
-    for product in monitored_products:
-        p_data = {}
-        shop = product.shop
+def display_product(request, id):
+    product = Product.objects.get(id=id)
+    dprod = DisplayProduct()
+    dprod.name = product.name
+    dprod.shop = product.shop
+    dprod.url = product.url
+    dprod.price = 20
 
-        if shop == 'emag':
-            spider = GiantSpiders.EmagSpider()
-            if httplib.OK == spider.req_product(product.url):
-                prod = spider.get_product()
-                price = prod.price
+    dates_prices =  ProductPrice.objects.filter(product_id__exact=product.id)
+    for item in dates_prices:
+        p = DisplayDatePriceProduct(item.date, item.price)
+        dprod.date_prices.append(p)
 
-                p_data['status'] = 'OK'
-                p_data['pname'] = prod.name
-
-                new_prod_price = ProductPrice()
-                new_prod_price.price = price
-                new_prod_price.product = product
-                new_prod_price.save()
-
-            else:
-                p_data['status'] = 'NOK'
-                p_data['pname'] = prod.name
-        data.append(p_data)
-
-    return HttpResponse(json.dumps(data), content_type='application/json')
+    return render(request, 'product-graph.html', {'data': dprod})

@@ -34,7 +34,7 @@
                             {% else %}
                             <td><span class="glyphicon glyphicon-hand-right text-info"></span></td>
                             {% endif %}
-                            <td> <span class="glyphicon glyphicon-stats"></span> /
+                            <td> <a href="/display-product/{{item.id}}"><span class="glyphicon glyphicon-stats"></span></a> /
                                 <a href="/delete-tail/{{item.id}}"><span class="glyphicon glyphicon-trash"></span> </a></td>
                         </tr>
                     {% endfor %}
