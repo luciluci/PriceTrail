@@ -25,7 +25,7 @@
                     {% for item in data %}
                         <tr>
                             <td>{{item.idx}}</td>
-                            <td>{{item.name}}</td>
+                            <td><a href="{{item.url}}" target="_blank">{{item.name}}</a></td>
                             <td>{{item.price}}</td>
                             {% if item.trend == "ASC" %}
                             <td><span class="glyphicon glyphicon-hand-up text-danger"></span></td>

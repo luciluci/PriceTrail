@@ -20,7 +20,7 @@ from .views import home_page as home_view
 from .views import login_page as login_view
 from .views import registration_page as reg_view
 from .views import add_tail_view as add_tail_view
-from .views import add_tail, my_tails, delete_tail, display_product
+from .views import add_tail, my_tails, delete_tail, display_product, profile_view
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -31,10 +31,12 @@ urlpatterns = [
     #product pages:
     url(r'^add-tail-view/$', add_tail_view, name='add-tail-view'),
     url(r'^add-tail/$', add_tail, name='add-tail'),
-    url(r'^get-tails/$', my_tails, name='get-tail'),
+    url(r'^my-tails/$', my_tails, name='my-tails'),
     url(r'^delete-tail/(?P<id>\d+)/', delete_tail, name='delete-tail'),
     #url(r'^poll-data/$', poll_data, name='poll-data'),
     url(r'^display-product/(?P<id>\d+)/', display_product, name='display-product'),
 
     url(r'^accounts/login/$', login_view, name='acc-login'),
+    #Profile view
+    url(r'^profile/$', profile_view, name='profile'),
 ]

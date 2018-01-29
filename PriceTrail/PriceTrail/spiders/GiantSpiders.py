@@ -47,7 +47,7 @@ class EmagSpider():
         prod_price_str = ''
         for element in product_node_tree[0].iter():
             unavailable_node = element.find('span[@class="label label-unavailable"]')
-            if unavailable_node:
+            if unavailable_node != None:
                 return data.PRODUCT_UNAVAILABLE
             new_price_node = element.find('p[@class="product-new-price"]')
             if new_price_node:

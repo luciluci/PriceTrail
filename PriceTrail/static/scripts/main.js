@@ -75,3 +75,7 @@ function checkUrl(input, token) {
         .then(response => validate(response));
     }
 };
+
+function checkProfileChanges(){
+    document.getElementById("register-profile-submit").disabled = false;
+}

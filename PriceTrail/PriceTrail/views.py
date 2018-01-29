@@ -4,11 +4,11 @@ from django.shortcuts import render, redirect
 from .forms import LoginForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from django.http import JsonResponse, HttpResponse
-import json
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from TailedProducts.models import Product, ProductPrice, UserToProduct, DisplayProduct, DisplayDatePriceProduct
 
+import json
 from spiders import GiantSpiders
 import httplib
 from datetime import datetime
@@ -167,7 +167,7 @@ def delete_tail(request, id):
     if remaining_user_products.count() == 0:
         ProductPrice.objects.filter(product_id__exact=id).delete()
         Product.objects.filter(id__exact=id).delete()
-    return redirect('get-tail')
+    return redirect('my-tails')
 
 def display_product(request, id):
     product = Product.objects.get(id=id)
@@ -183,3 +183,16 @@ def display_product(request, id):
         dprod.date_prices.append(p)
 
     return render(request, 'product-graph.html', {'data': dprod})
+
+@login_required
+def profile_view(request):
+    if request.method == 'POST':
+        firstname = request.POST['firstname']
+        lastname = request.POST['lastname']
+        current_user = User.objects.get(id__exact=request.user.id)
+        if current_user:
+            current_user.first_name = firstname
+            current_user.last_name = lastname
+            current_user.save()
+        return redirect('base')
+    return render(request, 'profile.html', )

@@ -1,6 +1,11 @@
 TO DOs:
 
+* update user data from profile page
+* in registration form add also name/last name
 * Add product unavailable functionality
+    * on parser: DONE
+    * on DB
+    * on display
 * add url to product title in pages so it can be accessed
 * when adding a product we should also erase/clear the input field
 * notify user by email when product price gets lowest/unavailable
@@ -13,7 +18,7 @@ TO DOs:
 *. Main page with:
     * last tails added
     * most tails added
-*. Create Profile page
+* Create Profile page
 * Create Search functionality
 * Capcha form for registration page
 
