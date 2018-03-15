@@ -1,0 +1,45 @@
+{% extends 'blank.html' %}
+
+{% load staticfiles %}
+
+{% block title %} PriceTrail - Login {% endblock %}
+{% block main_content%}
+	  <div id="login-page">
+	  	<div class="container">
+		      <form class="form-login" role="form" method="post" action="{% url 'login' %}" id="login-form">
+				  {% csrf_token %}
+		        <h2 class="form-login-heading">sign in now</h2>
+		        <div class="login-wrap">
+		            <input type="text" class="form-control" placeholder="User ID" id="idi_username" name="username" autofocus>
+		            <br>
+		            <input type="password" class="form-control" placeholder="Password" id="id_password" name="password">
+		            <br>
+		            <button class="btn btn-theme btn-block" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
+		            <hr>
+		            <div class="registration">
+		                Don't have an account yet?<br/>
+		                <a class="" href="/register">
+		                    Create an account
+		                </a>
+		            </div>
+		        </div>
+		      </form>	  	
+	  	
+	  	</div>
+	  </div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block end_javascript %}
+	<script src="{% static 'js/jquery.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+	<!--BACKSTRETCH-->
+	<!-- You can use an image of whatever size. This script will stretch to fit in any screen size.-->
+	<script type="text/javascript" src="{% static 'js/jquery.backstretch.min.js' %}"></script>
+	<script>
+		$.backstretch("{% static 'img/login-bg.jpg' %}", {speed: 500});
+	</script>
+{% endblock %}

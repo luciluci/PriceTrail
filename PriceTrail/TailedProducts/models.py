@@ -8,6 +8,7 @@ class Product(models.Model):
     name = models.CharField(max_length=150)
     url = models.TextField()
     shop = models.CharField(max_length=50)
+    available = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -31,6 +32,8 @@ class DisplayProduct():
         self.url = ""
         self.price = 0
         self.trend = "EQ"
+        self.percent = 0
+        self.available = True
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,

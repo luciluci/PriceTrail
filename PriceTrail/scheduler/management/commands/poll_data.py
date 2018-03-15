@@ -29,7 +29,7 @@ class Command(BaseCommand):
                     new_prod_price.save()
                     self.stdout.write(self.style.SUCCESS(prod.name + ' - OK'))
                 elif data.PRODUCT_UNAVAILABLE == response:
-                    self.stdout.write(self.style.SKIP(prod.name + ' - UNAVAILABLE'))
+                    self.stdout.write(self.style.ERROR(prod.name + ' - UNAVAILABLE'))
                 else:
                     self.stdout.write(self.style.ERROR(prod.name + ' - NOK'))
             else:

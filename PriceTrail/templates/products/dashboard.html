@@ -1,0 +1,91 @@
+{% extends 'blank.html' %}
+
+{% load staticfiles %}
+
+{% block title %} {{ user.username }} - Profile page {% endblock %}
+
+{% block begin_javascript %}
+    <link rel="stylesheet" href="{% static 'css/to-do.css' %}">
+{% endblock%}
+
+{% block main_content%}
+    <section class="wrapper">
+        <h3><i class="fa fa-angle-right"></i> {{ user.username}}'s dashboard</h3>
+
+
+        <div class="row mt">
+                  <div class="col-md-12">
+                      <div class="content-panel">
+                          <h4><i class="fa fa-tasks"></i> Trailed products from EMag</h4><hr>
+
+                          <table class="table table-striped table-advance table-hover">
+                              <thead>
+                                  <tr>
+                                      <th><i class="fa fa-bullhorn"></i> Store</th>
+                                      <th> <i class="glyphicon glyphicon-tag"></i> Product</th>
+                                      <th><i class="fa fa-money"></i> Price</th>
+                                      <th><i class=" fa fa-edit"></i> Status</th>
+                                      <th></th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+
+                              {% for product in products %}
+                              <tr>
+                                  <td><a href="http://www.emag.ro" target="_blank">EMag</a></td>
+                                  <td class="hidden-phone">{{product.name}}</td>
+                                  <td>RON {{product.price}}</td>
+
+                                  {% if product.trend == "ASC" %}
+                                    <td><span class="label label-danger label-mini">up {{product.percent}}%</span></td>
+                                    {% elif product.trend == "DESC" %}
+                                    <td><span class="label label-success label-mini">down {{product.percent}}%</span></td>
+                                    {% else %}
+                                    <td><span class="label label-info label-mini">same price</span></td>
+                                  {% endif %}
+                                  <td>
+                                      <button class="btn btn-success btn-xs" data-toggle="modal" data-target="#productModal" data-id="graphBody" onclick="openModalGraph({{product.id}}, '{{product.url}}')"><span class="glyphicon glyphicon-stats"></span></button>
+                                      <button class="btn btn-danger btn-xs" onclick="deleteProduct('{{product.id}}')"><i class="fa fa-trash-o "></i></button>
+                                  </td>
+                              </tr>
+
+                              {% endfor %}
+
+                              <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog" style="width: 1300px; height: 500px">
+                                      <div class="modal-content">
+                                          <div class="modal-header">
+                                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                              <h4 class="modal-title" id="myModalLabel"><b>Product progress</b></h4>
+                                          </div>
+                                          <div class="modal-body" id="graphBody" style="width: 1300px; height: 500px;">
+                                              <iframe url="" width="100%" height="100%" frameborder="0px"></iframe>
+                                          </div>
+                                          <div class="modal-footer">
+                                              <button type="button" class="btn btn-primary" id="gotoProductButton" data-url="" onclick="openNewWindow()">GoTo product</button>
+                                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div><! --/col-lg-6 -->
+                              <!--end modal button-->
+
+                              </tbody>
+                          </table>
+                          <div class=" add-task-row">
+                              <a class="btn btn-success btn-sm pull-left" href="todo_list.html#">Add New Tasks</a>
+                          </div>
+                      </div><!-- /content-panel -->
+                  </div><!-- /col-md-12 -->
+              </div>
+    <!-- INLINE FORM ELELEMNTS -->
+
+    </section>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block more_js%}
+    <script src="{% static 'scripts/main.js' %}"></script>
+{% endblock %}

@@ -5,39 +5,32 @@
 {% block head %}
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-<script type="text/javascript">
-    $(window).on('load',function(){
-       document.getElementById('curve_chart').value = "dada";
-    });
+    <script type="text/javascript">
+        google.charts.load("visualization", "1", {packages:["corechart"]});
+        google.charts.setOnLoadCallback(drawChart);
 
-    google.charts.load("visualization", "1", {packages:["corechart"]});
-    google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            info = [['Date', 'product price variation']];
 
-    function drawChart() {
-        testData = {{data.price}};
-        testData2 = '{{data.url}}';
-        testData3 = '{{data.shop}}';
-        info = [['Date', 'product price variation']];
+            item_index = 0;
+            {% for item in data.date_prices %}
+                info.push(['{{item.date}}', {{item.price}}])
+            {% endfor %}
 
-        item_index = 0;
-        {% for item in data.date_prices %}
-            info.push(['{{item.date}}', {{item.price}}])
-        {% endfor %}
+            var data = google.visualization.arrayToDataTable(info);
 
-        var data = google.visualization.arrayToDataTable(info);
+            var options = {
+                title: "{{ data.name }}",
+                curveType: 'function',
+                legend: { position: 'bottom' }
+            };
 
-        var options = {
-            title: "{{ data.name }}",
-            curveType: 'function',
-            legend: { position: 'bottom' }
-        };
+            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
 
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+            chart.draw(data, options);
+        }
+    </script>
 
-        chart.draw(data, options);
-    }
-
-</script>
 {% endblock %}
 
 {% block content %}
