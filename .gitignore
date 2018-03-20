@@ -10,3 +10,8 @@ tutorial/*
 
 #sources
 *.pyc
+*.DS_Store
+Templates/*
+test/*
+PriceTrail/PriceTrail/*.pyc
+Tutorial_Django

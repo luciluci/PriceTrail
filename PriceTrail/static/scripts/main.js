@@ -173,6 +173,9 @@ function deleteProduct(pid)
 
 //$('#btnStep1').click(function(){
 function btnStep1Click(){
+    document.getElementById("btnStep1").innerHTML = '<i class="fa fa-spinner fa-spin"></i>  Next'
+    document.getElementById("btnStep1").disabled = true;
+
     var curStep = $('#step-1'),
         curStepBtn = curStep.attr("id"),
         nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
@@ -194,6 +197,9 @@ function btnStep1Click(){
 
     function validate(response) {
         console.log("VALIDATE PRODUCT")
+        document.getElementById("btnStep1").innerHTML = 'Next'
+        document.getElementById("btnStep1").disabled = false;
+
         var json_result = JSON.parse(response);
         if (json_result.status === "valid") {
             document.getElementById("invalidURLId").style.display = "none";
@@ -212,12 +218,12 @@ function btnStep1Click(){
 
     validateURL(currentURL)
     .then(response => validate(response));
-//});
 };
 
-//$('#btnStep2').click(function(){
-
 function btnStep2Click(){
+    document.getElementById("btnStep2").innerHTML = '<i class="fa fa-spinner fa-spin"></i>  Next'
+    document.getElementById("btnStep2").disabled = true;
+
     var curStep = $('#step-2'),
         curStepBtn = curStep.attr("id"),
         nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
@@ -242,6 +248,8 @@ function btnStep2Click(){
     }
 
     function validate(response){
+        document.getElementById("btnStep2").innerHTML = 'Next'
+        document.getElementById("btnStep2").disabled = false;
         console.log(response)
         nextStepWizard.removeAttr('disabled').trigger('click');
     }
@@ -257,7 +265,6 @@ function btnStep2Click(){
     }
 };
 
-//$('#btnStep3').click(function(){
 function btnStep3Click(){
     var curStep = $('#step-3'),
         curStepBtn = curStep.attr("id"),
