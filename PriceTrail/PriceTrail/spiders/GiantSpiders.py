@@ -21,6 +21,7 @@ class EmagSpider():
         self.product = Product()
 
     def req_product(self, url, retries=0):
+
         if not url.startswith('https://www.emag.ro'):
             return httplib.NOT_IMPLEMENTED
         try:

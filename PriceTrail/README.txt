@@ -1,23 +1,22 @@
 TO DOs:
 
-* notifications: notify user for different price changes
-* messages: notify user for unavailable products
+* check the percentage only for the last 2 products, not from all of them - DONE
+* try adding the same product twice - DONE
+* check delete, it should remain on the same page it;s accessed
+* create loading icons
 
-* in registration form add also name/last name
 * add email notification system:
     * registration
     * best price on product
+    * notify user by email when product price gets lowest/unavailable
 * get entire floating point price
-* Add product unavailable functionality
-    * on parser: DONE
-    * on DB
-    * on display
+
 * add url to product title in pages so it can be accessed
-* when adding a product we should also erase/clear the input field
-* notify user by email when product price gets lowest/unavailable
+
 * add a product:
     * Add loading icon
-    * Add err message
+    * Add err messages
+
 * contact page
 * password reset
 

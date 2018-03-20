@@ -82,17 +82,19 @@ var validateURL = function(url) {
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 resolve(xhttp.responseText);
+                console.log(this.status);
             }
         };
         xhttp.open("POST", "http://localhost:8006/validate-product/", true);
 
         var payload = {
-        'product-url': url,
+            'product-url': url,
         };
 
         var data = new FormData();
         data.append( "json", JSON.stringify( payload ) );
 
+        console.log("send before");
         xhttp.send(data);
   });
 }
@@ -163,10 +165,14 @@ function deleteProduct(pid)
 {
     if (confirm("Are you sure you want to delete it?")) {
         window.open('/delete-product/'+pid);
+        //var xmlHttp = new XMLHttpRequest();
+        //xmlHttp.open( "GET", '/delete-product/'+pid, false ); // false for synchronous request
+        //xmlHttp.send( null );
     }
 }
 
-$('#btnStep1').click(function(){
+//$('#btnStep1').click(function(){
+function btnStep1Click(){
     var curStep = $('#step-1'),
         curStepBtn = curStep.attr("id"),
         nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
@@ -187,6 +193,7 @@ $('#btnStep1').click(function(){
     }
 
     function validate(response) {
+        console.log("VALIDATE PRODUCT")
         var json_result = JSON.parse(response);
         if (json_result.status === "valid") {
             document.getElementById("invalidURLId").style.display = "none";
@@ -205,10 +212,12 @@ $('#btnStep1').click(function(){
 
     validateURL(currentURL)
     .then(response => validate(response));
-});
+//});
+};
 
-$('#btnStep2').click(function(){
+//$('#btnStep2').click(function(){
 
+function btnStep2Click(){
     var curStep = $('#step-2'),
         curStepBtn = curStep.attr("id"),
         nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
@@ -246,10 +255,10 @@ $('#btnStep2').click(function(){
         addNewProduct(pname, pprice, purl, pshop)
         .then(response => validate(response));
     }
-});
+};
 
-$('#btnStep3').click(function(){
-
+//$('#btnStep3').click(function(){
+function btnStep3Click(){
     var curStep = $('#step-3'),
         curStepBtn = curStep.attr("id"),
         nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
@@ -266,4 +275,4 @@ $('#btnStep3').click(function(){
 
     if (isValid)
         nextStepWizard.removeAttr('disabled').trigger('click');
-});
+};

@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
 
     <!--external css-->
-    <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.css' %}">
+    <link rel="stylesheet" href="{% static 'font-awesome-4.7.0/css/font-awesome.css' %}">
 
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -55,33 +55,37 @@
                 <ul class="nav top-menu">
                     <!-- settings start -->
                     <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="/">
                             <i class="fa fa-tasks"></i>
                             <span class="badge bg-theme">{{ diff_count }}</span>
                         </a>
                         <ul class="dropdown-menu extended tasks-bar">
                             <div class="notify-arrow notify-arrow-green"></div>
                             <li>
-                                <p class="green">You have {{ diff_count }} changed products</p>
+                                {% if diff_count > 0 %}
+                                <p class="green">Price changed for {{ diff_count }} products</p>
+                                {% else %}
+                                <p class="green">No changed products today</p>
+                                {% endif %}
                             </li>
                             {% for product in diff_products %}
                             <li>
                                 <a href="/dashboard">
                                     <div class="task-info">
-                                        <div class="desc truncate">{{product.name}}</div>
+                                        <div class="desc truncate-250">{{product.name}}</div>
                                         {% if product.trend == "ASC" %}
-                                        <div class="percent">-{{product.percent}}%</div>
-                                        {% elif product.trend == "DESC" %}
                                         <div class="percent">+{{product.percent}}%</div>
+                                        {% elif product.trend == "DESC" %}
+                                        <div class="percent">-{{product.percent}}%</div>
                                         {% endif %}
                                     </div>
                                     <div class="progress progress-striped">
                                         {% if product.trend == "ASC" %}
-                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="{{product.percent}}" aria-valuemin="0" aria-valuemax="100" style="width: {{product.percent}}%">
+                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{product.percent}}%">
                                             <span class="sr-only">{{product.percent}}% Complete (success)</span>
                                         </div>
                                         {% elif product.trend == "DESC" %}
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{product.percent}}" aria-valuemin="0" aria-valuemax="100" style="width: {{product.percent}}%">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{product.percent}}%">
                                             <span class="sr-only">{{product.percent}}% Complete (success)</span>
                                         </div>
                                         {% endif %}
@@ -89,9 +93,11 @@
                                 </a>
                             </li>
                             {% endfor %}
-                            <li class="external">
-                                <a href="/dashboard">See All Products</a>
-                            </li>
+                            {% if diff_count > 0 %}
+                                <li class="external">
+                                    <a href="/dashboard">See all products</a>
+                                </li>
+                            {% endif %}
                         </ul>
                     </li>
                     <!-- settings end -->
@@ -99,64 +105,35 @@
                     <li id="header_inbox_bar" class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
                             <i class="fa fa-envelope-o"></i>
-                            <span class="badge bg-theme">5</span>
+                            <span class="badge bg-theme">{{ unavailable_count }}</span>
                         </a>
                         <ul class="dropdown-menu extended inbox">
                             <div class="notify-arrow notify-arrow-green"></div>
                             <li>
-                                <p class="green">You have 5 new messages</p>
+                                {% if unavailable_count == 1 %}
+                                <p class="green">You have {{ unavailable_count }} notification</p>
+                                {% elif unavailable_count > 1 %}
+                                <p class="green">You have {{ unavailable_count }} notifications</p>
+                                {% else %}
+                                <p class="green">No notifications today</p>
+                                {% endif %}
                             </li>
+                             {% for product in unavailable_products %}
+                                <li>
+                                    <a >
+                                        <span class="photo"><img alt="avatar" src="{% static 'img/ui-danro.jpg' %}"></span>
+                                        <span class="subject">
+                                        <span class="from danger alert-danger">Product is no longer available</span>
+                                        <span class="time"><button class="btn btn-danger btn-xs" onclick="deleteProduct('{{product.id}}')"><i class="fa fa-trash-o "></i></button></span>
+                                        </span>
+                                        <span class="message truncate">
+                                            {{product.name}}
+                                        </span>
+                                    </a>
+                                </li>
+                            {% endfor %}
                             <li>
-                                <a href="index.html#">
-                                    <span class="photo"><img alt="avatar" src="{% static 'img/ui-zac.jpg' %}"></span>
-
-                                    <span class="subject">
-                                    <span class="from">Zac Snider</span>
-                                    <span class="time">Just now</span>
-                                    </span>
-                                    <span class="message">
-                                        Hi mate, how is everything?
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="index.html#">
-                                    <span class="photo"><img alt="avatar" src="{% static 'img/ui-divya.jpg' %}"></span>
-                                    <span class="subject">
-                                    <span class="from">Divya Manian</span>
-                                    <span class="time">40 mins.</span>
-                                    </span>
-                                    <span class="message">
-                                     Hi, I need your help with this.
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="index.html#">
-                                    <span class="photo"><img alt="avatar" src="{% static 'img/ui-danro.jpg' %}"></span>
-                                    <span class="subject">
-                                    <span class="from">Dan Rogers</span>
-                                    <span class="time">2 hrs.</span>
-                                    </span>
-                                    <span class="message">
-                                        Love your new Dashboard.
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="index.html#">
-                                    <span class="photo"><img alt="avatar" src="{% static 'img/ui-sherman.jpg' %}"></span>
-                                    <span class="subject">
-                                    <span class="from">Dj Sherman</span>
-                                    <span class="time">4 hrs.</span>
-                                    </span>
-                                    <span class="message">
-                                        Please, answer asap.
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="index.html#">See all messages</a>
+                                <a href="/dashboard">See all products</a>
                             </li>
                         </ul>
                     </li>
@@ -312,6 +289,8 @@
 
     <!--common script for all pages-->
   <script src="{% static 'js/common-scripts.js' %}"></script>
+  <script src="{% static 'scripts/main.js' %}"></script>
+
   {% endblock %}
 
   {% block more_js%}

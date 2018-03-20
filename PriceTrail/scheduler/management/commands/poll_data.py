@@ -29,8 +29,10 @@ class Command(BaseCommand):
                     new_prod_price.save()
                     self.stdout.write(self.style.SUCCESS(prod.name + ' - OK'))
                 elif data.PRODUCT_UNAVAILABLE == response:
-                    self.stdout.write(self.style.ERROR(prod.name + ' - UNAVAILABLE'))
+                    self.stdout.write(self.style.ERROR(product.name + ' - UNAVAILABLE'))
+                    product.available = False
+                    product.save()
                 else:
-                    self.stdout.write(self.style.ERROR(prod.name + ' - NOK'))
+                    self.stdout.write(self.style.ERROR(product.name + ' - NOK'))
             else:
                 self.stdout.write(self.style.ERROR('SHOP NOT SUPPORTED: ' + shop))

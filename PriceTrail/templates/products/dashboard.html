@@ -40,6 +40,8 @@
                                     <td><span class="label label-danger label-mini">up {{product.percent}}%</span></td>
                                     {% elif product.trend == "DESC" %}
                                     <td><span class="label label-success label-mini">down {{product.percent}}%</span></td>
+                                    {% elif product.trend == "FIRST_ENTRY" %}
+                                    <td><span class="label label-default">first entry</span></td>
                                     {% else %}
                                     <td><span class="label label-info label-mini">same price</span></td>
                                   {% endif %}
@@ -73,7 +75,7 @@
                               </tbody>
                           </table>
                           <div class=" add-task-row">
-                              <a class="btn btn-success btn-sm pull-left" href="todo_list.html#">Add New Tasks</a>
+                              <a class="btn btn-success btn-sm pull-left" href="/add-new-product">Add New Products</a>
                           </div>
                       </div><!-- /content-panel -->
                   </div><!-- /col-md-12 -->

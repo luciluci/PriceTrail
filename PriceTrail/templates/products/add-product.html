@@ -43,7 +43,7 @@
                                         <input id="urlId" maxlength="1024" type="text" required="required" class="form-control" placeholder="https://www.emag.ro/telefon-mobil-apple-iphone....."  />
                                     </div>
                                     <div class="alert alert-danger" id="invalidURLId" hidden="true"><b>Oh snap!</b> URL is invalid. Add a valid URL and try again</div>
-                                    <button class="btn btn-primary nextBtn btn-lg pull-right" type="button" id="btnStep1">Next</button>
+                                    <button class="btn btn-primary nextBtn btn-lg pull-right" type="button" id="btnStep1" onclick="btnStep1Click()">Next</button>
                                 </div>
                             </div>
                         </div>
@@ -66,7 +66,7 @@
                                     </div>
                                     <p class="form-control-static" id="productURLId" hidden="true"></p>
                                     <p class="form-control-static" id="productShopId" hidden="true"></p>
-                                    <button class="btn btn-primary nextBtn btn-lg pull-right" type="button" id="btnStep2">Next</button>
+                                    <button class="btn btn-primary nextBtn btn-lg pull-right" type="button" id="btnStep2" onclick="btnStep2Click()">Next</button>
                                 </div>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                             <div class="col-xs-12">
                                 <div class="col-md-12">
                                     <h3 class = "alert alert-success"> Congratulations! Product has been added succesfully!</h3>
-                                    <button class="btn btn-success btn-lg pull-right" type="submit" id="btnStep3">Add another one!</button>
+                                    <button class="btn btn-success btn-lg pull-right" type="submit" id="btnStep3" onclick="btnStep3Click()">Add another one!</button>
                                     <a class="btn btn-lg pull-left" type="submit" href="/dashboard">View products</a>
                                 </div>
                             </div>
