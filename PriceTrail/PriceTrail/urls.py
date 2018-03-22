@@ -16,13 +16,12 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-#from .views import add_tail_view as add_tail_view
 from .views import validate_product, display_product
 
 #user related views
 from .views import index_view, login_view, register_view, profile_view
 #products related views
-from .views import dashboard_view, delete_product, add_new_product
+from .views import my_products_view, delete_product, add_new_product, dashboard_view
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -33,10 +32,11 @@ urlpatterns = [
     url(r'^login/$', login_view, name='login'),
     url(r'^register/$', register_view, name='register'),
     url(r'^profile/$', profile_view, name='profile'),
-    url(r'^dashboard/$', dashboard_view, name='dashboard'),
+    url(r'^my-products/$', my_products_view, name='my-products'),
     url(r'^delete-product/(?P<id>\d+)/', delete_product, name='delete-product'),
     url(r'^add-new-product/$', add_new_product, name='add-new-product'),
     url(r'^validate-product/$', validate_product, name='validate-product'),
+    url(r'^dashboard/$', dashboard_view, name='dashboard'),
 
     #modal window
     url(r'^display-product/(?P<id>\d+)/', display_product, name='display-product'),

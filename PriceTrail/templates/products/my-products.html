@@ -2,7 +2,7 @@
 
 {% load staticfiles %}
 
-{% block title %} {{ user.username }} - Profile page {% endblock %}
+{% block title %} {{ user.username }} products page {% endblock %}
 
 {% block begin_javascript %}
     <link rel="stylesheet" href="{% static 'css/to-do.css' %}">
@@ -10,7 +10,7 @@
 
 {% block main_content%}
     <section class="wrapper">
-        <h3><i class="fa fa-angle-right"></i> {{ user.username}}'s dashboard</h3>
+        <h3><i class="fa fa-angle-right"></i> {{ user.username}}'s monitored products</h3>
 
 
         <div class="row mt">
@@ -60,7 +60,7 @@
                                               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                               <h4 class="modal-title" id="myModalLabel"><b>Product progress</b></h4>
                                           </div>
-                                          <div class="modal-body" id="graphBody" style="width: 1300px; height: 500px;">
+                                          <div class="modal-body" id="graphBody" style="width: 1300px; height: 510px;">
                                               <iframe url="" width="100%" height="100%" frameborder="0px"></iframe>
                                           </div>
                                           <div class="modal-footer">

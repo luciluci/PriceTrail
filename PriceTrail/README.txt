@@ -1,9 +1,15 @@
 TO DOs:
 
-* check the percentage only for the last 2 products, not from all of them - DONE
-* try adding the same product twice - DONE
-* check delete, it should remain on the same page it;s accessed
-* create loading icons
+* create product page with: image, graphic, delete action..
+
+* create index page for logged out users:
+    * number of monitored products
+    * total number of products that vary for all users
+    * total number of products that are deleted for all users
+    * most changed product
+
+    grafic with the most
+* when logged out, pages should be redirected to login page
 
 * add email notification system:
     * registration
@@ -14,7 +20,6 @@ TO DOs:
 * add url to product title in pages so it can be accessed
 
 * add a product:
-    * Add loading icon
     * Add err messages
 
 * contact page
@@ -58,7 +63,8 @@ Functionalities used:
 
 Theme:
 
-
+1. dashboard icons:
+    http://www.taklom360.com/help-icons.html
 1. NavBar:
     Not logged in:
         How it works?

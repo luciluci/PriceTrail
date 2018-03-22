@@ -14,15 +14,46 @@ import httplib
 from django.contrib import messages
 from utils.helpers import get_current_date
 
+def dashboard_view_logged_out(request):
+    reset_session(request)
+    (diff_products, unavailable_products) = _get_notification_products(request, False)
+    total_monitored_products = Product.objects.all()
+
+    (min_var_product, max_var_product) = _get_product_with_highest_price_variation(-1, False)
+
+    return render(request, 'user/dashboard.html', {'diff_products': diff_products,
+                                                   'diff_count': len(diff_products),
+                                                   'unavailable_products': unavailable_products,
+                                                   'unavailable_count': len(unavailable_products),
+                                                   'total_monitored_products': len(total_monitored_products),
+                                                   'most_changed_product': max_var_product,
+                                                   'least_changed_product': min_var_product
+                                                   })
+
+@login_required(login_url='/login')
+def dashboard_view(request):
+    (diff_products, unavailable_products) = _get_notification_products(request)
+    total_monitored_products = _total_products_monitored_by_user(request.user.id)
+
+    (min_var_product, max_var_product) = _get_product_with_highest_price_variation(request.user.id)
+
+    return render(request, 'user/dashboard.html', {'diff_products': diff_products,
+                                                   'diff_count': len(diff_products),
+                                                   'unavailable_products': unavailable_products,
+                                                   'unavailable_count': len(unavailable_products),
+                                                   'total_monitored_products': total_monitored_products,
+                                                   'most_changed_product': max_var_product,
+                                                   'least_changed_product': min_var_product
+                                                   })
+
 #endpoint "/"
 def index_view(request):
+    #reset_session(request)
+    if request.user.is_authenticated():
+        return dashboard_view(request)
+    else:
+        return dashboard_view_logged_out(request)
 
-    (diff_products, unavailable_products) = _get_notification_products(request)
-    return render(request, 'blank.html', {'diff_products': diff_products,
-                                          'diff_count': len(diff_products),
-                                          'unavailable_products': unavailable_products,
-                                          'unavailable_count': len(unavailable_products)
-                                          })
 
 #endpoint "/login"
 def login_view(request):
@@ -38,6 +69,9 @@ def login_view(request):
         else:
             login(request, user)
             return redirect('index')
+
+    if not request.user.is_authenticated():
+        reset_session(request)
 
     return render(request, 'user/login.html', )
 
@@ -69,7 +103,7 @@ def register_view(request):
     return render(request, 'user/register.html', )
 
 #endpoint "/profile"
-@login_required
+@login_required(login_url='/login')
 def profile_view(request):
     product_list = _get_products_by_user(request.user.id)
     (diff_products, unavailable_products) = _get_notification_products(request)
@@ -80,23 +114,22 @@ def profile_view(request):
                                                  'unavailable_products': unavailable_products,
                                                  'unavailable_count': len(unavailable_products)})
 
-#endpoint "/dashboard"
-@login_required
-def dashboard_view(request):
+
+#endpoint "/my-products"
+@login_required(login_url='/login')
+def my_products_view(request):
     product_list = _get_products_by_user(request.user.id)
     (diff_products, unavailable_products) = _get_notification_products(request)
 
-    return render(request, 'products/dashboard.html', {'products':product_list,
+    return render(request, 'products/my-products.html', {'products':product_list,
                                                        'diff_products': diff_products,
                                                        'diff_count': len(diff_products),
                                                        'unavailable_products': unavailable_products,
                                                        'unavailable_count': len(unavailable_products)
                                                        })
 #action used to delete a product
-@login_required
+@login_required(login_url='/login')
 def delete_product(request, id):
-
-    current_url = request.path
 
     UserToProduct.objects.filter(product_id__exact=id, user_id__exact=request.user.id).delete()
 
@@ -109,10 +142,12 @@ def delete_product(request, id):
     product_list = _get_products_by_user(request.user.id)
     unavailable_product_ids = [x.id for x in product_list if x.available == False]
     request.session['unavailable_product_ids'] = unavailable_product_ids
-    return dashboard_view(request)
+
+    return HttpResponse('')
+    #return my_products_view(request)
 
 #action used to add a product
-@login_required
+@login_required(login_url='/login')
 def add_new_product(request):
 
     if request.method == 'POST':
@@ -162,55 +197,8 @@ def add_new_product(request):
                                                          'unavailable_count': len(unavailable_products)
                                                          })
 
-# @login_required
-# def add_tail_view(request):
-#     form_data = {}
-#     form_data['form'] = LoginForm()
-#
-#     if request.method == 'POST':
-#         product_name = request.POST['product_name']
-#         product_price = request.POST['product_price']
-#         product_url = request.POST['product_url']
-#         product_shop = request.POST['product_shop']
-#
-#         #create module and add in DB
-#         prod = Product.objects.filter(name__exact=product_name)
-#
-#         if prod.count() == 0:
-#             #Create new product in Product table
-#             new_prod = Product()
-#             new_prod.name = product_name
-#             new_prod.shop = product_shop
-#             new_prod.url = product_url
-#             new_prod.save()
-#
-#             # Create new entry in ProductPrice table
-#             new_prod_price = ProductPrice()
-#             new_prod_price.price = product_price
-#             new_prod_price.product = new_prod
-#             new_prod_price.save()
-#
-#             # Create a new entry in UserToProduct table
-#             new_user_product = UserToProduct()
-#             new_user_product.product = new_prod
-#             new_user_product.user = request.user
-#             new_user_product.save()
-#         else:
-#             first_prod = prod[0]
-#             #check if the current user is not already monitoring the product
-#             user_product = UserToProduct.objects.filter(product__exact=first_prod.id, user__exact=request.user.id)
-#             if user_product.count() == 0:
-#                 # Create a new entry in UserToProduct table
-#                 new_user_product = UserToProduct()
-#                 new_user_product.product = first_prod
-#                 new_user_product.user = request.user
-#                 new_user_product.save()
-#
-#         return redirect('add-tail-view')
-#
-#     return render(request, 'add-tail.html', form_data)
 
-@login_required
+@login_required(login_url='/login')
 def validate_product(request):
     if request.method == 'POST':
         d = json.loads(request.POST['json'])
@@ -229,14 +217,6 @@ def validate_product(request):
 
     return HttpResponse(json.dumps(data), content_type='application/json')
 
-# @login_required
-# def my_tails(request):
-#     user_products = UserToProduct.objects.filter(user__exact=request.user.id).values('product_id')
-#     products = Product.objects.filter(id__in=user_products)
-#
-#     display_products = _get_display_products_by_products(products)
-#
-#     return render(request, 'my-tails.html', {'data': display_products})
 
 def _get_display_products_by_products(products):
     display_products = []
@@ -254,35 +234,7 @@ def _get_display_products_by_products(products):
         prod.trend = prod_dict["trend"]
         prod.price = prod_dict["price"]
         prod.percent = prod_dict["percent"]
-
         idx += 1
-
-        # TO DO: sort by time
-        # product_prices = ProductPrice.objects.filter(product_id__exact=product.id)
-        # if product_prices.count() > 1:
-        #     last_price = product_prices[0].price
-        #     for prod_price in product_prices:
-        #         price = prod_price.price
-        #         if last_price > price:
-        #             prod.trend = "DESC"
-        #             prod.percent = int((last_price - price)/last_price * 100)
-        #             if prod.percent == 0:
-        #                 prod.percent = 1
-        #         elif last_price < price:
-        #             prod.trend = "ASC"
-        #             prod.percent = int((price - last_price)/last_price * 100)
-        #             if prod.percent == 0:
-        #                 prod.percent = 1
-        #         else:
-        #             prod.trend = "EQ"
-        #         prod.price = price
-        #         last_price = price
-        # elif product_prices.count() == 1:
-        #     prod.price = product_prices[0].price
-        #     prod.trend = "FIRST_ENTRY"
-        # else:
-        #     prod.price = -1
-        #     prod.trend = "NO RECORD"
     return display_products
 
 def _compute_product_trend_price_percent(product_id):
@@ -333,55 +285,27 @@ def _get_products_by_user(user_id):
     products = Product.objects.filter(id__in=user_products)
 
     display_products = _get_display_products_by_products(products)
-    # idx = 1
-    # for product in products:
-    #     prod = DisplayProduct()
-    #     prod.name = product.name
-    #     prod.url = product.url
-    #     prod.shop = product.shop
-    #     prod.id = product.id
-    #     prod.idx = idx
-    #
-    #     # TO DO: sort by time
-    #     product_prices = ProductPrice.objects.filter(product_id__exact=product.id)
-    #     if product_prices.count() > 1:
-    #         last_price = product_prices[0].price
-    #         for prod_price in product_prices:
-    #             price = prod_price.price
-    #             if last_price > price:
-    #                 prod.trend = "DESC"
-    #                 prod.percent = int(last_price/price * 100) - 100
-    #             elif last_price < price:
-    #                 prod.trend = "ASC"
-    #                 prod.percent = int(price/last_price * 100) - 100
-    #             else:
-    #                 prod.trend = "EQ"
-    #             prod.price = price
-    #             last_price = price
-    #     elif product_prices.count() == 1:
-    #         prod.price = product_prices[0].price
-    #     else:
-    #         prod.price = -1
-    #         prod.trend = "NO RECORD"
-    #
-    #     display_products.append(prod)
-    #     idx += 1
+    return display_products
 
+#Returns array of DisplayProduct type containing all products
+def _get_all_products():
+    products = Product.objects.all()
+    display_products = _get_display_products_by_products(products)
     return display_products
 
 #get list of products that has the price changed in comparison to the previous day
-def _get_notification_products(request):
+def _get_notification_products(request, by_user_id = True):
     session_date = request.session.get('updated_date')
     if not session_date:
-        create_today_product_id_session(request)
+        create_today_product_id_session(request, by_user_id)
     else:
         if request.session['updated_date'] == str(get_current_date()):
             diff_product_ids = request.session.get('diff_product_ids')
             unavailable_product_ids = request.session.get('unavailable_product_ids')
             if diff_product_ids is None or unavailable_product_ids is None:
-                create_product_id_session(request)
+                create_product_id_session(request, by_user_id)
         else:
-            create_today_product_id_session(request)
+            create_today_product_id_session(request, by_user_id)
     diff_product_ids = request.session.get('diff_product_ids')
     diff_products = _get_products_by_product_ids(diff_product_ids)
     unavailable_product_ids = request.session.get('unavailable_product_ids')
@@ -394,24 +318,74 @@ def _get_products_by_product_ids(ids):
     return _get_display_products_by_products(products)
 
 #create session data for list of changed priced products
-def create_today_product_id_session(request):
+def create_today_product_id_session(request, by_user_id = True):
     request.session['updated_date'] = str(get_current_date())
-    create_product_id_session(request)
+    create_product_id_session(request, by_user_id)
 
 #create session data for list of changed priced products by current date
 #the session data will be refreshed every day
-def create_product_id_session(request):
-    product_list = _get_products_by_user(request.user.id)
+def create_product_id_session(request, by_user_id = True):
+    product_list = []
+    if by_user_id == True:
+        product_list = _get_products_by_user(request.user.id)
+    else:
+        product_list = _get_all_products()
     unavailable_product_ids = [x.id for x in product_list if x.available == False]
     diff_product_ids = [x.id for x in product_list if x.trend == "DESC" or x.trend == "ASC"]
     request.session['diff_product_ids'] = diff_product_ids
     request.session['unavailable_product_ids'] = unavailable_product_ids
 
+def _total_products_monitored_by_user(user_id):
+    product = UserToProduct.objects.filter(user_id__exact=user_id)
+    return product.count()
+
+def _get_product_with_highest_price_variation(user_id, by_user_id = True):
+
+    if by_user_id == True:
+        user_product_ids = UserToProduct.objects.filter(user__exact=user_id).values('product_id')
+        products = Product.objects.filter(id__in=user_product_ids)
+    else:
+        products = Product.objects.all()
+
+    products_variation = []
+    for product in products:
+        price_changes = 0
+        days_monitored = 0
+        yesterday_price = 0
+
+        product_prices = ProductPrice.objects.filter(product_id__exact=product.id)
+        for product_price in product_prices:
+            today_price = product_price.price
+            if yesterday_price != 0 and today_price != yesterday_price:
+                price_changes += 1
+            yesterday_price = today_price
+            days_monitored += 1
+
+        product_variation = {"id":product.id,
+                             "name":product.name,
+                             "days_monitored":days_monitored,
+                             "price_changes": price_changes}
+        #compute price per day variation vs the entire number of days monitored
+        product_variation["total_variation"] = int((price_changes * 100)/ days_monitored)
+        products_variation.append(product_variation)
+
+    product_most_changed = None
+    if len(products_variation):
+        product_most_changed = max(products_variation, key=lambda x:x["total_variation"])
+        product_least_changed = min(products_variation, key=lambda x: x["total_variation"])
+    return (product_least_changed, product_most_changed)
+
 
 def reset_session(request):
-    del request.session['updated_date']
-    del request.session['diff_product_ids']
-    del request.session['unavailable_product_ids']
+    session_date = request.session.get('updated_date')
+    if session_date:
+        del request.session['updated_date']
+    session_date = request.session.get('diff_product_ids')
+    if session_date:
+        del request.session['diff_product_ids']
+    session_date = request.session.get('unavailable_product_ids')
+    if session_date:
+        del request.session['unavailable_product_ids']
 
 from .utils import data
 import time

@@ -164,10 +164,10 @@ function openNewWindow()
 function deleteProduct(pid)
 {
     if (confirm("Are you sure you want to delete it?")) {
-        window.open('/delete-product/'+pid);
-        //var xmlHttp = new XMLHttpRequest();
-        //xmlHttp.open( "GET", '/delete-product/'+pid, false ); // false for synchronous request
-        //xmlHttp.send( null );
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( "GET", '/delete-product/'+pid, false ); // false for synchronous request
+        xmlHttp.send( null );
+        location.reload();
     }
 }
 
