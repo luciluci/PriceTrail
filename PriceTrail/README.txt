@@ -1,12 +1,13 @@
 TO DOs:
 
-* create product page with: image, graphic, delete action..
+* arrange products due to "importance" and "favorites"
+    * importance means products that are changed or unavailable.
+* limit max number of notifications/messages to 10
+* limit max number of monitored products to 50
+* add images for monitored shops(in product list add emag logo for emag products)
 
-* create index page for logged out users:
-    * number of monitored products
-    * total number of products that vary for all users
-    * total number of products that are deleted for all users
-    * most changed product
+* create product page with: image, graphic, delete action..
+* register to emag profitshare
 
     grafic with the most
 * when logged out, pages should be redirected to login page
@@ -19,23 +20,20 @@ TO DOs:
 
 * add url to product title in pages so it can be accessed
 
-* add a product:
-    * Add err messages
-
 * contact page
 * password reset
 
 *. Main page with:
     * last tails added
     * most tails added
-* Create Profile page
-* Create Search functionality
+
+
 * Capcha form for registration page
 * notification system:
     * check products that you want to be notified of
     * every day the product data will appear on notifications
 * alert system
-* rate product system,
+* rate product system, create favorites
 * real time graph with number of monitored products
 
 MAIN PAGE:
@@ -55,6 +53,7 @@ Features:
     2.3. investigate other afiliates..
 3. Create browser add-on for the app
 
+
 Functionalities used:
 1. Dropdown login:
     https://bootsnipp.com/snippets/featured/fancy-navbar-login-sign-in-form
@@ -65,21 +64,3 @@ Theme:
 
 1. dashboard icons:
     http://www.taklom360.com/help-icons.html
-1. NavBar:
-    Not logged in:
-        How it works?
-        Contact us
-    Logged in:
-        Alerts
-        Notifications
-
-    INDEX:
-        pic with product tag
-        features available tag
-        demo graph tag
-        how it works tag
-            step 1
-            step 2
-            ...
-        samples:
-            http://wrapbootstrap.com/preview/WB035103Jp
