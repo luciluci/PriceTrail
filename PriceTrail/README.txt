@@ -5,6 +5,11 @@ TO DOs:
 * limit max number of notifications/messages to 10
 * limit max number of monitored products to 50
 * add images for monitored shops(in product list add emag logo for emag products)
+* When logged-out and if you want to access a specific page, the page redirects to login, but after login the page
+    should be redirected to the page selected.
+       Eg: http://localhost:8006/login/?next=/add-new-product/
+* in login page, the upper bar must be removed, or the modal centered
+* separate view functions from other help functions in views.py
 
 * create product page with: image, graphic, delete action..
 * register to emag profitshare
