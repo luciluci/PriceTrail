@@ -14,6 +14,7 @@ from spiders import GiantSpiders
 import httplib
 from django.contrib import messages
 from utils.helpers import get_current_date
+from utils.data import MAX_DIFFERENT_ITEMS, MAX_UNAVAILABLE_ITEMS
 
 def dashboard_view_logged_out(request):
     reset_session(request)
@@ -333,8 +334,8 @@ def create_product_id_session(request, by_user_id = True):
         product_list = _get_all_products()
     unavailable_product_ids = [x.id for x in product_list if x.available == False]
     diff_product_ids = [x.id for x in product_list if x.trend == "DESC" or x.trend == "ASC"]
-    request.session['diff_product_ids'] = diff_product_ids
-    request.session['unavailable_product_ids'] = unavailable_product_ids
+    request.session['diff_product_ids'] = diff_product_ids[:MAX_DIFFERENT_ITEMS]
+    request.session['unavailable_product_ids'] = unavailable_product_ids[:MAX_UNAVAILABLE_ITEMS]
 
 def _total_products_monitored_by_user(user_id):
     product = UserToProduct.objects.filter(user_id__exact=user_id)
