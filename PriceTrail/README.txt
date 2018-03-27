@@ -1,7 +1,5 @@
 TO DOs:
 
-* arrange products due to "importance" and "favorites"
-    * importance means products that are changed or unavailable.
 * limit max number of notifications/messages to 10
 * limit max number of monitored products to 50
 * add images for monitored shops(in product list add emag logo for emag products)
@@ -13,6 +11,8 @@ TO DOs:
 
 * create product page with: image, graphic, delete action..
 * register to emag profitshare
+* add get attribute to /my-products for filtering the displayed products
+* add favorites products and sort the view by them
 
     grafic with the most
 * when logged out, pages should be redirected to login page

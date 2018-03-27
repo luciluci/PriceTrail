@@ -40,8 +40,10 @@
                                     <td><span class="label label-danger label-mini">up {{product.percent}}%</span></td>
                                     {% elif product.trend == "DESC" %}
                                     <td><span class="label label-success label-mini">down {{product.percent}}%</span></td>
-                                    {% elif product.trend == "FIRST_ENTRY" %}
-                                    <td><span class="label label-default">first entry</span></td>
+                                    {% elif product.trend == "FIRST_ENTRY"%}
+                                    <td><span class="label label-primary">first entry</span></td>
+                                    {% elif product.available == False %}
+                                    <td><span class="label label-warning">unavailable</span></td>
                                     {% else %}
                                     <td><span class="label label-info label-mini">same price</span></td>
                                   {% endif %}

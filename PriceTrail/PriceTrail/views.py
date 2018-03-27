@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from TailedProducts.models import Product, ProductPrice, UserToProduct, DisplayProduct, DisplayDatePriceProduct
+from TailedProducts.helpers import filters
 
 import json
 from spiders import GiantSpiders
@@ -119,9 +120,10 @@ def profile_view(request):
 @login_required(login_url='/login')
 def my_products_view(request):
     product_list = _get_products_by_user(request.user.id)
+    new_products_list = filters.sort_products_by_importance(product_list)
     (diff_products, unavailable_products) = _get_notification_products(request)
 
-    return render(request, 'products/my-products.html', {'products':product_list,
+    return render(request, 'products/my-products.html', {'products':new_products_list,
                                                        'diff_products': diff_products,
                                                        'diff_count': len(diff_products),
                                                        'unavailable_products': unavailable_products,
@@ -144,7 +146,6 @@ def delete_product(request, id):
     request.session['unavailable_product_ids'] = unavailable_product_ids
 
     return HttpResponse('')
-    #return my_products_view(request)
 
 #action used to add a product
 @login_required(login_url='/login')
@@ -374,7 +375,6 @@ def _get_product_with_highest_price_variation(user_id, by_user_id = True):
         product_most_changed = max(products_variation, key=lambda x:x["total_variation"])
         product_least_changed = min(products_variation, key=lambda x: x["total_variation"])
     return (product_least_changed, product_most_changed)
-
 
 def reset_session(request):
     session_date = request.session.get('updated_date')
