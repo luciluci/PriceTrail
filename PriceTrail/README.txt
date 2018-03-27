@@ -1,6 +1,5 @@
 TO DOs:
 
-* limit max number of notifications/messages to 10
 * limit max number of monitored products to 50
 * add images for monitored shops(in product list add emag logo for emag products)
 * When logged-out and if you want to access a specific page, the page redirects to login, but after login the page
@@ -14,7 +13,6 @@ TO DOs:
 * add get attribute to /my-products for filtering the displayed products
 * add favorites products and sort the view by them
 
-    grafic with the most
 * when logged out, pages should be redirected to login page
 
 * add email notification system:

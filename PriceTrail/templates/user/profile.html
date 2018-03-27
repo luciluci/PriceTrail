@@ -4,6 +4,7 @@
 
 {% block title %} {{ user.username }} - Profile page {% endblock %}
 {% block main_content%}
+   <section id="main-content">
     <section class="wrapper">
         <h3><i class="fa fa-angle-right"></i> {{ user.username}}'s profile</h3>
 
@@ -81,7 +82,7 @@
             </div><!-- /col-lg-12 -->
         </div><!-- /row -->
     </section>
-
+   </section>
 {% endblock %}
 
 {% block footer %}
