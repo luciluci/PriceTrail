@@ -6,15 +6,14 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from TailedProducts.models import Product, ProductPrice, UserToProduct, DisplayProduct, DisplayDatePriceProduct
+from TailedProducts.models import Product, UserToProduct, ProductPrice, DisplayProduct, DisplayDatePriceProduct
 from TailedProducts.helpers import filters
+from .utils import general
 
 import json
 from spiders import GiantSpiders
 import httplib
 from django.contrib import messages
-# from utils.helpers import get_current_date
-# from utils.data import MAX_DIFFERENT_ITEMS, MAX_UNAVAILABLE_ITEMS
 
 #endpoint "/"
 def index_view(request):
@@ -22,6 +21,7 @@ def index_view(request):
         return index_view_logged_in(request)
     else:
         return index_view_logged_out(request)
+
 
 def index_view_logged_out(request):
     reset_session(request)
@@ -39,6 +39,7 @@ def index_view_logged_out(request):
                                                    'least_changed_product': min_var_product
                                                    })
 
+
 def index_view_logged_in(request):
 
     (diff_products, unavailable_products) = filters._get_notification_products(request)
@@ -54,6 +55,7 @@ def index_view_logged_in(request):
                                                    'most_changed_product': max_var_product,
                                                    'least_changed_product': min_var_product
                                                    })
+
 
 @login_required(login_url='/login')
 def dashboard_view(request):
@@ -86,7 +88,7 @@ def login_view(request):
             return redirect('login')
         else:
             login(request, user)
-            page = get_redirect_url(request)
+            page = general.get_redirect_url(request)
             if not page:
                 return redirect('index')
             return redirect(page)
@@ -94,19 +96,6 @@ def login_view(request):
         reset_session(request)
 
     return render(request, 'user/login.html', )
-
-def get_redirect_url(request):
-    #'http://localhost:8006/login/?next=/dashboard/'
-    if 'HTTP_REFERER' in request.environ:
-        referer = request.environ['HTTP_REFERER']
-        if 'next' in referer:
-            next_page = referer.split("next=")
-            next_page = next_page[1].replace('/', '')
-            return next_page
-        else:
-            return ''
-    else:
-        return ''
 
 
 #endpoint "/register"
@@ -133,8 +122,8 @@ def register_view(request):
         auser = authenticate(username=username, password=password)
         login(request, auser)
         return redirect('index')
-
     return render(request, 'user/register.html', )
+
 
 #endpoint "/profile"
 @login_required(login_url='/login')
@@ -162,6 +151,8 @@ def my_products_view(request):
                                                        'unavailable_products': unavailable_products,
                                                        'unavailable_count': len(unavailable_products)
                                                        })
+
+
 #action used to delete a product
 @login_required(login_url='/login')
 def delete_product(request, id):
@@ -179,6 +170,7 @@ def delete_product(request, id):
     request.session['unavailable_product_ids'] = unavailable_product_ids
 
     return HttpResponse('')
+
 
 #action used to add a product
 @login_required(login_url='/login')
@@ -251,52 +243,6 @@ def validate_product(request):
 
     return HttpResponse(json.dumps(data), content_type='application/json')
 
-
-# def _get_display_products_by_products(products):
-#     display_products = []
-#     idx = 1
-#     for product in products:
-#         prod = DisplayProduct()
-#         prod.name = product.name
-#         prod.url = product.url
-#         prod.shop = product.shop
-#         prod.id = product.id
-#         prod.available = product.available
-#         prod.idx = idx
-#         display_products.append(prod)
-#         prod_dict = _compute_product_trend_price_percent(product.id)
-#         prod.trend = prod_dict["trend"]
-#         prod.price = prod_dict["price"]
-#         prod.percent = prod_dict["percent"]
-#         idx += 1
-#     return display_products
-
-# def _compute_product_trend_price_percent(product_id):
-#     product_prices = ProductPrice.objects.filter(product_id__exact=product_id)
-#     if product_prices.count() <= 0:
-#         return {"trend":"NO_RECORD", "price":-1, "percent": 0}
-#     elif product_prices.count() == 1:
-#         return {"trend": "FIRST_ENTRY", "price": product_prices[0].price, "percent":0}
-#     elif product_prices.count() >= 2:
-#         last_products = product_prices[product_prices.count()-2:]
-#         prev_price = last_products[0].price
-#         curr_price = last_products[1].price
-#         trend = "EQ"
-#         percent = 0
-#         if prev_price > curr_price:
-#             percent = int((prev_price - curr_price) / prev_price * 100)
-#             trend = "DESC"
-#             if percent == 0:
-#                 percent = 1
-#         elif prev_price < curr_price:
-#             percent = int((curr_price - prev_price) / prev_price * 100)
-#             trend = "ASC"
-#             if percent == 0:
-#                 percent = 1
-#         return {"trend": trend, "price": curr_price, "percent": percent}
-#     return {"trend": "NO_RECORD", "price": -1, "percent": 0}
-
-
 #iframe to be displayed in a modal window
 def display_product(request, id):
     product = Product.objects.get(id=id)
@@ -313,66 +259,6 @@ def display_product(request, id):
 
     return render(request, 'products/product-modal.html', {'data': dprod})
 
-#Returns array of DisplayProduct type containing all products monitored by a specific user
-# def _get_products_by_user(user_id):
-#     user_products = UserToProduct.objects.filter(user__exact=user_id).values('product_id')
-#     products = Product.objects.filter(id__in=user_products)
-#
-#     display_products = _get_display_products_by_products(products)
-#     return display_products
-
-#Returns array of DisplayProduct type containing all products
-# def _get_all_products():
-#     products = Product.objects.all()
-#     display_products = _get_display_products_by_products(products)
-#     return display_products
-
-#get list of products that has the price changed in comparison to the previous day
-# def _get_notification_products(request, by_user_id = True):
-#     session_date = request.session.get('updated_date')
-#     if not session_date:
-#         create_today_product_id_session(request, by_user_id)
-#     else:
-#         if request.session['updated_date'] == str(get_current_date()):
-#             diff_product_ids = request.session.get('diff_product_ids')
-#             unavailable_product_ids = request.session.get('unavailable_product_ids')
-#             if diff_product_ids is None or unavailable_product_ids is None:
-#                 create_product_id_session(request, by_user_id)
-#         else:
-#             create_today_product_id_session(request, by_user_id)
-#     diff_product_ids = request.session.get('diff_product_ids')
-#     diff_products = _get_products_by_product_ids(diff_product_ids)
-#     unavailable_product_ids = request.session.get('unavailable_product_ids')
-#     unavailable_products = _get_products_by_product_ids(unavailable_product_ids)
-#     return (diff_products, unavailable_products)
-
-#get display products from a list of product ids
-# def _get_products_by_product_ids(ids):
-#     products = Product.objects.filter(id__in=ids)
-#     return _get_display_products_by_products(products)
-
-#create session data for list of changed priced products
-# def create_today_product_id_session(request, by_user_id = True):
-#     request.session['updated_date'] = str(get_current_date())
-#     create_product_id_session(request, by_user_id)
-
-#create session data for list of changed priced products by current date
-#the session data will be refreshed every day
-# def create_product_id_session(request, by_user_id = True):
-#     product_list = []
-#     if by_user_id == True:
-#         product_list = _get_products_by_user(request.user.id)
-#     else:
-#         product_list = _get_all_products()
-#     unavailable_product_ids = [x.id for x in product_list if x.available == False]
-#     diff_product_ids = [x.id for x in product_list if x.trend == "DESC" or x.trend == "ASC"]
-#     request.session['diff_product_ids'] = diff_product_ids[:MAX_DIFFERENT_ITEMS]
-#     request.session['unavailable_product_ids'] = unavailable_product_ids[:MAX_UNAVAILABLE_ITEMS]
-
-# def _total_products_monitored_by_user(user_id):
-#     product = UserToProduct.objects.filter(user_id__exact=user_id)
-#     return product.count()
-
 def reset_session(request):
     session_date = request.session.get('updated_date')
     if session_date:
@@ -384,6 +270,8 @@ def reset_session(request):
     if session_date:
         del request.session['unavailable_product_ids']
 
+
+#used for hardocoding the update prices operations.
 from .utils import data
 import time
 
