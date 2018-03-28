@@ -10,7 +10,9 @@
 {% endblock %}
 
 {% block main_content%}
+    {% if user.is_authenticated %}
     <section id="main-content">
+    {% endif %}
      <section class="wrapper">
         <section id="our-portfolio" class="sections col-md-11">
             <div class="container">
@@ -200,7 +202,9 @@
             </div>
         </section>
     </section>
+   {% if user.is_authenticated %}
     </section>
+   {% endif %}
 {% endblock %}
 
 {% block footer %}
