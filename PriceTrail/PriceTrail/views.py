@@ -86,12 +86,28 @@ def login_view(request):
             return redirect('login')
         else:
             login(request, user)
-            return redirect('index')
-
+            page = get_redirect_url(request)
+            if not page:
+                return redirect('index')
+            return redirect(page)
     if not request.user.is_authenticated():
         reset_session(request)
 
     return render(request, 'user/login.html', )
+
+def get_redirect_url(request):
+    #'http://localhost:8006/login/?next=/dashboard/'
+    if 'HTTP_REFERER' in request.environ:
+        referer = request.environ['HTTP_REFERER']
+        if 'next' in referer:
+            next_page = referer.split("next=")
+            next_page = next_page[1].replace('/', '')
+            return next_page
+        else:
+            return ''
+    else:
+        return ''
+
 
 #endpoint "/register"
 def register_view(request):

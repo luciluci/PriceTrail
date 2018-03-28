@@ -1,22 +1,23 @@
 TO DOs:
 
-* split index from dashboard
-    on index leave "What is about"
-    on dashboard leave the products
+/:
+* in the logged in version of index:
+    * make a bit smaller the distance between the 2 sections
+    * create a real values chart with values monitored by the user along the time.
+
 * limit max number of monitored products to 50
 * add images for monitored shops(in product list add emag logo for emag products)
 * When logged-out and if you want to access a specific page, the page redirects to login, but after login the page
     should be redirected to the page selected.
        Eg: http://localhost:8006/login/?next=/add-new-product/
-* in login page, the upper bar must be removed, or the modal centered
 * separate view functions from other help functions in views.py
 
 * create product page with: image, graphic, delete action..
 * register to emag profitshare
-* add get attribute to /my-products for filtering the displayed products
-* add favorites products and sort the view by them
 
-* when logged out, pages should be redirected to login page
+/my-products:
+    * add GET attribute to /my-products for filtering the displayed products
+    * add favorites products and sort the view by them
 
 * add email notification system:
     * registration
