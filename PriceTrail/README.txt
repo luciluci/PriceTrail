@@ -1,5 +1,8 @@
 TO DOs:
 
+* split index from dashboard
+    on index leave "What is about"
+    on dashboard leave the products
 * limit max number of monitored products to 50
 * add images for monitored shops(in product list add emag logo for emag products)
 * When logged-out and if you want to access a specific page, the page redirects to login, but after login the page

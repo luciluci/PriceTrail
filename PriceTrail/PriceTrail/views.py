@@ -16,14 +16,21 @@ from django.contrib import messages
 from utils.helpers import get_current_date
 from utils.data import MAX_DIFFERENT_ITEMS, MAX_UNAVAILABLE_ITEMS
 
-def dashboard_view_logged_out(request):
+#endpoint "/"
+def index_view(request):
+    if request.user.is_authenticated():
+        return index_view_logged_in(request)
+    else:
+        return index_view_logged_out(request)
+
+def index_view_logged_out(request):
     reset_session(request)
     (diff_products, unavailable_products) = _get_notification_products(request, False)
     total_monitored_products = Product.objects.all()
 
     (min_var_product, max_var_product) = _get_product_with_highest_price_variation(-1, False)
 
-    return render(request, 'user/dashboard.html', {'diff_products': diff_products,
+    return render(request, 'index.html', {'diff_products': diff_products,
                                                    'diff_count': len(diff_products),
                                                    'unavailable_products': unavailable_products,
                                                    'unavailable_count': len(unavailable_products),
@@ -32,8 +39,25 @@ def dashboard_view_logged_out(request):
                                                    'least_changed_product': min_var_product
                                                    })
 
+def index_view_logged_in(request):
+
+    (diff_products, unavailable_products) = _get_notification_products(request)
+    total_monitored_products = _total_products_monitored_by_user(request.user.id)
+
+    (min_var_product, max_var_product) = _get_product_with_highest_price_variation(request.user.id)
+
+    return render(request, 'index.html', {'diff_products': diff_products,
+                                                   'diff_count': len(diff_products),
+                                                   'unavailable_products': unavailable_products,
+                                                   'unavailable_count': len(unavailable_products),
+                                                   'total_monitored_products': total_monitored_products,
+                                                   'most_changed_product': max_var_product,
+                                                   'least_changed_product': min_var_product
+                                                   })
+
 @login_required(login_url='/login')
 def dashboard_view(request):
+
     (diff_products, unavailable_products) = _get_notification_products(request)
     total_monitored_products = _total_products_monitored_by_user(request.user.id)
 
@@ -47,14 +71,6 @@ def dashboard_view(request):
                                                    'most_changed_product': max_var_product,
                                                    'least_changed_product': min_var_product
                                                    })
-
-#endpoint "/"
-def index_view(request):
-    #reset_session(request)
-    if request.user.is_authenticated():
-        return dashboard_view(request)
-    else:
-        return dashboard_view_logged_out(request)
 
 
 #endpoint "/login"
