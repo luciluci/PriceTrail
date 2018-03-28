@@ -45,6 +45,7 @@ def _get_product_with_highest_price_variation(user_id, by_user_id = True):
         products_variation.append(product_variation)
 
     product_most_changed = None
+    product_least_changed = None
     if len(products_variation):
         product_most_changed = max(products_variation, key=lambda x:x["total_variation"])
         product_least_changed = min(products_variation, key=lambda x: x["total_variation"])

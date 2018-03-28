@@ -112,7 +112,8 @@ def register_view(request):
             return redirect('register')
 
         users = User.objects.filter(username__exact=username)
-        if users.count > 0:
+        
+        if len(users) > 0:
             messages.error(request, "error! username already exists!")
             return redirect('register')
         else:

@@ -7,7 +7,6 @@ TO DOs:
 
 * limit max number of monitored products to 50
 * add images for monitored shops(in product list add emag logo for emag products)
-* separate view functions from other help functions in views.py
 
 * create product page with: image, graphic, delete action..
 * register to emag profitshare
@@ -36,7 +35,7 @@ TO DOs:
 * notification system:
     * check products that you want to be notified of
     * every day the product data will appear on notifications
-* alert system
+
 * rate product system, create favorites
 * real time graph with number of monitored products
 
