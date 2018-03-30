@@ -108,32 +108,46 @@
                     <li id="header_inbox_bar" class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
                             <i class="fa fa-envelope-o"></i>
-                            <span class="badge bg-theme">{{ unavailable_count }}</span>
+                            <span class="badge bg-theme">{{ unavailable_count|add:count_best_price }}</span>
                         </a>
                         <ul class="dropdown-menu extended inbox">
                             <div class="notify-arrow notify-arrow-green"></div>
                             <li>
-                                {% if unavailable_count == 1 %}
-                                <p class="green">You have {{ unavailable_count }} notification</p>
-                                {% elif unavailable_count > 1 %}
-                                <p class="green">You have {{ unavailable_count }} notifications</p>
+                                {% if unavailable_count|add:count_best_price == 1 %}
+                                <p class="green">You have {{ unavailable_count|add:count_best_price }} notification</p>
+                                {% elif unavailable_count|add:count_best_price > 1 %}
+                                <p class="green">You have {{ unavailable_count|add:count_best_price }} notifications</p>
                                 {% else %}
                                 <p class="green">No notifications today</p>
                                 {% endif %}
                             </li>
-                             {% for product in unavailable_products %}
-                                <li>
-                                    <a >
-                                        <span class="photo"><img alt="avatar" src="{% static 'img/ui-danro.jpg' %}"></span>
-                                        <span class="subject">
-                                        <span class="from danger alert-danger">Product is no longer available</span>
-                                        <span class="time"><button class="btn btn-danger btn-xs" onclick="deleteProduct('{{product.id}}')"><i class="fa fa-trash-o "></i></button></span>
-                                        </span>
-                                        <span class="message truncate">
-                                            {{product.name}}
-                                        </span>
-                                    </a>
-                                </li>
+                            {% for product in unavailable_products %}
+                            <li>
+                                <a >
+                                    <span class="photo"><img alt="avatar" src="{% static 'img/ui-danro.jpg' %}"></span>
+                                    <span class="subject">
+                                    <span class="from danger alert-danger">Product is no longer available</span>
+                                    <span class="time"><button class="btn btn-danger btn-xs" onclick="deleteProduct('{{product.id}}')"><i class="fa fa-trash-o "></i></button></span>
+                                    </span>
+                                    <span class="message truncate">
+                                        {{product.name}}
+                                    </span>
+                                </a>
+                            </li>
+                            {% endfor %}
+                            {% for product in best_price_products %}
+                            <li>
+                                <a href="index.html#">
+                                    <span class="photo"><img alt="avatar" src="{% static 'img/text-alerts.png' %}"></span>
+                                    <span class="subject">
+                                    <span class="from">Best price</span>
+                                    <span class="time">Today</span>
+                                    </span>
+                                    <span class="message truncate">
+                                        {{product.name}}
+                                    </span>
+                                </a>
+                            </li>
                             {% endfor %}
                             <li>
                                 <a href="/my-products">See all products</a>
