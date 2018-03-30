@@ -8,7 +8,8 @@ def get_current_date():
     return now.strftime("%Y-%m-%d")
 
 MAX_DIFFERENT_ITEMS = 10
-MAX_UNAVAILABLE_ITEMS = 10
+MAX_UNAVAILABLE_ITEMS = 5
+MAX_BEST_ITEMS = 5
 
 # Sorts products and place in front products that have the price changed or are unavailable
 # product_list is a list of DisplayProduct objects
@@ -100,50 +101,73 @@ def _get_all_products():
     display_products = _get_display_products_by_products(products)
     return display_products
 
-def _get_products_by_user(user_id):
-    user_products = UserToProduct.objects.filter(user__exact=user_id).values('product_id')
-    products = Product.objects.filter(id__in=user_products)
-
+def get_display_products_by_user(user_id):
+    #user_products = UserToProduct.objects.filter(user__exact=user_id).values('product_id')
+    #products = Product.objects.filter(id__in=user_products)
+    products = _get_products_by_user(user_id)
     display_products = _get_display_products_by_products(products)
     return display_products
 
-def _get_products_by_product_ids(ids):
+def _get_products_by_user(user_id):
+    user_products = UserToProduct.objects.filter(user__exact=user_id).values('product_id')
+    return Product.objects.filter(id__in=user_products)
+
+def _create_display_products_by_ids(ids):
     products = Product.objects.filter(id__in=ids)
     return _get_display_products_by_products(products)
 
-def create_product_id_session(request, by_user_id = True):
+def _create_product_id_session(request, by_user_id = True):
     product_list = []
     if by_user_id == True:
-        product_list = _get_products_by_user(request.user.id)
+        product_list = get_display_products_by_user(request.user.id)
+        best_list = get_ids_of_best_price_products(request.user.id)
     else:
         product_list = _get_all_products()
+        best_list = get_ids_of_best_price_products()
     unavailable_product_ids = [x.id for x in product_list if x.available == False]
     diff_product_ids = [x.id for x in product_list if x.trend == "DESC" or x.trend == "ASC"]
     request.session['diff_product_ids'] = diff_product_ids[:MAX_DIFFERENT_ITEMS]
     request.session['unavailable_product_ids'] = unavailable_product_ids[:MAX_UNAVAILABLE_ITEMS]
+    request.session['best_product_ids'] = best_list[:MAX_BEST_ITEMS]
 
-def create_today_product_id_session(request, by_user_id = True):
+
+def _create_today_product_id_session(request, by_user_id = True):
     request.session['updated_date'] = str(get_current_date())
-    create_product_id_session(request, by_user_id)
+    _create_product_id_session(request, by_user_id)
 
-def _get_notification_products(request, by_user_id = True):
+
+def get_notification_products(request, by_user_id = True):
     session_date = request.session.get('updated_date')
     if not session_date:
-        create_today_product_id_session(request, by_user_id)
+        _create_today_product_id_session(request, by_user_id)
     else:
         if request.session['updated_date'] == str(get_current_date()):
             diff_product_ids = request.session.get('diff_product_ids')
             unavailable_product_ids = request.session.get('unavailable_product_ids')
-            if diff_product_ids is None or unavailable_product_ids is None:
-                create_product_id_session(request, by_user_id)
+            best_products_ids = request.session.get('best_product_ids')
+            if diff_product_ids is None or unavailable_product_ids is None or best_products_ids is None:
+                _create_product_id_session(request, by_user_id)
         else:
-            create_today_product_id_session(request, by_user_id)
+            _create_today_product_id_session(request, by_user_id)
     diff_product_ids = request.session.get('diff_product_ids')
-    diff_products = _get_products_by_product_ids(diff_product_ids)
+    diff_products = _create_display_products_by_ids(diff_product_ids)
     unavailable_product_ids = request.session.get('unavailable_product_ids')
-    unavailable_products = _get_products_by_product_ids(unavailable_product_ids)
-    return (diff_products, unavailable_products)
+    unavailable_products = _create_display_products_by_ids(unavailable_product_ids)
+    best_products_ids = request.session.get('best_product_ids')
+    best_products = _create_display_products_by_ids(best_products_ids)
+    return (diff_products, unavailable_products, best_products)
 
-def _total_products_monitored_by_user(user_id):
+def count_total_products_monitored_by_user(user_id):
     product = UserToProduct.objects.filter(user_id__exact=user_id)
     return product.count()
+
+#check if the current_price is better than min_price
+#return list of Product ids with current_price as best_price
+def get_ids_of_best_price_products(user_id = None):
+
+    if user_id:
+        products_all = _get_products_by_user(user_id)
+    else:
+        products_all = Product.objects.all()
+    best_price_ids = [x.id for x in products_all if x.has_best_price == True]
+    return best_price_ids

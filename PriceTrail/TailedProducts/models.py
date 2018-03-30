@@ -9,6 +9,9 @@ class Product(models.Model):
     url = models.TextField()
     shop = models.CharField(max_length=50)
     available = models.BooleanField(default=True)
+    current_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    best_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    has_best_price = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

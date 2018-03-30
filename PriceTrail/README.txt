@@ -1,7 +1,16 @@
 TO DOs:
 
+
+* product name should not have characters like '&amp;'
+    they must be replaced
+* message notifications should include also daily best price for product
+* split notification products from 'list display' products, since the most of the data is redundant
+* in get_notification_products:
+    if diff_product_ids is None or unavailable_product_ids is None or best_products_ids is None:
+    can be splitted in 3 so if one of the values misses not to compute all 3
+
 /:
-* in the logged in version of index:
+* in the 'logged in' version of index:
     * make a bit smaller the distance between the 2 sections
     * create a real values chart with values monitored by the user along the time.
 

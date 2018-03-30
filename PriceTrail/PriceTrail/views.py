@@ -17,6 +17,7 @@ from django.contrib import messages
 
 #endpoint "/"
 def index_view(request):
+    reset_session(request)
     if request.user.is_authenticated():
         return index_view_logged_in(request)
     else:
@@ -25,43 +26,47 @@ def index_view(request):
 
 def index_view_logged_out(request):
     reset_session(request)
-    (diff_products, unavailable_products) = filters._get_notification_products(request, False)
+    (diff_products, unavailable_products, best_price_products) = filters.get_notification_products(request, False)
     total_monitored_products = Product.objects.all()
 
     (min_var_product, max_var_product) = filters._get_product_with_highest_price_variation(-1, False)
 
     return render(request, 'index.html', {'diff_products': diff_products,
-                                                   'diff_count': len(diff_products),
-                                                   'unavailable_products': unavailable_products,
-                                                   'unavailable_count': len(unavailable_products),
-                                                   'total_monitored_products': len(total_monitored_products),
-                                                   'most_changed_product': max_var_product,
-                                                   'least_changed_product': min_var_product
-                                                   })
+                                          'diff_count': len(diff_products),
+                                          'unavailable_products': unavailable_products,
+                                          'unavailable_count': len(unavailable_products),
+                                          'total_monitored_products': len(total_monitored_products),
+                                          'most_changed_product': max_var_product,
+                                          'least_changed_product': min_var_product,
+                                          'best_price_products': best_price_products,
+                                          'count_best_price': len(best_price_products)
+                                          })
 
 
 def index_view_logged_in(request):
 
-    (diff_products, unavailable_products) = filters._get_notification_products(request)
-    total_monitored_products = filters._total_products_monitored_by_user(request.user.id)
+    (diff_products, unavailable_products, best_price_products) = filters.get_notification_products(request)
+    total_monitored_products = filters.count_total_products_monitored_by_user(request.user.id)
 
     (min_var_product, max_var_product) = filters._get_product_with_highest_price_variation(request.user.id)
 
     return render(request, 'index.html', {'diff_products': diff_products,
-                                                   'diff_count': len(diff_products),
-                                                   'unavailable_products': unavailable_products,
-                                                   'unavailable_count': len(unavailable_products),
-                                                   'total_monitored_products': total_monitored_products,
-                                                   'most_changed_product': max_var_product,
-                                                   'least_changed_product': min_var_product
-                                                   })
+                                          'diff_count': len(diff_products),
+                                          'unavailable_products': unavailable_products,
+                                          'unavailable_count': len(unavailable_products),
+                                          'total_monitored_products': total_monitored_products,
+                                          'most_changed_product': max_var_product,
+                                          'least_changed_product': min_var_product,
+                                          'best_price_products': best_price_products,
+                                          'count_best_price': len(best_price_products)
+                                           })
 
 
 @login_required(login_url='/login')
 def dashboard_view(request):
 
-    (diff_products, unavailable_products) = filters._get_notification_products(request)
-    total_monitored_products = filters._total_products_monitored_by_user(request.user.id)
+    (diff_products, unavailable_products, best_price_products) = filters.get_notification_products(request)
+    total_monitored_products = filters.count_total_products_monitored_by_user(request.user.id)
 
     (min_var_product, max_var_product) = filters._get_product_with_highest_price_variation(request.user.id)
 
@@ -71,7 +76,9 @@ def dashboard_view(request):
                                                    'unavailable_count': len(unavailable_products),
                                                    'total_monitored_products': total_monitored_products,
                                                    'most_changed_product': max_var_product,
-                                                   'least_changed_product': min_var_product
+                                                   'least_changed_product': min_var_product,
+                                                   'best_price_products': best_price_products,
+                                                   'count_best_price': len(best_price_products)
                                                    })
 
 
@@ -112,7 +119,7 @@ def register_view(request):
             return redirect('register')
 
         users = User.objects.filter(username__exact=username)
-        
+
         if len(users) > 0:
             messages.error(request, "error! username already exists!")
             return redirect('register')
@@ -129,28 +136,33 @@ def register_view(request):
 #endpoint "/profile"
 @login_required(login_url='/login')
 def profile_view(request):
-    product_list = filters._get_products_by_user(request.user.id)
-    (diff_products, unavailable_products) = filters._get_notification_products(request)
+    product_list = filters.get_display_products_by_user(request.user.id)
+    (diff_products, unavailable_products, best_price_products) = filters.get_notification_products(request)
 
     return render(request, 'user/profile.html', {'products':product_list,
                                                  'diff_products': diff_products,
                                                  'diff_count': len(diff_products),
                                                  'unavailable_products': unavailable_products,
-                                                 'unavailable_count': len(unavailable_products)})
+                                                 'unavailable_count': len(unavailable_products),
+                                                 'best_price_products': best_price_products,
+                                                 'count_best_price': len(best_price_products)
+                                                 })
 
 
 #endpoint "/my-products"
 @login_required(login_url='/login')
 def my_products_view(request):
-    product_list = filters._get_products_by_user(request.user.id)
+    product_list = filters.get_display_products_by_user(request.user.id)
     new_products_list = filters.sort_products_by_importance(product_list)
-    (diff_products, unavailable_products) = filters._get_notification_products(request)
+    (diff_products, unavailable_products, best_price_products) = filters.get_notification_products(request)
 
     return render(request, 'products/my-products.html', {'products':new_products_list,
-                                                       'diff_products': diff_products,
-                                                       'diff_count': len(diff_products),
-                                                       'unavailable_products': unavailable_products,
-                                                       'unavailable_count': len(unavailable_products)
+                                                         'diff_products': diff_products,
+                                                         'diff_count': len(diff_products),
+                                                         'unavailable_products': unavailable_products,
+                                                         'unavailable_count': len(unavailable_products),
+                                                         'best_price_products': best_price_products,
+                                                         'count_best_price': len(best_price_products)
                                                        })
 
 
@@ -166,7 +178,7 @@ def delete_product(request, id):
         Product.objects.filter(id__exact=id).delete()
 
     #recalculate unavailable products
-    product_list = filters._get_products_by_user(request.user.id)
+    product_list = filters.get_display_products_by_user(request.user.id)
     unavailable_product_ids = [x.id for x in product_list if x.available == False]
     request.session['unavailable_product_ids'] = unavailable_product_ids
 
@@ -193,6 +205,7 @@ def add_new_product(request):
             new_prod.name = product_name
             new_prod.shop = product_shop
             new_prod.url = product_url
+            new_prod.current_price = product_price
             new_prod.save()
 
             # Create new entry in ProductPrice table
@@ -217,11 +230,13 @@ def add_new_product(request):
                 new_user_product.user = request.user
                 new_user_product.save()
 
-    (diff_products, unavailable_products) = filters._get_notification_products(request)
+    (diff_products, unavailable_products, best_price_products) = filters.get_notification_products(request)
     return render(request, 'products/add-product.html', {'diff_products': diff_products,
                                                          'diff_count': len(diff_products),
                                                          'unavailable_products': unavailable_products,
-                                                         'unavailable_count': len(unavailable_products)
+                                                         'unavailable_count': len(unavailable_products),
+                                                         'best_price_products': best_price_products,
+                                                         'count_best_price': len(best_price_products)
                                                          })
 
 
@@ -288,11 +303,13 @@ def update_prices():
             if httplib.OK == response:
                 prod = spider.get_product()
                 price = prod.price
-
+                #new entry in ProductPrice table
                 new_prod_price = ProductPrice()
                 new_prod_price.price = price
                 new_prod_price.product = product
                 new_prod_price.save()
+                #update current_proce in Product table
+                _detect_best_price(product, price)
                 print(prod.name + ' - OK')
             elif data.PRODUCT_UNAVAILABLE == response:
                 print(product.name + ' - UNAVAILABLE')
@@ -302,3 +319,18 @@ def update_prices():
                 print(product.name + ' - NOK')
         else:
             print('SHOP NOT SUPPORTED: ' + shop)
+
+#detects best price and flags if best price found for later use
+def _detect_best_price(product, live_price):
+    product.current_price = live_price
+    if product.best_price == 0:
+        product.best_price = live_price
+        product.has_best_price = False
+    else:
+        if float(live_price) < product.best_price:
+            product.best_price = live_price
+            product.has_best_price = True
+        else:
+            product.has_best_price = False
+
+    product.save()

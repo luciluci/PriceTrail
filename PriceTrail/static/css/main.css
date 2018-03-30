@@ -41,6 +41,15 @@
 
 .btn-line {
   position: relative;
-
 }
 
+.btn-line::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  border-top: 1px solid black;
+  z-index: -1;
+  width: 100%;
+  margin-right: 0px;
+}
