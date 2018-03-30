@@ -17,7 +17,7 @@ from django.contrib import messages
 
 #endpoint "/"
 def index_view(request):
-    reset_session(request)
+    #reset_session(request)
     if request.user.is_authenticated():
         return index_view_logged_in(request)
     else:
