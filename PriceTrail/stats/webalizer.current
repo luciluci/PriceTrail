@@ -1,0 +1,262 @@
+# Webalizer V2.23-08 Incremental Data - 03/29/2018 22:26:50
+2018 3 29 22 26 50
+350 154 7 39 11 6 11469972 117 9 0
+5 56 171 28 29
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+7 4 961 3 2 1
+343 150 11469011 5 115 8
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0
+0 0 0 0
+0 0 0 0
+0 0 0 0
+0 0 0 0
+0 0 0 0
+0 0 0 0
+0 0 0 0
+0 0 0 0
+0 0 0 0
+0 0 0 0
+0 0 0 0
+7 4 961 2
+0 0 0 0
+0 0 0 0
+0 0 0 0
+32 0 73391 23
+41 0 4765882 24
+171 70 3717666 30
+43 36 1399315 12
+0 0 0 0
+0 0 0 0
+56 44 1512757 26
+0 0 0 0
+0
+0
+0
+154
+0
+0
+0
+0
+0
+0
+0
+18
+9
+0
+0
+0
+0
+1
+0
+0
+6
+93
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+69
+0
+0
+0
+0
+0
+# -urls- 
+/static/css/style-responsive.css
+0 4 7635792 26896 0 0
+/my-products/
+0 7 7663120 235455 0 0
+/static/img/login-bg.jpg
+1 4 7662880 436196 0 0
+/static/js/jquery-ui-1.9.2.custom.min.js
+0 4 7662400 951208 0 0
+/static/js/jquery.nicescroll.js
+0 4 7661712 237456 0 0
+/static/unique-assets/images/monitor.png
+1 4 7662256 433296 0 0
+/static/js/bootstrap.min.js
+0 4 7636816 127276 0 0
+/static/unique-assets/images/right-arrow.png
+1 4 7661568 12112 0 0
+/static/css/bootstrap.css
+0 4 7636320 530184 0 0
+/register/
+0 2 7663920 9156 0 0
+/static/font-awesome-4.7.0/css/font-awesome.css
+0 4 7636128 149656 0 0
+/static/unique-assets/images/screen3.png
+1 4 7662112 197712 0 0
+/static/img/ui-sam.jpg
+1 4 7663008 50788 0 0
+/add-new-product/
+0 5 7664768 76640 0 0
+/static/css/to-do.css
+0 4 7663232 7140 0 0
+/static/img/shops/emag.png
+1 2 7665104 15394 0 0
+/static/css/style.css
+0 4 7636048 168252 0 0
+/static/js/common-scripts.js
+0 4 7637488 13728 0 0
+/static/fonts/glyphicons-halflings-regular.woff
+0 4 7663440 93280 0 0
+/static/img/left-arrow.png
+1 4 7661840 10552 0 0
+/static/lineicons/style.css
+0 4 7636560 602636 0 0
+/static/js/jquery.scrollTo.min.js
+0 4 7637072 9736 0 0
+/static/unique-assets/images/screen4.png
+1 4 7661968 131332 0 0
+/static/js/jquery.dcjqaccordion.2.7.js
+0 4 7636944 26500 0 0
+/.well-known/acme-challenge/ycUGDviA7Vvc66k7Z6ru__gGbpd_DVrrS8gCSL8Mhy0
+0 2 0 174 0 0
+/
+0 14 7635376 205488 3 0
+/.well-known/acme-challenge/Gs63ORGwxBAasUumbv-oyUkAEda6ITxUf956Un-PS3E
+0 2 0 174 0 0
+/static/css/main.css
+0 4 7636208 2468 0 0
+/static/js/jquery.backstretch.min.js
+0 4 7662656 16188 0 0
+/static/css/wizard.css
+0 2 7664880 1484 0 0
+/dashboard/
+0 1 7665776 14718 0 0
+/static/js/jquery.ui.touch-punch.min.js
+0 4 7636688 5164 0 0
+/static/font-awesome-4.7.0/fonts/fontawesome-webfont.woff2
+0 4 0 308640 0 0
+/static/unique-assets/css/style.css
+0 4 7635920 79300 0 0
+/profile/
+0 1 7665664 28413 0 0
+/display-product/14/
+0 2 7664032 10348 0 0
+/login/
+0 6 7662544 24444 0 0
+/static/scripts/main.js
+0 4 0 37000 0 0
+/static/js/jquery.js
+0 4 7636448 372424 0 0
+# End Of Table - urls
+# -sites- (monthly)
+79-112-39-115.iasi.fiberlink.ro
+0 56 44 1512757 1 1522362410
+/add-new-product/
+pentalog-net-nxd-fo.b.astral.ro
+0 4 0 106236 2 1522344804
+-
+pentalog.demarc.cogentco.com
+0 199 35 7086683 4 1522347602
+/
+outbound1.letsencrypt.org
+0 2 2 174 0 0
+-
+82-137-14-92.rdsnet.ro
+0 44 35 1364633 1 1522349266
+/display-product/14/
+82-137-12-105.rdsnet.ro
+0 43 36 1399315 1 1522351545
+/my-products/
+server
+0 2 2 174 0 0
+-
+# End Of Table - sites (monthly)
+# -sites- (daily)
+79-112-39-115.iasi.fiberlink.ro
+0 56 44 1512757 1 1522362410
+/add-new-product/
+pentalog-net-nxd-fo.b.astral.ro
+0 4 0 106236 2 1522344804
+-
+pentalog.demarc.cogentco.com
+0 196 35 7086070 3 1522347602
+/
+82-137-14-92.rdsnet.ro
+0 44 35 1364633 1 1522349266
+/display-product/14/
+82-137-12-105.rdsnet.ro
+0 43 36 1399315 1 1522351545
+/my-products/
+# End Of Table - sites (daily)
+# -referrers- 
+http://shopping-list.ro/my-products/
+0 11
+http://shopping-list.ro/static/css/bootstrap.css
+0 3
+http://shopping-list.ro/static/font-awesome-4.7.0/css/font-awesome.css
+0 3
+http://shopping-list.ro/add-new-product/
+0 14
+http://shopping-list.ro/display-product/14/
+0 3
+- (Direct Request)
+0 63
+http://shopping-list.ro/
+0 224
+http://shopping-list.ro/login/
+0 22
+http://shopping-list.ro/profile/
+0 2
+http://shopping-list.ro/dashboard/
+0 2
+http://shopping-list.ro/register/
+0 3
+# End Of Table - referrers
+# -agents- 
+Mozilla/5.0 (compatible; Let's Encrypt validation server; +https://www.letsencrypt.org)
+0 2
+Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_6 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D100 S
+0 43
+Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+0 48
+Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+0 56
+Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.75 Safari/537.36
+0 199
+Python-urllib/2.7
+0 2
+# End Of Table - agents
+# -search strings- 
+# End Of Table - search strings
+# -usernames- 
+# End Of Table - usernames

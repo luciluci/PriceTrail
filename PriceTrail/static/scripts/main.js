@@ -85,7 +85,7 @@ var validateURL = function(url) {
                 console.log(this.status);
             }
         };
-        xhttp.open("POST", "http://localhost:8006/validate-product/", true);
+        xhttp.open("POST", "http://shopping-list.ro/validate-product/", true);
 
         var payload = {
             'product-url': url,
@@ -107,7 +107,7 @@ var addNewProduct = function(pname, pprice, purl, pshop) {
                 resolve(xhttp.responseText);
             }
         };
-        xhttp.open("POST", "http://localhost:8006/add-new-product/", true);
+        xhttp.open("POST", "http://shopping-list.ro/add-new-product/", true);
 
         var payload = {
         'product_name': pname,
