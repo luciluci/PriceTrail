@@ -6,6 +6,8 @@ import httplib
 import requests
 import ssl
 
+import logging
+
 from PriceTrail.utils import data
 
 class Product():
@@ -18,6 +20,7 @@ class EmagSpider():
     MAX_RETRIES = 3
 
     def __init__(self):
+        self.logger = logging.getLogger('SpiderLog')
         self.product = Product()
 
     def req_product(self, url, retries=0):
@@ -25,15 +28,18 @@ class EmagSpider():
         if not url.startswith('https://www.emag.ro'):
             return httplib.NOT_IMPLEMENTED
         try:
+            self.logger.info("requesting to URL:" + url)
             result = requests.get(url, timeout=10)
         except ssl.SSLError:
             time.sleep(1)
+            self.logger.error("SSL error")
             if retries == self.MAX_RETRIES:
                 return httplib.INTERNAL_SERVER_ERROR
             return self.req_product(url, retries + 1)
 
         except ConnectionError as e:
             time.sleep(1)
+            self.logger.error("Connection error")
             if retries == self.MAX_RETRIES:
                 return httplib.INTERNAL_SERVER_ERROR
             return self.req_product(url, retries + 1)
@@ -49,6 +55,7 @@ class EmagSpider():
         for element in product_node_tree[0].iter():
             unavailable_node = element.find('span[@class="label label-unavailable"]')
             if unavailable_node != None:
+                self.logger.error("Product unavailable")
                 return data.PRODUCT_UNAVAILABLE
             new_price_node = element.find('p[@class="product-new-price"]')
             if new_price_node:
@@ -58,6 +65,7 @@ class EmagSpider():
         page_title = tree.xpath('//h1[@class="page-title"]/text()')
 
         if not prod_price_str or not page_title:
+            self.logger.error("No content")
             return httplib.NO_CONTENT
 
         self.product.price = prod_price_str.replace('.', '').strip()
