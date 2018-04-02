@@ -298,7 +298,7 @@ import time
 def update_prices():
     monitored_products = Product.objects.all()
     for product in monitored_products:
-        time.sleep(1)
+        time.sleep(2)
         shop = product.shop
 
         if shop == 'emag':

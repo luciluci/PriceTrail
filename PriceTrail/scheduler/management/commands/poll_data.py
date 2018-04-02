@@ -5,6 +5,7 @@ from PriceTrail.spiders import GiantSpiders
 from PriceTrail.utils import data
 
 import httplib
+import time
 
 class Command(BaseCommand):
     help = 'Add price entry for all products'
@@ -14,6 +15,7 @@ class Command(BaseCommand):
 
         monitored_products = Product.objects.all()
         for product in monitored_products:
+            time.sleep(2)
             shop = product.shop
 
             if shop == 'emag':
