@@ -18,6 +18,10 @@ class Product():
 
 class EmagSpider():
     MAX_RETRIES = 3
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+        'From': 'lucian_apetre@yahoo.com.com'
+    }
 
     def __init__(self):
         self.logger = logging.getLogger('SpiderLog')
@@ -29,7 +33,7 @@ class EmagSpider():
             return httplib.NOT_IMPLEMENTED
         try:
             self.logger.info("requesting to URL:" + url)
-            result = requests.get(url, timeout=10)
+            result = requests.get(url, timeout=10, headers=self.headers)
         except ssl.SSLError:
             time.sleep(1)
             self.logger.error("SSL error")
