@@ -113,6 +113,8 @@ def register_view(request):
         email = request.POST['email']
         password = request.POST['password']
         cpassword = request.POST['confirm-password']
+        first_name = request.POST['firstname']
+        last_name = request.POST['lastname']
 
         if password != cpassword:
             messages.error(request, "error! password is not the same!")
@@ -125,6 +127,8 @@ def register_view(request):
             return redirect('register')
         else:
             user = User.objects.create_user(username, email, password)
+            user.last_name = last_name
+            user.first_name = first_name
             user.save()
 
         auser = authenticate(username=username, password=password)
