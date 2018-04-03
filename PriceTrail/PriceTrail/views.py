@@ -327,13 +327,13 @@ def update_prices():
             new_prod_price.save()
             #update current_proce in Product table
             _detect_best_price(product, price)
-            print(prod.name + ' - OK')
+            print(prod.name.encode('utf-8') + ' - OK')
         elif data.PRODUCT_UNAVAILABLE == response:
-            print(product.name + ' - UNAVAILABLE')
+            print(product.name.encode('utf-8') + ' - UNAVAILABLE')
             product.available = False
             product.save()
         else:
-            print(product.name + ' - NOK')
+            print(product.name.encode('utf-8') + ' - NOK')
 
 #detects best price and flags if best price found for later use
 def _detect_best_price(product, live_price):
