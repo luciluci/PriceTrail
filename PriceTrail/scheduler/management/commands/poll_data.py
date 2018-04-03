@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
 from TailedProducts.models import Product, ProductPrice
-from PriceTrail.spiders import GiantSpiders
+from PriceTrail.spiders.GiantSpiders import SpiderGenerator
 from PriceTrail.utils import data
 
 import httplib
@@ -11,36 +11,37 @@ class Command(BaseCommand):
     help = 'Add price entry for all products'
 
     def handle(self, *args, **options):
-        help = "Append price each day for each product"
-
         monitored_products = Product.objects.all()
+
+        # create spiders pool
+        spider_gen = SpiderGenerator()
+
         for product in monitored_products:
+            if product.shop not in data.SHOPS:
+                print('SHOP NOT SUPPORTED: ' + product.shop)
+                continue
             time.sleep(2)
-            shop = product.shop
 
-            if shop == 'emag':
-                spider = GiantSpiders.EmagSpider()
-                response = spider.req_product(product.url)
-                if httplib.OK == response:
-                    prod = spider.get_product()
-                    price = prod.price
-                    # new entry in ProductPrice table
-                    new_prod_price = ProductPrice()
-                    new_prod_price.price = price
-                    new_prod_price.product = product
-                    new_prod_price.save()
+            spider = spider_gen.get_spider(product.shop)
+            response = spider.parse_data(product.url)
 
-                    #detect best price
-                    self._detect_best_price(product, price)
-                    self.stdout.write(self.style.SUCCESS(prod.name + ' - OK'))
-                elif data.PRODUCT_UNAVAILABLE == response:
-                    self.stdout.write(self.style.ERROR(product.name + ' - UNAVAILABLE'))
-                    product.available = False
-                    product.save()
-                else:
-                    self.stdout.write(self.style.ERROR(product.name + ' - NOK'))
+            if httplib.OK == response:
+                prod = spider.get_product()
+                price = prod.price
+                # new entry in ProductPrice table
+                new_prod_price = ProductPrice()
+                new_prod_price.price = price
+                new_prod_price.product = product
+                new_prod_price.save()
+                # update current_proce in Product table
+                self._detect_best_price(product, price)
+                print(prod.name + ' - OK')
+            elif data.PRODUCT_UNAVAILABLE == response:
+                print(product.name + ' - UNAVAILABLE')
+                product.available = False
+                product.save()
             else:
-                self.stdout.write(self.style.ERROR('SHOP NOT SUPPORTED: ' + shop))
+                print(product.name + ' - NOK')
 
     #detects best price and flags if best price found for later use
     def _detect_best_price(self, product, live_price):

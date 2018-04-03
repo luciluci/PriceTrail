@@ -11,7 +11,7 @@ from TailedProducts.helpers import filters
 from .utils import general
 
 import json
-from spiders import GiantSpiders
+from spiders.GiantSpiders import SpiderGenerator, Spider
 import httplib
 from django.contrib import messages
 
@@ -249,19 +249,26 @@ def validate_product(request):
     if request.method == 'POST':
         d = json.loads(request.POST['json'])
         product_url = d['product-url']
-    data = {}
-    spider = GiantSpiders.EmagSpider()
-    if httplib.OK == spider.req_product(product_url):
-        prod = spider.get_product()
-        data['status'] = 'valid'
-        data['pname'] = prod.name
-        data['pprice'] = prod.price
-        data['purl'] = product_url
-        data['pshop'] = 'emag'
-    else:
-        data['status'] = 'invalid'
+    pdata = {}
 
-    return HttpResponse(json.dumps(data), content_type='application/json')
+    shop_name = Spider.get_shop_from_url(product_url)
+    if shop_name not in data.SHOPS:
+        return HttpResponse({"error": "unavailable shop"}, content_type='application/json')
+
+    spider_gen = SpiderGenerator()
+    spider = spider_gen.get_spider(shop_name)
+
+    if httplib.OK == spider.parse_data(product_url):
+        prod = spider.get_product()
+        pdata['status'] = 'valid'
+        pdata['pname'] = prod.name
+        pdata['pprice'] = prod.price
+        pdata['purl'] = product_url
+        pdata['pshop'] = 'emag'
+    else:
+        pdata['status'] = 'invalid'
+
+    return HttpResponse(json.dumps(pdata), content_type='application/json')
 
 #iframe to be displayed in a modal window
 def display_product(request, id):
@@ -297,32 +304,36 @@ import time
 
 def update_prices():
     monitored_products = Product.objects.all()
-    for product in monitored_products:
-        time.sleep(2)
-        shop = product.shop
 
-        if shop == 'emag':
-            spider = GiantSpiders.EmagSpider()
-            response = spider.req_product(product.url)
-            if httplib.OK == response:
-                prod = spider.get_product()
-                price = prod.price
-                #new entry in ProductPrice table
-                new_prod_price = ProductPrice()
-                new_prod_price.price = price
-                new_prod_price.product = product
-                new_prod_price.save()
-                #update current_proce in Product table
-                _detect_best_price(product, price)
-                print(prod.name + ' - OK')
-            elif data.PRODUCT_UNAVAILABLE == response:
-                print(product.name + ' - UNAVAILABLE')
-                product.available = False
-                product.save()
-            else:
-                print(product.name + ' - NOK')
+    #create spiders pool
+    spider_gen = SpiderGenerator()
+
+    for product in monitored_products:
+        if product.shop not in data.SHOPS:
+            print('SHOP NOT SUPPORTED: ' + product.shop)
+            continue
+        time.sleep(2)
+
+        spider = spider_gen.get_spider(product.shop)
+        response = spider.parse_data(product.url)
+
+        if httplib.OK == response:
+            prod = spider.get_product()
+            price = prod.price
+            #new entry in ProductPrice table
+            new_prod_price = ProductPrice()
+            new_prod_price.price = price
+            new_prod_price.product = product
+            new_prod_price.save()
+            #update current_proce in Product table
+            _detect_best_price(product, price)
+            print(prod.name + ' - OK')
+        elif data.PRODUCT_UNAVAILABLE == response:
+            print(product.name + ' - UNAVAILABLE')
+            product.available = False
+            product.save()
         else:
-            print('SHOP NOT SUPPORTED: ' + shop)
+            print(product.name + ' - NOK')
 
 #detects best price and flags if best price found for later use
 def _detect_best_price(product, live_price):
