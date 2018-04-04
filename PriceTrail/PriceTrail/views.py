@@ -210,6 +210,7 @@ def add_new_product(request):
             new_prod.shop = product_shop
             new_prod.url = product_url
             new_prod.current_price = product_price
+            new_prod.best_price = product_price
             new_prod.save()
 
             # Create new entry in ProductPrice table
