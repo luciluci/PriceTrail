@@ -252,8 +252,15 @@ def validate_product(request):
     pdata = {}
 
     shop_name = Spider.get_shop_from_url(product_url)
+    if not shop_name:
+        pdata['status'] = 'invalid'
+        pdata['message'] = '<b>Oh snap!</b> URL is invalid. Add a valid URL and try again'
+        return HttpResponse(json.dumps(pdata), content_type='application/json')
+
     if shop_name not in data.SHOPS:
-        return HttpResponse({"error": "unavailable shop"}, content_type='application/json')
+        pdata['status'] = 'invalid'
+        pdata['message'] = '<b>Oh snap!</b> This shop is not supported. Add a product from the supported shops'
+        return HttpResponse(json.dumps(pdata), content_type='application/json')
 
     spider_gen = SpiderGenerator()
     spider = spider_gen.get_spider(shop_name)
@@ -267,6 +274,7 @@ def validate_product(request):
         pdata['pshop'] = 'emag'
     else:
         pdata['status'] = 'invalid'
+        pdata['message'] = '<b>Oh snap!</b> Data is invalid. The page did not respond accordingly'
 
     return HttpResponse(json.dumps(pdata), content_type='application/json')
 
