@@ -1,6 +1,6 @@
 TO DOs:
 
-
+* sign-up/register should also be available from index
 * product name should not have characters like '&amp;'
     they must be replaced
 * message notifications should include also daily best price for product

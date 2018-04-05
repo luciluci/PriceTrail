@@ -33,7 +33,12 @@
 
                               {% for product in products %}
                               <tr>
-                                  <td>{{product.shop}}</td>
+                                  {% if product.shop == 'emag' %}
+                                    <td><a href = "https://www.emag.ro" target="_blank"><img class="hidden-xs" src="{% static '/img/shops/emag-logo-thumb.png' %}" alt=""></a></td>
+                                  {% elif product.shop == 'avstore' %}
+                                    <td><a href = "https://www.avstore.ro" target="_blank"><img class="hidden-xs" src="{% static '/img/shops/AVstore-logo-thumb.png' %}" alt=""></a></td>
+                                  {% endif %}
+                                  <!--<td>{{product.shop}}</td>-->
                                   <td class="hidden-phone"><a href="{{product.url}}" target="_blank">{{product.name}}</a></td>
                                   <td>RON {{product.price}}</td>
 
