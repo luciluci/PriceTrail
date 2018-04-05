@@ -93,12 +93,46 @@ class EmagSpider(Spider):
 
         return httplib.OK
 
+class AVStoreSpider(Spider):
+
+    def __init__(self):
+        super(AVStoreSpider, self).__init__('avstore')
+
+    def parse_data(self, url):
+        if httplib.OK != self._request_url(url):
+            return self.result.status_code
+
+        tree = html.fromstring(self.result.content)
+
+        product_node_tree = tree.xpath('//div[@class="st mainproductprice"]')
+
+        prod_price_str = ''
+        for element in product_node_tree[0].iter():
+            new_price_node = element.find('span[@class="pret-nou number"]')
+            if new_price_node is not None:
+                prod_price_str = new_price_node.text.replace('.', '').strip()
+                break
+
+        page_title = tree.xpath('//h1[@class="product-title"]/text()')
+
+        if not prod_price_str or not page_title:
+            return httplib.NO_CONTENT
+
+        self.product.price = prod_price_str.replace('.', '').strip()
+        # assume it's the first element in the array
+        self.product.name = page_title[0].strip()
+
+        return httplib.OK
+
 
 class SpiderGenerator():
 
     def __init__(self):
         self.emag = EmagSpider()
+        self.avstore = AVStoreSpider()
 
     def get_spider(self, name):
         if name == "emag":
             return self.emag
+        elif name == "avstore":
+            return self.avstore

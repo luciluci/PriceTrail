@@ -33,8 +33,8 @@
 
                               {% for product in products %}
                               <tr>
-                                  <td><a href="http://www.emag.ro" target="_blank">EMag</a></td>
-                                  <td class="hidden-phone">{{product.name}}</td>
+                                  <td>{{product.shop}}</td>
+                                  <td class="hidden-phone"><a href="{{product.url}}" target="_blank">{{product.name}}</a></td>
                                   <td>RON {{product.price}}</td>
 
                                   {% if product.trend == "ASC" %}

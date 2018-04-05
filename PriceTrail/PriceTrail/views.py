@@ -272,7 +272,7 @@ def validate_product(request):
         pdata['pname'] = prod.name
         pdata['pprice'] = prod.price
         pdata['purl'] = product_url
-        pdata['pshop'] = 'emag'
+        pdata['pshop'] = shop_name
     else:
         pdata['status'] = 'invalid'
         pdata['message'] = '<b>Oh snap!</b> Data is invalid. The page did not respond accordingly'
