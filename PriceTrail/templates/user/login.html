@@ -4,29 +4,29 @@
 
 {% block title %} ShoppingList - Login {% endblock %}
 {% block main_content%}
-	  <div id="login-page">
-	  	<div class="container">
-		      <form class="form-login" role="form" method="post" action="{% url 'login' %}" id="login-form">
-				  {% csrf_token %}
-		        <h2 class="form-login-heading">sign in now</h2>
-		        <div class="login-wrap">
-		            <input type="text" class="form-control" placeholder="User ID" id="idi_username" name="username" autofocus>
-		            <br>
-		            <input type="password" class="form-control" placeholder="Password" id="id_password" name="password">
-		            <br>
-		            <button class="btn btn-theme btn-block" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
-		            <hr>
-		            <div class="registration">
-		                Don't have an account yet?<br/>
-		                <a class="" href="/register">
-		                    Create an account
-		                </a>
-		            </div>
-		        </div>
-		      </form>	  	
-	  	
-	  	</div>
-	  </div>
+<div id="login-page">
+	<div class="container">
+		  <form class="form-login" role="form" method="post" action="{% url 'login' %}" id="login-form">
+			  {% csrf_token %}
+			<h2 class="form-login-heading">sign in now</h2>
+			<div class="login-wrap">
+				<input type="text" class="form-control" placeholder="User ID" id="idi_username" name="username" autofocus>
+				<br>
+				<input type="password" class="form-control" placeholder="Password" id="id_password" name="password">
+				<br>
+				<button class="btn btn-theme btn-block" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
+				<hr>
+				<div class="registration">
+					Don't have an account yet?<br/>
+					<a class="" href="/register">
+						Create an account
+					</a>
+				</div>
+			</div>
+		  </form>
+
+	</div>
+</div>
 {% endblock %}
 
 {% block footer %}

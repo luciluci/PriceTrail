@@ -8,201 +8,188 @@
 {% endblock %}
 
 {% block main_content%}
-    {% if user.is_authenticated %}
-    <section id="main-content">
-    {% endif %}
-     <section class="wrapper">
-        <section id="our-portfolio" class="sections col-md-11">
-            <div class="container">
+<section id="our-portfolio" class="sections">
+        <div class="container">
 
-                <div class="row">
-                    <div class="heading">
-                        <div class="title text-center arrow-right">
-                            <h4 class="">WHAT IS THIS ABOUT </h4>
-                            <img class="hidden-xs" src="{% static '/unique-assets/images/right-arrow.png' %}" alt="">
-
-                        </div>
-                    </div>
-
-
-                    <!-- Example row of columns -->
-
-                    <div class="portfolio-wrap">
-
-                        <div class="portfolio">
-
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <img class="hidden-xs" src="{% static '/unique-assets/images/monitor.png' %}" alt="">
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <div class="portfolio-item">
-                                    <h4>WHAT WE DO</h4>
-                                    <h5>
-                                        We gather daily data about the products you are interested in and we create visual charts so you can see what
-                                        happens with your product. You just need to add you product and we'll do the rest.
-                                    </h5>
-                                    <a class="btn pt-btn btn-primary" href="/add-new-product">Add a product</a>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="portfolio">
-
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <div class="portfolio-item">
-                                    <h4>YOU'LL BE NOTICED</h4>
-                                    <h5>
-                                        When the prices are lowest you'll get a notification, so register with your email so you'll be notified in time
-                                        for the products you want to buy.
-                                    </h5>
-                                    <a class="btn pt-btn btn-primary" href="/profile">update your email</a>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <!--<img class="hidden-xs" src="{% static '/unique-assets/images/monitor.png' %}" alt="">-->
-                                <img class="hidden-xs" src="{% static '/unique-assets/images/screen3.png' %}" alt="">
-                            </div>
-                        </div>
-
-
-                        <div class="portfolio">
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <img class="hidden-xs" src="{% static '/unique-assets/images/screen4.png' %}" alt="">
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <div class="portfolio-item">
-                                    <h4>LIVE CHARTS</h4>
-                                    <h5>
-                                        We offer live charts where all your data is daily updated.
-                                    </h5>
-                                    <a class="btn pt-btn btn-primary" href="/my-products">Check out your charts</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- /container -->
-        </section>
-
-
-        <section id="notification-id" class="sections col-md-11">
-            <div class="container text-center col-md-11">
-
+            <div class="row">
                 <div class="heading">
-                    <div class="title text-center arrow-left">
-                        <img class="hidden-xs" src="{% static 'img/left-arrow.png' %}" alt="">
-                        <h4 class="">SOME NOTIFICATIONS </h4>
-                    </div>
-                </div>
-
-                <div class="col-md-2 col-sm-2 col-md-offset-1 box0">
-                  			<div class="box1">
-					  			<span class="li_sound"></span>
-					  			<h3>{{diff_count}}</h3>
-                  			</div>
-					  			<p>{{diff_count}} products have changed prices from yesterday!</p>
-                  		</div>
-
-                  		<div class="col-md-2 col-sm-2 box0">
-                  			<div class="box1">
-					  			<span class="li_trash"></span>
-					  			<h3>{{unavailable_count}}</h3>
-                  			</div>
-					  			<p>{{unavailable_count}} products are no longer available today.</p>
-                  		</div>
-                  		<div class="col-md-2 col-sm-2 box0">
-                  			<div class="box1">
-					  			<span class="li_data"></span>
-					  			<h3>{{total_monitored_products}}</h3>
-                  			</div>
-                                {% if user.is_authenticated %}
-					  			    <p>You have {{total_monitored_products}} monitored products.</p>
-                                {% else %}
-                                    <p>There are a total of {{total_monitored_products}} monitored products right now.</p>
-                                {% endif %}
-                  		</div>
-                  		<div class="col-md-2 col-sm-2 box0">
-                  			<div class="box1">
-					  			<span class="li_lab"></span>
-					  			<h3>{{most_changed_product.total_variation}}%</h3>
-                  			</div>
-                            <p>Product <u><b>{{most_changed_product.name}}</b></u> changed the price the most.</p>
-                                <p>It it monitored for {{most_changed_product.days_monitored}} days, and since, it changed the price on
-                                {{most_changed_product.total_variation}}% of the time.</p>
-                  		</div>
-                  		<div class="col-md-2 col-sm-2 box0">
-                  			<div class="box1">
-					  			<span class="li_location"></span>
-					  			<h3>{{least_changed_product.total_variation}}%</h3>
-                  			</div>
-					  			<p>Product <u><b>{{least_changed_product.name}}</b></u> changed the price the least.</p>
-                                <p>It it monitored for {{least_changed_product.days_monitored}} days, and since, it changed the price on
-                                {{least_changed_product.total_variation}}% of the time.</p>
-                  		</div>
-                </div>
-        </section>
-
-
-        <section id="products-id" class="sections col-md-11">
-            <div class="container text-center col-md-11">
-
-                <div class="heading">
-                    <div class="title text-center arrow-left">
-                        <h4 class="">PRODUCTS MONITORED IN 2018 </h4>
+                    <div class="title text-center arrow-right">
+                        <h4 class="">WHAT IS THIS ABOUT </h4>
                         <img class="hidden-xs" src="{% static '/unique-assets/images/right-arrow.png' %}" alt="">
+
                     </div>
                 </div>
 
-                      <div class="custom-bar-chart">
-                          <ul class="y-axis">
-                              <li><span>500</span></li>
-                              <li><span>400</span></li>
-                              <li><span>300</span></li>
-                              <li><span>200</span></li>
-                              <li><span>100</span></li>
-                              <li><span>0</span></li>
-                          </ul>
-                          <div class="bar">
-                              <div class="title">SEP</div>
-                              <div class="value tooltips" data-original-title="8.500" data-toggle="tooltip" data-placement="top" style="height: 0%;">2%</div>
-                          </div>
-                          <div class="bar ">
-                              <div class="title">OCT</div>
-                              <div class="value tooltips" data-original-title="5.000" data-toggle="tooltip" data-placement="top" style="height: 10%;">4%</div>
-                          </div>
-                          <div class="bar ">
-                              <div class="title">NOV</div>
-                              <div class="value tooltips" data-original-title="6.000" data-toggle="tooltip" data-placement="top" style="height: 20%;">6%</div>
-                          </div>
-                          <div class="bar ">
-                              <div class="title">DEC</div>
-                              <div class="value tooltips" data-original-title="4.500" data-toggle="tooltip" data-placement="top" style="height: 10%;">10%</div>
-                          </div>
-                          <div class="bar">
-                              <div class="title">JAN</div>
-                              <div class="value tooltips" data-original-title="3.200" data-toggle="tooltip" data-placement="top" style="height: 20%;">25%</div>
-                          </div>
-                          <div class="bar ">
-                              <div class="title">FEB</div>
-                              <div class="value tooltips" data-original-title="6.200" data-toggle="tooltip" data-placement="top" style="height: 24%;">40%</div>
-                          </div>
-                          <div class="bar">
-                              <div class="title">MAR</div>
-                              <div class="value tooltips" data-original-title="7.500" data-toggle="tooltip" data-placement="top" style="height: 20%;">50%</div>
-                          </div>
-                      </div>
 
+                <!-- Example row of columns -->
+
+                <div class="portfolio-wrap">
+
+                    <div class="portfolio">
+
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <img class="hidden-xs" src="{% static '/unique-assets/images/monitor.png' %}" alt="">
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="portfolio-item">
+                                <h4>WHAT WE DO</h4>
+                                <h5>
+                                    We gather daily data about the products you are interested in and we create visual charts so you can see what
+                                    happens with your product. You just need to add you product and we'll do the rest.
+                                </h5>
+                                <a class="btn pt-btn btn-primary" href="/add-new-product">Add a product</a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="portfolio">
+
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="portfolio-item">
+                                <h4>YOU'LL BE NOTICED</h4>
+                                <h5>
+                                    When the prices are lowest you'll get a notification, so register with your email so you'll be notified in time
+                                    for the products you want to buy.
+                                </h5>
+                                <a class="btn pt-btn btn-primary" href="/profile">update your email</a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <!--<img class="hidden-xs" src="{% static '/unique-assets/images/monitor.png' %}" alt="">-->
+                            <img class="hidden-xs" src="{% static '/unique-assets/images/screen3.png' %}" alt="">
+                        </div>
+                    </div>
+
+
+                    <div class="portfolio">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <img class="hidden-xs" src="{% static '/unique-assets/images/screen4.png' %}" alt="">
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="portfolio-item">
+                                <h4>LIVE CHARTS</h4>
+                                <h5>
+                                    We offer live charts where all your data is daily updated.
+                                </h5>
+                                <a class="btn pt-btn btn-primary" href="/my-products">Check out your charts</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </section>
-    </section>
-   {% if user.is_authenticated %}
-    </section>
-   {% endif %}
+        </div>
+</section>
+
+<section id="notification-id" class="sections">
+        <div class="container text-center col-md-11">
+
+            <div class="heading">
+                <div class="title text-center arrow-left">
+                    <img class="hidden-xs" src="{% static 'img/left-arrow.png' %}" alt="">
+                    <h4 class="">SOME NOTIFICATIONS </h4>
+                </div>
+            </div>
+
+            <div class="col-md-2 col-sm-2 col-md-offset-1 box0">
+                        <div class="box1">
+                            <span class="li_sound"></span>
+                            <h3>{{diff_count}}</h3>
+                        </div>
+                            <p>{{diff_count}} products have changed prices from yesterday!</p>
+                    </div>
+
+                    <div class="col-md-2 col-sm-2 box0">
+                        <div class="box1">
+                            <span class="li_trash"></span>
+                            <h3>{{unavailable_count}}</h3>
+                        </div>
+                            <p>{{unavailable_count}} products are no longer available today.</p>
+                    </div>
+                    <div class="col-md-2 col-sm-2 box0">
+                        <div class="box1">
+                            <span class="li_data"></span>
+                            <h3>{{total_monitored_products}}</h3>
+                        </div>
+                            {% if user.is_authenticated %}
+                                <p>You have {{total_monitored_products}} monitored products.</p>
+                            {% else %}
+                                <p>There are a total of {{total_monitored_products}} monitored products right now.</p>
+                            {% endif %}
+                    </div>
+                    <div class="col-md-2 col-sm-2 box0">
+                        <div class="box1">
+                            <span class="li_lab"></span>
+                            <h3>{{most_changed_product.total_variation}}%</h3>
+                        </div>
+                        <p>Product <u><b>{{most_changed_product.name}}</b></u> changed the price the most.</p>
+                            <p>It it monitored for {{most_changed_product.days_monitored}} days, and since, it changed the price on
+                            {{most_changed_product.total_variation}}% of the time.</p>
+                    </div>
+                    <div class="col-md-2 col-sm-2 box0">
+                        <div class="box1">
+                            <span class="li_location"></span>
+                            <h3>{{least_changed_product.total_variation}}%</h3>
+                        </div>
+                            <p>Product <u><b>{{least_changed_product.name}}</b></u> changed the price the least.</p>
+                            <p>It it monitored for {{least_changed_product.days_monitored}} days, and since, it changed the price on
+                            {{least_changed_product.total_variation}}% of the time.</p>
+                    </div>
+            </div>
+</section>
+
+<section id="products-id" class="sections">
+        <div class="container text-center col-md-11">
+
+            <div class="heading">
+                <div class="title text-center arrow-left">
+                    <h4 class="">PRODUCTS MONITORED IN 2018 </h4>
+                    <img class="hidden-xs" src="{% static '/unique-assets/images/right-arrow.png' %}" alt="">
+                </div>
+            </div>
+
+                  <div class="custom-bar-chart">
+                      <ul class="y-axis">
+                          <li><span>500</span></li>
+                          <li><span>400</span></li>
+                          <li><span>300</span></li>
+                          <li><span>200</span></li>
+                          <li><span>100</span></li>
+                          <li><span>0</span></li>
+                      </ul>
+                      <div class="bar">
+                          <div class="title">SEP</div>
+                          <div class="value tooltips" data-original-title="8.500" data-toggle="tooltip" data-placement="top" style="height: 0%;">2%</div>
+                      </div>
+                      <div class="bar ">
+                          <div class="title">OCT</div>
+                          <div class="value tooltips" data-original-title="5.000" data-toggle="tooltip" data-placement="top" style="height: 10%;">4%</div>
+                      </div>
+                      <div class="bar ">
+                          <div class="title">NOV</div>
+                          <div class="value tooltips" data-original-title="6.000" data-toggle="tooltip" data-placement="top" style="height: 20%;">6%</div>
+                      </div>
+                      <div class="bar ">
+                          <div class="title">DEC</div>
+                          <div class="value tooltips" data-original-title="4.500" data-toggle="tooltip" data-placement="top" style="height: 10%;">10%</div>
+                      </div>
+                      <div class="bar">
+                          <div class="title">JAN</div>
+                          <div class="value tooltips" data-original-title="3.200" data-toggle="tooltip" data-placement="top" style="height: 20%;">25%</div>
+                      </div>
+                      <div class="bar ">
+                          <div class="title">FEB</div>
+                          <div class="value tooltips" data-original-title="6.200" data-toggle="tooltip" data-placement="top" style="height: 24%;">40%</div>
+                      </div>
+                      <div class="bar">
+                          <div class="title">MAR</div>
+                          <div class="value tooltips" data-original-title="7.500" data-toggle="tooltip" data-placement="top" style="height: 20%;">50%</div>
+                      </div>
+                  </div>
+
+        </div>
+</section>
 {% endblock %}
 
 {% block footer %}

@@ -12,98 +12,90 @@
 {% endblock%}
 
 {% block main_content%}
-    <section id="main-content">
-        <section class="wrapper">
-            <div class="row mt">
-                  <div class="col-md-12">
-                      <div class="content-panel">
-                          <h4><i class="fa fa-sliders"></i> Add a new product to be monitored</h4><hr>
-                          <div class="stepwizard">
-                            <div class="stepwizard-row setup-panel">
-                                <div class="stepwizard-step">
-                                    <a href="#step-1" type="button" class="btn btn-primary btn-circle btn-xl btn-line">1</a>
-                                    <!--<img class="hidden-xs" src="{% static '/unique-assets/images/top-arrow.png' %}" alt="">-->
-                                    <p>Step 1</p>
-                                </div>
-                                <div class="stepwizard-step">
-                                    <a href="#step-2" type="button" class="btn btn-default btn-circle btn-xl btn-line" disabled="disabled">2</a>
-                                    <p>Step 2</p>
-                                </div>
-                                <div class="stepwizard-step">
-                                    <a href="#step-3" type="button" class="btn btn-default btn-circle btn-xl btn-line" disabled="disabled">3</a>
-                                    <p>Step 3</p>
-                                </div>
-                            </div>
-                        </div>
-                        <form role="form">
-                            <div class="row setup-content" id="step-1">
-                                <div class="col-xs-12">
-                                    <div class="col-md-12">
-                                        <h3> Step 1: <i>Copy link of the product and paste it below</i></h3>
-                                        <div class="form-group">
-                                            <label class="control-label">product link</label>
-                                            <input id="urlId" maxlength="1024" type="text" required="required" class="form-control" placeholder="https://www.emag.ro/telefon-mobil-apple-iphone....."  />
-                                        </div>
-                                        <div class="alert alert-danger" id="invalidURLId" hidden="true"><b>Oh snap!</b> URL is invalid. Add a valid URL and try again</div>
-                                        <button class="btn btn-primary nextBtn btn-lg pull-right" type="button" id="btnStep1" onclick="btnStep1Click()">
-                                            Next
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row setup-content" id="step-2">
-                                <div class="col-xs-12">
-                                    <div class="col-md-12">
-                                        <h3> A product has been found!</h3>
-                                        <div class="form-group">
-                                          <label class="col-lg-2 col-sm-2 control-label">Product name:</label>
-                                          <div class="col-lg-10">
-                                              <p class="form-control-static" id="productNameId"></p>
-                                          </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                          <label class="col-lg-2 col-sm-2 control-label">Product price:</label>
-                                          <div class="col-lg-10">
-                                              <p class="form-control-static" id="productPriceId"></p>
-                                          </div>
-                                        </div>
-                                        <p class="form-control-static" id="productURLId" hidden="true"></p>
-                                        <p class="form-control-static" id="productShopId" hidden="true"></p>
-                                        <button class="btn btn-primary nextBtn btn-lg pull-right" type="button" id="btnStep2" onclick="btnStep2Click()">Next</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row setup-content" id="step-3">
-                                <div class="col-xs-12">
-                                    <div class="col-md-12">
-                                        <h3 class = "alert alert-success"> Congratulations! Product has been added succesfully!</h3>
-                                        <button class="btn btn-success btn-lg pull-right" type="submit" id="btnStep3" onclick="btnStep3Click()">Add another one!</button>
-                                        <a class="btn btn-lg pull-left" type="submit" href="/my-products">View products</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                      </div>
-
-
-
-                  </div>
-            </div>
-
-            <div class="row mt">
-                <div class="col-md-12">
-                    <div class="content-panel">
-                        <h4><i class="fa fa-shopping-cart"></i> Available shops. More will be available soon.</h4>
-                        <hr>
-                        <img class="hidden-xs" src="{% static '/img/shops/emag-logo.png' %}" alt="">
-                        <img class="hidden-xs" src="{% static '/img/shops/AVstore-logo.png' %}" alt="">
+<div class="row mt">
+      <div class="col-md-12">
+          <div class="content-panel">
+              <h4><i class="fa fa-sliders"></i> Add a new product to be monitored</h4><hr>
+              <div class="stepwizard">
+                <div class="stepwizard-row setup-panel">
+                    <div class="stepwizard-step">
+                        <a href="#step-1" type="button" class="btn btn-primary btn-circle btn-xl btn-line">1</a>
+                        <!--<img class="hidden-xs" src="{% static '/unique-assets/images/top-arrow.png' %}" alt="">-->
+                        <p>Step 1</p>
+                    </div>
+                    <div class="stepwizard-step">
+                        <a href="#step-2" type="button" class="btn btn-default btn-circle btn-xl btn-line" disabled="disabled">2</a>
+                        <p>Step 2</p>
+                    </div>
+                    <div class="stepwizard-step">
+                        <a href="#step-3" type="button" class="btn btn-default btn-circle btn-xl btn-line" disabled="disabled">3</a>
+                        <p>Step 3</p>
                     </div>
                 </div>
             </div>
+            <form role="form">
+                <div class="row setup-content" id="step-1">
+                    <div class="col-xs-12">
+                        <div class="col-md-12">
+                            <h3> Step 1: <i>Copy link of the product and paste it below</i></h3>
+                            <div class="form-group">
+                                <label class="control-label">product link</label>
+                                <input id="urlId" maxlength="1024" type="text" required="required" class="form-control" placeholder="https://www.emag.ro/telefon-mobil-apple-iphone....."  />
+                            </div>
+                            <div class="alert alert-danger" id="invalidURLId" hidden="true"><b>Oh snap!</b> URL is invalid. Add a valid URL and try again</div>
+                            <button class="btn btn-primary nextBtn btn-lg pull-right" type="button" id="btnStep1" onclick="btnStep1Click()">
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row setup-content" id="step-2">
+                    <div class="col-xs-12">
+                        <div class="col-md-12">
+                            <h3> A product has been found!</h3>
+                            <div class="form-group">
+                              <label class="col-lg-2 col-sm-2 control-label">Product name:</label>
+                              <div class="col-lg-10">
+                                  <p class="form-control-static" id="productNameId"></p>
+                              </div>
+                            </div>
 
-        </section>
-    </section>
+                            <div class="form-group">
+                              <label class="col-lg-2 col-sm-2 control-label">Product price:</label>
+                              <div class="col-lg-10">
+                                  <p class="form-control-static" id="productPriceId"></p>
+                              </div>
+                            </div>
+                            <p class="form-control-static" id="productURLId" hidden="true"></p>
+                            <p class="form-control-static" id="productShopId" hidden="true"></p>
+                            <button class="btn btn-primary nextBtn btn-lg pull-right" type="button" id="btnStep2" onclick="btnStep2Click()">Next</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row setup-content" id="step-3">
+                    <div class="col-xs-12">
+                        <div class="col-md-12">
+                            <h3 class = "alert alert-success"> Congratulations! Product has been added succesfully!</h3>
+                            <button class="btn btn-success btn-lg pull-right" type="submit" id="btnStep3" onclick="btnStep3Click()">Add another one!</button>
+                            <a class="btn btn-lg pull-left" type="submit" href="/my-products">View products</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+          </div>
+      </div>
+</div>
+
+<div class="row mt">
+    <div class="col-md-12">
+        <div class="content-panel">
+            <h4><i class="fa fa-shopping-cart"></i> Available shops. More will be available soon.</h4>
+            <hr>
+            <img class="hidden-xs" src="{% static '/img/shops/emag-logo.png' %}" alt="">
+            <img class="hidden-xs" src="{% static '/img/shops/AVstore-logo.png' %}" alt="">
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block footer %}
