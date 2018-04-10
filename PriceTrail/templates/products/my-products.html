@@ -35,6 +35,10 @@
                         <td><a href = "https://www.emag.ro" target="_blank"><img class="hidden-xs" src="{% static '/img/shops/emag-logo-thumb.png' %}" alt=""></a></td>
                       {% elif product.shop == 'avstore' %}
                         <td><a href = "https://www.avstore.ro" target="_blank"><img class="hidden-xs" src="{% static '/img/shops/AVstore-logo-thumb.png' %}" alt=""></a></td>
+                      {% elif product.shop == 'evomag' %}
+                        <td><a href = "https://www.evomag.ro" target="_blank"><img class="hidden-xs" src="{% static '/img/shops/evomag-logo-thumb.png' %}" alt=""></a></td>
+                      {% else %}
+                        <td>  </td>
                       {% endif %}
                       <!--<td>{{product.shop}}</td>-->
                       <td class="hidden-phone"><a href="{{product.url}}" target="_blank">{{product.name}}</a></td>
@@ -56,7 +60,6 @@
                           <button class="btn btn-danger btn-xs" onclick="deleteProduct('{{product.id}}')"><i class="fa fa-trash-o "></i></button>
                       </td>
                   </tr>
-
                   {% endfor %}
 
                   <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

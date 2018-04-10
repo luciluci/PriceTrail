@@ -1,3 +1,3 @@
 PRODUCT_UNAVAILABLE = 666
 
-SHOPS = ['emag', 'avstore']
+SHOPS = ['emag', 'avstore', 'evomag']

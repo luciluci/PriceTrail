@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from TailedProducts.models import Product, UserToProduct, ProductPrice, DisplayProduct, DisplayDatePriceProduct
 from TailedProducts.helpers import filters
 from .utils import general
+import locale
 
 import json
 from spiders.GiantSpiders import SpiderGenerator, Spider
@@ -196,7 +197,7 @@ def add_new_product(request):
     if request.method == 'POST':
         d = json.loads(request.POST['json'])
         product_name = d['product_name']
-        product_price = d['product_price']
+        product_price = locale.atof(d['product_price'])
         product_url = d['product_url']
         product_shop = d['product_shop']
 
@@ -309,7 +310,6 @@ def reset_session(request):
 
 #used for hardocoding the update prices operations.
 from .utils import data
-import time
 
 def update_prices():
     monitored_products = Product.objects.all()
