@@ -8,6 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dashboard">
     <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <meta name='profitshareid' content='3b78a5a1064209c87f67401da6480445' />
 
     <title>{% block title %}ShoppingList - Home page{% endblock %}</title>
     {% block begin_javascript %}
@@ -157,15 +158,24 @@
                 <!--  notification end -->
             </div>
             <div class="top-menu">
-            	<ul class="nav pull-right top-menu">
-                    <li><a class="logout" onclick="location.href={% url 'logout'%}">Logout</a></li>
+            	<!--<ul class="nav pull-right top-menu">-->
+                <ul class="nav navbar-nav navbar-right pull-right pull-down">
+                    <li><a onclick="location.href={% url 'logout'%}">Logout</a></li>
             	</ul>
             </div>
           {% else %}
             <div class="top-menu">
-            	<ul class="nav pull-right top-menu">
-                    <li><a class="logout" href="/login">Login</a></li>
-            	</ul>
+            	<!--<ul class="nav pull-right top-menu">-->
+                    <!--<li><a class="logout" href="/login">Login</a></li>-->
+                    <!--<li class="active"><a href="#home">Home<span class="sr-only">(current)</span></a></li>-->
+            	<!--</ul>-->
+                <ul class="nav navbar-nav navbar-right pull-right pull-down">
+                    <!--<li class="active"><a href="/#about-id">About<span class="sr-only">(current)</span></a></li>-->
+                    <!--<li><a href="/#notification-id">Notification</a></li>-->
+                    <!--<li><a href="/#products-id">Products</a></li>-->
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/register">Register</a></li>
+                </ul>
             </div>
           {% endif %}
         </header>

@@ -53,3 +53,8 @@
   width: 100%;
   margin-right: 0px;
 }
+
+.pull-down{
+    margin-top: 5px !important;
+    font-size: 15px !important;
+}
