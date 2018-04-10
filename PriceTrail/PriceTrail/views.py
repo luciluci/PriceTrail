@@ -261,7 +261,7 @@ def validate_product(request):
 
     if shop_name not in data.SHOPS:
         pdata['status'] = 'invalid'
-        pdata['message'] = '<b>Oh snap!</b> This shop is not supported. Add a product from the supported shops'
+        pdata['message'] = '<b>Oh snap!</b> <u>' + shop_name + '</u> is not supported. Add a product from the supported shops'
         return HttpResponse(json.dumps(pdata), content_type='application/json')
 
     spider_gen = SpiderGenerator()
