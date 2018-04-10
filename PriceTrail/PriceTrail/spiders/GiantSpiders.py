@@ -58,6 +58,9 @@ class Spider(object):
             return ''
         return shop_name[1]
 
+    def pause(self):
+        time.sleep(2)
+
 
 class EmagSpider(Spider):
 
@@ -92,6 +95,9 @@ class EmagSpider(Spider):
         self.product.name = page_title[0].strip()
 
         return httplib.OK
+
+    def pause(self):
+        time.sleep(3)
 
 class AVStoreSpider(Spider):
 

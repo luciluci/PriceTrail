@@ -321,7 +321,6 @@ def update_prices():
         if product.shop not in data.SHOPS:
             print('SHOP NOT SUPPORTED: ' + product.shop)
             continue
-        time.sleep(2)
 
         spider = spider_gen.get_spider(product.shop)
         response = spider.parse_data(product.url)
@@ -343,6 +342,8 @@ def update_prices():
             product.save()
         else:
             print(product.name.encode('utf-8') + ' - NOK')
+        #wait until new http req is made
+        spider.pause()
 
 #detects best price and flags if best price found for later use
 def _detect_best_price(product, live_price):
