@@ -2,7 +2,6 @@ TO DOs:
 
 * product name should not have characters like '&amp;'
     they must be replaced
-* message notifications should include also daily best price for product
 * split notification products from 'list display' products, since the most of the data is redundant
 * in get_notification_products:
     if diff_product_ids is None or unavailable_product_ids is None or best_products_ids is None:
@@ -11,9 +10,8 @@ TO DOs:
     create link to 'my-products'
     instead of today display current price
     add 'buy now' button that will go to actual product
-* attach affiliate link
 * add email notification system
-
+* add "in stock"/"out of stock" search n page and display
 
 /:
 * in the 'logged in' version of index:

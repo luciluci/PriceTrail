@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from TailedProducts.models import Product, UserToProduct, ProductPrice, DisplayProduct, DisplayDatePriceProduct
 from TailedProducts.helpers import filters
 from .utils import general, affiliates
+from .email.client import EmailClient
 import locale
 
 import json
@@ -360,3 +361,8 @@ def _detect_best_price(product, live_price):
             product.has_best_price = False
 
     product.save()
+
+def test_view(request):
+    product_list = filters.get_display_products_by_user(request.user.id)
+    rw = EmailClient.send_best_price_notification(['lucian_apetre@yahoo.com', 'lucian.apetre@gmail.com'], product_list)
+    return rw
