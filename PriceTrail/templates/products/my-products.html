@@ -40,8 +40,8 @@
                       {% else %}
                         <td>  </td>
                       {% endif %}
-                      <!--<td>{{product.shop}}</td>-->
-                      <td class="hidden-phone"><a href="{{product.url}}" target="_blank">{{product.name}}</a></td>
+
+                      <td class="hidden-phone"><a href="{{product.aff_url}}" target="_blank">{{product.name}}</a></td>
                       <td>RON {{product.price}}</td>
 
                       {% if product.trend == "ASC" %}
@@ -56,7 +56,7 @@
                         <td><span class="label label-info label-mini">same price</span></td>
                       {% endif %}
                       <td>
-                          <button class="btn btn-success btn-xs" data-toggle="modal" data-target="#productModal" data-id="graphBody" onclick="openModalGraph({{product.id}}, '{{product.url}}')"><span class="glyphicon glyphicon-stats"></span></button>
+                          <button class="btn btn-success btn-xs" data-toggle="modal" data-target="#productModal" data-id="graphBody" onclick="openModalGraph({{product.id}}, '{{product.aff_url}}')"><span class="glyphicon glyphicon-stats"></span></button>
                           <button class="btn btn-danger btn-xs" onclick="deleteProduct('{{product.id}}')"><i class="fa fa-trash-o "></i></button>
                       </td>
                   </tr>

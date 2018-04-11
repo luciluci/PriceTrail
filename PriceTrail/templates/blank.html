@@ -72,7 +72,8 @@
                             </li>
                             {% for product in diff_products %}
                             <li>
-                                <a href="/my-products">
+                                <a href="{{product.aff_url}}" target="_blank">
+
                                     <div class="task-info">
                                         <div class="desc truncate-250">{{product.name}}</div>
                                         {% if product.trend == "ASC" %}
@@ -122,7 +123,7 @@
                             </li>
                             {% for product in unavailable_products %}
                             <li>
-                                <a >
+                                <a href="/my-products">
                                     <span class="photo"><img alt="avatar" src="{% static 'img/ui-danro.jpg' %}"></span>
                                     <span class="subject">
                                     <span class="from danger alert-danger">Product is no longer available</span>
@@ -136,7 +137,7 @@
                             {% endfor %}
                             {% for product in best_price_products %}
                             <li>
-                                <a href="/">
+                                <a href="{{product.aff_url}}" target="_blank">
                                     <span class="photo"><img alt="avatar" src="{% static 'img/text-alerts.png' %}"></span>
                                     <span class="subject">
                                     <span class="from">Best price</span>
@@ -148,9 +149,11 @@
                                 </a>
                             </li>
                             {% endfor %}
+                            {% if unavailable_count|add:count_best_price > 0 %}
                             <li>
                                 <a href="/my-products">See all products</a>
                             </li>
+                            {% endif %}
                         </ul>
                     </li>
                     <!-- inbox dropdown end -->

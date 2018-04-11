@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from TailedProducts.models import Product, UserToProduct, ProductPrice, DisplayProduct, DisplayDatePriceProduct
 from TailedProducts.helpers import filters
-from .utils import general
+from .utils import general, affiliates
 import locale
 
 import json
@@ -288,6 +288,7 @@ def display_product(request, id):
     dprod.shop = product.shop
     dprod.url = product.url
     dprod.price = 20
+    dprod.aff_url = affiliates.Affiliate.createAffiliateURL(dprod.url, dprod.shop)
 
     dates_prices =  ProductPrice.objects.filter(product_id__exact=product.id)
     for item in dates_prices:

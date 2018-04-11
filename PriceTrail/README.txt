@@ -1,6 +1,5 @@
 TO DOs:
 
-* sign-up/register should also be available from index
 * product name should not have characters like '&amp;'
     they must be replaced
 * message notifications should include also daily best price for product
@@ -8,6 +7,13 @@ TO DOs:
 * in get_notification_products:
     if diff_product_ids is None or unavailable_product_ids is None or best_products_ids is None:
     can be splitted in 3 so if one of the values misses not to compute all 3
+* for notification products:
+    create link to 'my-products'
+    instead of today display current price
+    add 'buy now' button that will go to actual product
+* attach affiliate link
+* add email notification system
+
 
 /:
 * in the 'logged in' version of index:
@@ -76,3 +82,7 @@ Theme:
 
 1. dashboard icons:
     http://www.taklom360.com/help-icons.html
+
+Bug:
+* if product not added in step 2, the next button will be unavailable.
+it should become available after another product is added.

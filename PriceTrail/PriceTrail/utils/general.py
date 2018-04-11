@@ -13,3 +13,4 @@ def get_redirect_url(request):
             return ''
     else:
         return ''
+

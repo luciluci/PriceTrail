@@ -37,6 +37,7 @@ class DisplayProduct():
         self.trend = "EQ"
         self.percent = 0
         self.available = True
+        self.aff_url = ""
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,

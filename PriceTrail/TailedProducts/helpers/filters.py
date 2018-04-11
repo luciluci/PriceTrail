@@ -2,6 +2,7 @@ from operator import itemgetter, attrgetter, methodcaller
 from TailedProducts.models import Product, UserToProduct, ProductPrice, DisplayProduct
 
 from datetime import datetime
+from PriceTrail.utils.affiliates import Affiliate
 
 def get_current_date():
     now = datetime.now()
@@ -68,6 +69,7 @@ def _get_display_products_by_products(products):
         prod.trend = prod_dict["trend"]
         prod.price = prod_dict["price"]
         prod.percent = prod_dict["percent"]
+        prod.aff_url = Affiliate.createAffiliateURL(prod.url, prod.shop)
         idx += 1
     return display_products
 
