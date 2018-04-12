@@ -115,6 +115,8 @@ def _get_products_by_user(user_id):
     return Product.objects.filter(id__in=user_products)
 
 def _create_display_products_by_ids(ids):
+    if len(ids) == 0:
+        return []
     products = Product.objects.filter(id__in=ids)
     return _get_display_products_by_products(products)
 
@@ -163,8 +165,7 @@ def count_total_products_monitored_by_user(user_id):
     product = UserToProduct.objects.filter(user_id__exact=user_id)
     return product.count()
 
-#check if the current_price is better than min_price
-#return list of Product ids with current_price as best_price
+#return list of <product ids> with today's best_price
 def get_ids_of_best_price_products(user_id = None):
 
     if user_id:
@@ -173,3 +174,7 @@ def get_ids_of_best_price_products(user_id = None):
         products_all = Product.objects.all()
     best_price_ids = [x.id for x in products_all if x.has_best_price == True]
     return best_price_ids
+
+def get_best_display_products_by_user(user_id = None):
+    best_prods_ids = get_ids_of_best_price_products(user_id)
+    return _create_display_products_by_ids(best_prods_ids)

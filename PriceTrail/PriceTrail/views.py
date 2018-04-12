@@ -1,21 +1,20 @@
 from __future__ import unicode_literals
 
-from django.shortcuts import render, redirect
-
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
-from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
-from TailedProducts.models import Product, UserToProduct, ProductPrice, DisplayProduct, DisplayDatePriceProduct
-from TailedProducts.helpers import filters
 from .utils import general, affiliates
 from .email.client import EmailClient
-import locale
-
-import json
 from spiders.GiantSpiders import SpiderGenerator, Spider
-import httplib
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from TailedProducts.models import Product, UserToProduct, ProductPrice, DisplayProduct, DisplayDatePriceProduct
+from TailedProducts.helpers import filters
+
+import locale
+import json
+import httplib
 
 #endpoint "/"
 def index_view(request):
@@ -362,7 +361,19 @@ def _detect_best_price(product, live_price):
 
     product.save()
 
-def test_view(request):
-    product_list = filters.get_display_products_by_user(request.user.id)
-    rw = EmailClient.send_best_price_notification(['lucian_apetre@yahoo.com', 'lucian.apetre@gmail.com'], product_list)
-    return rw
+def test_email_notifications(request):
+    data = {}
+    users = User.objects.all()
+    for user in users:
+        product_list = filters.get_best_display_products_by_user(user.id)
+        data[user.username] = str(len(product_list)) + ' products'
+        if len(product_list) == 0:
+            continue
+        username = ''
+        if user.first_name or user.last_name:
+            username = user.first_name + ' ' + user.last_name
+        else:
+            username = user.username
+        rw = EmailClient.send_best_price_notification(['lucian_apetre@yahoo.com', 'lucian.apetre@gmail.com'], product_list, username)
+
+    return HttpResponse(json.dumps(data), content_type='application/json')

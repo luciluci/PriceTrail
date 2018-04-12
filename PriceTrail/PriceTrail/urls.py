@@ -21,7 +21,7 @@ from .views import validate_product, display_product
 #user related views
 from .views import index_view, login_view, register_view, profile_view
 #products related views
-from .views import my_products_view, delete_product, add_new_product, dashboard_view, test_view
+from .views import my_products_view, delete_product, add_new_product, dashboard_view, test_email_notifications
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -40,5 +40,5 @@ urlpatterns = [
 
     #modal window
     url(r'^display-product/(?P<id>\d+)/', display_product, name='display-product'),
-    url(r'^test/$', test_view, name='test-view'),
+    url(r'^test/$', test_email_notifications, name='test-view'),
 ]

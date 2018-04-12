@@ -5,7 +5,7 @@ from PriceTrail.spiders.GiantSpiders import SpiderGenerator
 from PriceTrail.utils import data
 
 import httplib
-import time
+import locale
 
 class Command(BaseCommand):
     help = 'Add price entry for all products'
@@ -26,7 +26,7 @@ class Command(BaseCommand):
 
             if httplib.OK == response:
                 prod = spider.get_product()
-                price = prod.price
+                price = locale.atof(prod.price)
                 # new entry in ProductPrice table
                 new_prod_price = ProductPrice()
                 new_prod_price.price = price
