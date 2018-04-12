@@ -1,9 +1,9 @@
 from PriceTrail.settings import BASE_DIR
+
+from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
-from django.http import HttpResponse
 from django.template import Context, Template
 
-import json
 import socket
 import smtplib
 import os
@@ -16,14 +16,19 @@ class EmailClient:
 
         message = EmailClient._create_email_message(products)
 
+        mail = EmailMultiAlternatives('', 'This is message', 'from_email', to_emails)
+        mail.attach_alternative(message, "text/html")
+
         try:
-            send_mail(
-                subject='Price drop in shopping-list.ro',
-                from_email='admin@shopping-list.ro',
-                recipient_list=to_emails,
-                fail_silently=False,
-                html_message=message,
-            )
+            mail.send()
+            # send_mail(
+            #     subject='Price drop in shopping-list.ro',
+            #     message=None,
+            #     from_email='admin@shopping-list.ro',
+            #     recipient_list=to_emails,
+            #     fail_silently=False,
+            #     html_message=message,
+            # )
         except smtplib.SMTPException as ex:
             data['error'] = ex.strerror
         except socket.error as ex:
