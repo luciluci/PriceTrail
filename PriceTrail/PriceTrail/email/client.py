@@ -15,15 +15,15 @@ class EmailClient:
         data = {}
         data['error'] = 'None'
 
-        #html_message = EmailClient._create_html_message(products)
-        html_message = loader.render_to_string(
-            os.path.join(BASE_DIR, 'templates/emails/newsletter-test.html'),
-            {
-                "name": "test name",
-                "price": 220,
-                "aff_url": "dsadas"
-            }
-        )
+        html_message = EmailClient._create_html_message(products)
+        # html_message = loader.render_to_string(
+        #     os.path.join(BASE_DIR, 'templates/emails/newsletter-test.html'),
+        #     {
+        #         "name": "test name",
+        #         "price": 220,
+        #         "aff_url": "dsadas"
+        #     }
+        # )
 
         #mail = EmailMultiAlternatives('', 'This is message', 'from_email', to_emails)
         #mail.attach_alternative(message, "text/html")
@@ -32,7 +32,7 @@ class EmailClient:
             #mail.send()
             send_mail(
                 subject='Price drop in shopping-list.ro',
-                message=None,
+                message='Hi',
                 from_email='admin@shopping-list.ro',
                 recipient_list=to_emails,
                 fail_silently=False,
@@ -46,11 +46,11 @@ class EmailClient:
 
     @staticmethod
     def _create_html_message(products):
-        #template_dir = os.path.join(BASE_DIR, 'templates/emails/newsletter.html')
-        template_dir = os.path.join(BASE_DIR, 'templates/emails/newsletter-test.html')
+        template_dir = os.path.join(BASE_DIR, 'templates/emails/newsletter.html')
+
         email_template = open(template_dir, 'r')
         template = Template(email_template.read())
 
-        #context = Context({"products": products})
-        context = Context({"product": products[0]})
+        context = Context({"products": products})
+
         return template.render(context)
