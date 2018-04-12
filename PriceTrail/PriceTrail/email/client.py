@@ -18,11 +18,12 @@ class EmailClient:
 
         try:
             send_mail(
-                'Price drop in shopping-list.ro',
-                message,
-                'admin@shopping-list.ro',
-                to_emails,
+                subject='Price drop in shopping-list.ro',
+                message=None,
+                from_email='admin@shopping-list.ro',
+                recipient_list=to_emails,
                 fail_silently=False,
+                html_message=message,
             )
         except smtplib.SMTPException as ex:
             data['error'] = ex.strerror
