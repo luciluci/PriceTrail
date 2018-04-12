@@ -37,9 +37,11 @@ class EmailClient:
 
     @staticmethod
     def _create_html_message(products):
-        template_dir = os.path.join(BASE_DIR, 'templates/emails/newsletter.html')
+        #template_dir = os.path.join(BASE_DIR, 'templates/emails/newsletter.html')
+        template_dir = os.path.join(BASE_DIR, 'templates/emails/newsletter-test.html')
         email_template = open(template_dir, 'r')
         template = Template(email_template.read())
 
-        context = Context({"products": products})
+        #context = Context({"products": products})
+        context = Context({"product": products[0]})
         return template.render(context)
