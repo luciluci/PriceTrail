@@ -1,25 +1,21 @@
+from PriceTrail.settings import BASE_DIR
 from django.core.mail import send_mail
 from django.http import HttpResponse
+from django.template import Context, Template
 
 import json
 import socket
 import smtplib
+import os
 
 class EmailClient:
     @staticmethod
-    def send_best_price_notification(to_emails, products):
-        a_after = '</a>'
-        new_line = '\n\r'
+    def send_best_price_notification(to_emails, products, username):
         data = {}
         data['error'] = 'None'
 
-        if len(products) > 1:
-            message = 'Price dropped for products:' + new_line
-        else:
-            message = 'Price dropped for product:' + new_line
-        for product in products:
-            a_before = '<a href=\"' + product.aff_url + '\" target=\"_blank\">'
-            message += a_before + product.name + a_after + new_line
+        message = EmailClient._create_email_message(products)
+
         try:
             send_mail(
                 'Price drop in shopping-list.ro',
@@ -32,4 +28,13 @@ class EmailClient:
             data['error'] = ex.strerror
         except socket.error as ex:
             data['error'] = ex.strerror
-        return HttpResponse(json.dumps(data), content_type='application/json')
+        return data
+
+    @staticmethod
+    def _create_email_message(products):
+        template_dir = os.path.join(BASE_DIR, 'templates/emails/newsletter.html')
+        email_template = open(template_dir, 'r')
+        template = Template(email_template.read())
+
+        context = Context({"products": products})
+        return template.render(context)

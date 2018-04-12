@@ -374,6 +374,10 @@ def test_email_notifications(request):
             username = user.first_name + ' ' + user.last_name
         else:
             username = user.username
-        rw = EmailClient.send_best_price_notification(['lucian_apetre@yahoo.com', 'lucian.apetre@gmail.com'], product_list, username)
+        if user.email:
+            email_data = EmailClient.send_best_price_notification([user.email], product_list, username)
+            data.update(email_data)
+        else:
+            data['warn'] = 'user ' + user.username + ' does not have an email'
 
     return HttpResponse(json.dumps(data), content_type='application/json')
