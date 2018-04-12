@@ -14,31 +14,29 @@ class EmailClient:
         data = {}
         data['error'] = 'None'
 
-        message = EmailClient._create_email_message(products)
+        html_message = EmailClient._create_html_message(products)
 
-        mail = EmailMultiAlternatives('', 'This is message', 'from_email', to_emails)
-        mail.attach_alternative(message, "text/html")
+        #mail = EmailMultiAlternatives('', 'This is message', 'from_email', to_emails)
+        #mail.attach_alternative(message, "text/html")
 
         try:
-            mail.send()
-            # send_mail(
-            #     subject='Price drop in shopping-list.ro',
-            #     message=None,
-            #     from_email='admin@shopping-list.ro',
-            #     recipient_list=to_emails,
-            #     fail_silently=False,
-            #     html_message=message,
-            # )
-        # except smtplib.SMTPException as ex:
-        #     data['error'] = ex.strerror
-        # except socket.error as ex:
-        #     data['error'] = ex.strerror
-        except:
-            data['error'] = 'failed to send email'
+            #mail.send()
+            send_mail(
+                subject='Price drop in shopping-list.ro',
+                message=None,
+                from_email='admin@shopping-list.ro',
+                recipient_list=to_emails,
+                fail_silently=False,
+                html_message=html_message,
+            )
+        except smtplib.SMTPException as ex:
+            data['error'] = ex.strerror
+        except socket.error as ex:
+            data['error'] = ex.strerror
         return data
 
     @staticmethod
-    def _create_email_message(products):
+    def _create_html_message(products):
         template_dir = os.path.join(BASE_DIR, 'templates/emails/newsletter.html')
         email_template = open(template_dir, 'r')
         template = Template(email_template.read())
