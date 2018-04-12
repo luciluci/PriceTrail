@@ -19,7 +19,6 @@ class EmailClient:
         try:
             send_mail(
                 subject='Price drop in shopping-list.ro',
-                message=None,
                 from_email='admin@shopping-list.ro',
                 recipient_list=to_emails,
                 fail_silently=False,
