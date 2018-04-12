@@ -3,6 +3,7 @@ from PriceTrail.settings import BASE_DIR
 from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
 from django.template import Context, Template
+from django.template import loader
 
 import socket
 import smtplib
@@ -14,7 +15,15 @@ class EmailClient:
         data = {}
         data['error'] = 'None'
 
-        html_message = EmailClient._create_html_message(products)
+        #html_message = EmailClient._create_html_message(products)
+        html_message = loader.render_to_string(
+            os.path.join(BASE_DIR, 'templates/emails/newsletter-test.html'),
+            {
+                "name": "test name",
+                "price": 220,
+                "aff_url": "dsadas"
+            }
+        )
 
         #mail = EmailMultiAlternatives('', 'This is message', 'from_email', to_emails)
         #mail.attach_alternative(message, "text/html")
