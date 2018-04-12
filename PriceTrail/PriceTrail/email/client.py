@@ -29,10 +29,12 @@ class EmailClient:
             #     fail_silently=False,
             #     html_message=message,
             # )
-        except smtplib.SMTPException as ex:
-            data['error'] = ex.strerror
-        except socket.error as ex:
-            data['error'] = ex.strerror
+        # except smtplib.SMTPException as ex:
+        #     data['error'] = ex.strerror
+        # except socket.error as ex:
+        #     data['error'] = ex.strerror
+        except:
+            data['error'] = 'failed to send email'
         return data
 
     @staticmethod
