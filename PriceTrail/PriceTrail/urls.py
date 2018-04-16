@@ -40,5 +40,7 @@ urlpatterns = [
 
     #modal window
     url(r'^display-product/(?P<id>\d+)/', display_product, name='display-product'),
+
+    #superuser endpoints
     url(r'^test/$', test_email_notifications, name='test-view'),
 ]

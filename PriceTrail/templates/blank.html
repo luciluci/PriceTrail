@@ -1,5 +1,7 @@
 {% load staticfiles %}
 
+{% with len_prod_unavailable=unavailable_products|length len_prod_best_price=best_price_products|length %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,13 +61,13 @@
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="/">
                             <i class="fa fa-tasks"></i>
-                            <span class="badge bg-theme">{{ diff_count }}</span>
+                            <span class="badge bg-theme">{{ diff_products|length }}</span>
                         </a>
                         <ul class="dropdown-menu extended tasks-bar">
                             <div class="notify-arrow notify-arrow-green"></div>
                             <li>
-                                {% if diff_count > 0 %}
-                                <p class="green">Price changed for {{ diff_count }} products</p>
+                                {% if diff_products|length > 0 %}
+                                <p class="green">Price changed for {{ diff_products|length }} products</p>
                                 {% else %}
                                 <p class="green">No changed products today</p>
                                 {% endif %}
@@ -96,7 +98,7 @@
                                 </a>
                             </li>
                             {% endfor %}
-                            {% if diff_count > 0 %}
+                            {% if diff_products|length > 0 %}
                                 <li class="external">
                                     <a href="/my-products">See all products</a>
                                 </li>
@@ -108,15 +110,15 @@
                     <li id="header_inbox_bar" class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
                             <i class="fa fa-envelope-o"></i>
-                            <span class="badge bg-theme">{{ unavailable_count|add:count_best_price }}</span>
+                            <span class="badge bg-theme">{{ len_prod_unavailable|add:len_prod_best_price }}</span>
                         </a>
                         <ul class="dropdown-menu extended inbox">
                             <div class="notify-arrow notify-arrow-green"></div>
                             <li>
-                                {% if unavailable_count|add:count_best_price == 1 %}
-                                <p class="green">You have {{ unavailable_count|add:count_best_price }} notification</p>
-                                {% elif unavailable_count|add:count_best_price > 1 %}
-                                <p class="green">You have {{ unavailable_count|add:count_best_price }} notifications</p>
+                                {% if len_prod_unavailable|add:len_prod_best_price == 1 %}
+                                <p class="green">You have {{ len_prod_unavailable|add:len_prod_best_price }} notification</p>
+                                {% elif len_prod_unavailable|add:len_prod_best_price > 1 %}
+                                <p class="green">You have {{ len_prod_unavailable|add:len_prod_best_price }} notifications</p>
                                 {% else %}
                                 <p class="green">No notifications today</p>
                                 {% endif %}
@@ -141,7 +143,7 @@
                                     <span class="photo"><img alt="avatar" src="{% static 'img/text-alerts.png' %}"></span>
                                     <span class="subject">
                                     <span class="from">Best price</span>
-                                    <span class="time">Today</span>
+                                    <span class="time">{{product.price}}</span>
                                     </span>
                                     <span class="message truncate">
                                         {{product.name}}
@@ -149,7 +151,7 @@
                                 </a>
                             </li>
                             {% endfor %}
-                            {% if unavailable_count|add:count_best_price > 0 %}
+                            {% if len_prod_unavailable|add:len_prod_best_price > 0 %}
                             <li>
                                 <a href="/my-products">See all products</a>
                             </li>
@@ -282,3 +284,5 @@
 
   </body>
 </html>
+
+{% endwith %}

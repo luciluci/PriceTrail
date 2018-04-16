@@ -33,14 +33,11 @@ def index_view_logged_out(request):
     (min_var_product, max_var_product) = filters._get_product_with_highest_price_variation(-1, False)
 
     return render(request, 'index.html', {'diff_products': diff_products,
-                                          'diff_count': len(diff_products),
                                           'unavailable_products': unavailable_products,
-                                          'unavailable_count': len(unavailable_products),
                                           'total_monitored_products': len(total_monitored_products),
                                           'most_changed_product': max_var_product,
                                           'least_changed_product': min_var_product,
-                                          'best_price_products': best_price_products,
-                                          'count_best_price': len(best_price_products)
+                                          'best_price_products': best_price_products
                                           })
 
 
@@ -52,14 +49,11 @@ def index_view_logged_in(request):
     (min_var_product, max_var_product) = filters._get_product_with_highest_price_variation(request.user.id)
 
     return render(request, 'index.html', {'diff_products': diff_products,
-                                          'diff_count': len(diff_products),
                                           'unavailable_products': unavailable_products,
-                                          'unavailable_count': len(unavailable_products),
                                           'total_monitored_products': total_monitored_products,
                                           'most_changed_product': max_var_product,
                                           'least_changed_product': min_var_product,
-                                          'best_price_products': best_price_products,
-                                          'count_best_price': len(best_price_products)
+                                          'best_price_products': best_price_products
                                            })
 
 
@@ -72,14 +66,11 @@ def dashboard_view(request):
     (min_var_product, max_var_product) = filters._get_product_with_highest_price_variation(request.user.id)
 
     return render(request, 'user/dashboard.html', {'diff_products': diff_products,
-                                                   'diff_count': len(diff_products),
                                                    'unavailable_products': unavailable_products,
-                                                   'unavailable_count': len(unavailable_products),
                                                    'total_monitored_products': total_monitored_products,
                                                    'most_changed_product': max_var_product,
                                                    'least_changed_product': min_var_product,
-                                                   'best_price_products': best_price_products,
-                                                   'count_best_price': len(best_price_products)
+                                                   'best_price_products': best_price_products
                                                    })
 
 
@@ -146,11 +137,8 @@ def profile_view(request):
 
     return render(request, 'user/profile.html', {'products':product_list,
                                                  'diff_products': diff_products,
-                                                 'diff_count': len(diff_products),
                                                  'unavailable_products': unavailable_products,
-                                                 'unavailable_count': len(unavailable_products),
-                                                 'best_price_products': best_price_products,
-                                                 'count_best_price': len(best_price_products)
+                                                 'best_price_products': best_price_products
                                                  })
 
 
@@ -163,11 +151,8 @@ def my_products_view(request):
 
     return render(request, 'products/my-products.html', {'products':new_products_list,
                                                          'diff_products': diff_products,
-                                                         'diff_count': len(diff_products),
                                                          'unavailable_products': unavailable_products,
-                                                         'unavailable_count': len(unavailable_products),
-                                                         'best_price_products': best_price_products,
-                                                         'count_best_price': len(best_price_products)
+                                                         'best_price_products': best_price_products
                                                        })
 
 
@@ -238,11 +223,8 @@ def add_new_product(request):
 
     (diff_products, unavailable_products, best_price_products) = filters.get_notification_products(request)
     return render(request, 'products/add-product.html', {'diff_products': diff_products,
-                                                         'diff_count': len(diff_products),
                                                          'unavailable_products': unavailable_products,
-                                                         'unavailable_count': len(unavailable_products),
-                                                         'best_price_products': best_price_products,
-                                                         'count_best_price': len(best_price_products)
+                                                         'best_price_products': best_price_products
                                                          })
 
 
@@ -369,7 +351,7 @@ def test_email_notifications(request):
         data[user.username] = str(len(product_list)) + ' products'
         if len(product_list) == 0:
             continue
-        username = ''
+
         if user.first_name or user.last_name:
             username = user.first_name + ' ' + user.last_name
         else:

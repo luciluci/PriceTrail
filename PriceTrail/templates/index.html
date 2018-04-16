@@ -95,17 +95,17 @@
             <div class="col-md-2 col-sm-2 col-md-offset-1 box0">
                         <div class="box1">
                             <span class="li_sound"></span>
-                            <h3>{{diff_count}}</h3>
+                            <h3>{{diff_products|length}}</h3>
                         </div>
-                            <p>{{diff_count}} products have changed prices from yesterday!</p>
+                            <p>{{diff_products|length}} products have changed prices from yesterday!</p>
                     </div>
 
                     <div class="col-md-2 col-sm-2 box0">
                         <div class="box1">
                             <span class="li_trash"></span>
-                            <h3>{{unavailable_count}}</h3>
+                            <h3>{{len_prod_unavailable}}</h3>
                         </div>
-                            <p>{{unavailable_count}} products are no longer available today.</p>
+                            <p>{{len_prod_unavailable}} products are no longer available today.</p>
                     </div>
                     <div class="col-md-2 col-sm-2 box0">
                         <div class="box1">
