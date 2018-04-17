@@ -164,12 +164,43 @@ class EVOMagSpider(Spider):
 
         return httplib.OK
 
+class CelSpider(Spider):
+    def __init__(self):
+        super(CelSpider, self).__init__('cel')
+
+    def parse_data(self, url):
+        if httplib.OK != self._request_url(url):
+            return self.result.status_code
+
+        tree = html.fromstring(self.result.content)
+
+        product_node_tree = tree.xpath('//div[@class="pret_tabela"]')
+
+        prod_price_str = ''
+        for element in product_node_tree[0].iter():
+            new_price_node = element.find('span[@class="productPrice"]')
+            if new_price_node is not None:
+                prod_price_str = new_price_node.text.replace('.', '').strip()
+                break
+
+        page_title = tree.xpath('//h2[@class="productName"]/text()')
+
+        if not prod_price_str or not page_title:
+            return httplib.NO_CONTENT
+
+        self.product.price = prod_price_str.replace('.', '').strip()
+        # assume it's the first element in the array
+        self.product.name = page_title[0].strip()
+
+        return httplib.OK
+
 class SpiderGenerator():
 
     def __init__(self):
         self.emag = EmagSpider()
         self.avstore = AVStoreSpider()
         self.evomag = EVOMagSpider()
+        self.cel = CelSpider()
 
     def get_spider(self, name):
         if name == "emag":
@@ -178,3 +209,5 @@ class SpiderGenerator():
             return self.avstore
         elif name == "evomag":
             return self.evomag
+        elif name == "cel":
+            return self.cel
