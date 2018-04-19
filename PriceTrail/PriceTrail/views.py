@@ -262,6 +262,20 @@ def validate_product(request):
 
     return HttpResponse(json.dumps(pdata), content_type='application/json')
 
+@login_required(login_url='/login')
+def edit_profile_view(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        first_name = request.POST['firstname']
+        last_name = request.POST['lastname']
+        current_user = request.user
+        current_user.first_name = first_name
+        current_user.last_name = last_name
+        current_user.email = email
+        current_user.save()
+    return profile_view(request)
+
+
 #iframe to be displayed in a modal window
 def display_product(request, id):
     product = Product.objects.get(id=id)

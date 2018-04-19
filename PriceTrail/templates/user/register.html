@@ -2,57 +2,64 @@
 
 {% load staticfiles %}
 
-{% block title %} ShoppingList - Registration {% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+  {% block title %} PriceTrail - Registration {% endblock %}
 
-  {% block main_content%}
-  <!-- **********************************************************************************************************************************************************
-  MAIN CONTENT
-  *********************************************************************************************************************************************************** -->
+  <body>
 
-  <div id="login-page">
-	<div class="container">
-		  <form class="form-login" role="form" method="post" action="{% url 'register' %}" id="login-form">
-			  {% csrf_token %}
-			<h2 class="form-login-heading">register now</h2>
-			<div class="login-wrap">
-				<input type="text" class="form-control" placeholder="User ID" id="id_username" name="username" autofocus>
-				<br>
-				<input type="text" class="form-control" placeholder="First Name" id="id_first_name" name="firstname">
-				<br>
-				<input type="text" class="form-control" placeholder="Last Name" id="id_last_name" name="lastname">
-				<br>
-				<input type="email" class="form-control" placeholder="johndoe@gmail.com" id="id_email" name="email">
-				<br>
-				<input type="password" class="form-control" placeholder="Password" id="id_password" name="password">
-				<br>
-				<input type="password" class="form-control" placeholder="Re-enter password" id="confirm_password" name="confirm-password">
-				<br>
-				{% if messages %}
-					{% for message in messages %}
-						<div class="alert alert-danger">{{message|safe}}</div>
-					{% endfor %}
-				{% endif %}
-				<button class="btn btn-theme btn-block" type="submit"><i class="fa fa-lock"></i> REGISTER</button>
-				<hr>
-			</div>
-		  </form>
-	</div>
-  </div>
-{% endblock %}
+  	  {% block main_content%}
+      <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
 
-{% block footer %}
-{% endblock %}
+	  <div id="login-page">
+	  	<div class="container">
+		      <form class="form-login" role="form" method="post" action="{% url 'register' %}" id="login-form">
+				  {% csrf_token %}
+		        <h2 class="form-login-heading">register now</h2>
+		        <div class="login-wrap">
+		            <input type="text" class="form-control" placeholder="User ID" id="id_username" name="username" autofocus>
+		            <br>
+                    <input type="text" class="form-control" placeholder="First Name" id="id_first_name" name="firstname">
+		            <br>
+                    <input type="text" class="form-control" placeholder="Last Name" id="id_last_name" name="lastname">
+		            <br>
+                    <input type="email" class="form-control" placeholder="johndoe@gmail.com" id="id_email" name="email">
+		            <br>
+		            <input type="password" class="form-control" placeholder="Password" id="id_password" name="password">
+                    <br>
+		            <input type="password" class="form-control" placeholder="Re-enter password" id="confirm_password" name="confirm-password">
+					<br>
+					{% if messages %}
+						{% for message in messages %}
+							<div class="alert alert-danger">{{message|safe}}</div>
+						{% endfor %}
+					{% endif %}
+		            <button class="btn btn-theme btn-block" type="submit"><i class="fa fa-lock"></i> REGISTER</button>
+					<hr>
+		        </div>
+		      </form>
 
-{% block end_javascript %}
-	<script src="{% static 'js/jquery.js' %}"></script>
-	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	  	</div>
+	  </div>
+	{% endblock %}
 
-	<!--BACKSTRETCH-->
-	<!-- You can use an image of whatever size. This script will stretch to fit in any screen size.-->
-	<script type="text/javascript" src="{% static 'js/jquery.backstretch.min.js' %}"></script>
-	<script>
-		$.backstretch("{% static 'img/login-bg.jpg' %}", {speed: 500});
-	</script>
-{% endblock %}
+	{% block footer %}
+  	{% endblock %}
+
+  	{% block end_javascript %}
+	  	<script src="{% static 'js/jquery.js' %}"></script>
+		<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+		<!--BACKSTRETCH-->
+		<!-- You can use an image of whatever size. This script will stretch to fit in any screen size.-->
+		<script type="text/javascript" src="{% static 'js/jquery.backstretch.min.js' %}"></script>
+		<script>
+			$.backstretch("{% static 'img/login-bg.jpg' %}", {speed: 500});
+		</script>
+    {% endblock %}
 
 
+  </body>
+</html>
