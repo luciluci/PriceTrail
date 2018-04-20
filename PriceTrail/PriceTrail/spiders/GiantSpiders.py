@@ -29,7 +29,7 @@ class Spider(object):
         self.result = None
         # locale - determines how float numbers are expressed
         # FR locale interprets comma as decimals
-        locale.setlocale(locale.LC_ALL, 'fr_FR')
+        # locale.setlocale(locale.LC_ALL, 'fr_FR')
 
     def get_product(self):
         return self.product

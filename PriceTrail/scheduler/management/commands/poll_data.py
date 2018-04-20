@@ -26,7 +26,8 @@ class Command(BaseCommand):
 
             if httplib.OK == response:
                 prod = spider.get_product()
-                price = locale.atof(prod.price)
+                trimmedPrice = prod.price.replace(',', '.')
+                price = locale.atof(trimmedPrice)
                 # new entry in ProductPrice table
                 new_prod_price = ProductPrice()
                 new_prod_price.price = price

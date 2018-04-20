@@ -174,7 +174,7 @@ def delete_product(request, id):
 
     return HttpResponse('')
 
-
+import locale
 #action used to add a product
 @login_required(login_url='/login')
 def add_new_product(request):
@@ -182,7 +182,8 @@ def add_new_product(request):
     if request.method == 'POST':
         d = json.loads(request.POST['json'])
         product_name = d['product_name']
-        product_price = locale.atof(d['product_price'])
+        trimmedPrice = d['product_price'].replace(',', '.')
+        product_price = locale.atof(trimmedPrice)
         product_url = d['product_url']
         product_shop = d['product_shop']
 
