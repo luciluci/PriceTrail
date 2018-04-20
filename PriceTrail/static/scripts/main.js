@@ -186,3 +186,7 @@ function btnStep3Click(){
     if (isValid)
         nextStepWizard.removeAttr('disabled').trigger('click');
 };
+
+function editEmail(){
+    document.getElementById("update-profile").removeAttr("style");
+}
