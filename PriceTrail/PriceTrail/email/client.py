@@ -13,7 +13,9 @@ class EmailClient:
         data = {}
         data['error'] = 'None'
 
-        html_message = EmailClient._create_html_message(products)
+        emaildata = {"products": products}
+        fileaddr = 'templates/emails/newsletter.html'
+        html_message = EmailClient._create_generic_html_message(emaildata, fileaddr)
 
         try:
             send_mail(
@@ -31,12 +33,36 @@ class EmailClient:
         return data
 
     @staticmethod
-    def _create_html_message(products):
-        template_dir = os.path.join(BASE_DIR, 'templates/emails/newsletter.html')
+    def say_hi(to_email, username):
+        data = {}
+        data['error'] = 'None'
+
+        emaildata = {'username': username}
+        fileaddr = 'templates/emails/newsletter-hi.html'
+        html_message = EmailClient._create_generic_html_message(emaildata, fileaddr)
+
+        try:
+            send_mail(
+                subject='Price drop in shopping-list.ro',
+                message='Hi',
+                from_email='admin@shopping-list.ro',
+                recipient_list=[to_email],
+                fail_silently=False,
+                html_message=html_message,
+            )
+        except smtplib.SMTPException as ex:
+            data['error'] = ex.strerror
+        except socket.error as ex:
+            data['error'] = ex.strerror
+        return data
+
+    @staticmethod
+    def _create_generic_html_message(data, fileaddr):
+        template_dir = os.path.join(BASE_DIR, fileaddr)
 
         email_template = open(template_dir, 'r')
         template = Template(email_template.read())
 
-        context = Context({"products": products})
+        context = Context(data)
 
         return template.render(context)

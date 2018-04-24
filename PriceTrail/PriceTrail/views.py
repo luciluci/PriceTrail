@@ -99,7 +99,7 @@ def login_view(request):
 
 #endpoint "/register"
 def register_view(request):
-
+    reset_session(request)
     if request.method == 'POST':
         username = request.POST['username']
         email = request.POST['email']
@@ -122,6 +122,7 @@ def register_view(request):
             user.last_name = last_name
             user.first_name = first_name
             user.save()
+            EmailClient.say_hi(email, username)
 
         auser = authenticate(username=username, password=password)
         login(request, auser)
