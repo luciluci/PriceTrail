@@ -30,6 +30,10 @@ class Spider(object):
         # locale - determines how float numbers are expressed
         # FR locale interprets comma as decimals
         # locale.setlocale(locale.LC_ALL, 'fr_FR')
+        self.price_parent_div = None
+        self.price_div = None
+        self.title_div = None
+        self.unavailable_div = None
 
     def get_product(self):
         return self.product
@@ -52,9 +56,6 @@ class Spider(object):
         self.result = result
         return result.status_code
 
-    def parse_data(self, url):
-        return httplib.NOT_IMPLEMENTED
-
     @staticmethod
     def get_shop_from_url(url):
         shop_name = url.split(".", 2)
@@ -65,11 +66,11 @@ class Spider(object):
     def pause(self):
         time.sleep(2)
 
-
-class EmagSpider(Spider):
-
-    def __init__(self):
-        super(EmagSpider, self).__init__('emag')
+    def config_spider(self, price_parent_div, price_div, title_div, unavailable_div = None):
+        self.price_parent_div = price_parent_div
+        self.price_div = price_div
+        self.title_div = title_div
+        self.unavailable_div = unavailable_div
 
     def parse_data(self, url):
         if httplib.OK != self._request_url(url):
@@ -77,19 +78,20 @@ class EmagSpider(Spider):
 
         tree = html.fromstring(self.result.content)
 
-        product_node_tree = tree.xpath('//div[@class="product-highlight product-page-pricing"]')
+        product_node_tree = tree.xpath(self.price_parent_div)
 
         prod_price_str = ''
         for element in product_node_tree[0].iter():
-            unavailable_node = element.find('span[@class="label label-unavailable"]')
-            if unavailable_node != None:
-                return data.PRODUCT_UNAVAILABLE
-            new_price_node = element.find('p[@class="product-new-price"]')
-            if new_price_node:
+            if self.unavailable_div:
+                unavailable_node = element.find(self.unavailable_div)
+                if unavailable_node != None:
+                    return data.PRODUCT_UNAVAILABLE
+            new_price_node = element.find(self.price_div)
+            if new_price_node is not None:
                 prod_price_str = new_price_node.text.replace('.', '').strip()
                 break
 
-        page_title = tree.xpath('//h1[@class="page-title"]/text()')
+        page_title = tree.xpath(self.title_div)
 
         if not prod_price_str or not page_title:
             return httplib.NO_CONTENT
@@ -99,6 +101,16 @@ class EmagSpider(Spider):
         self.product.name = page_title[0].strip()
 
         return httplib.OK
+
+
+class EmagSpider(Spider):
+
+    def __init__(self):
+        super(EmagSpider, self).__init__('emag')
+        self.price_parent_div = '//div[@class="product-highlight product-page-pricing"]'
+        self.price_div = 'p[@class="product-new-price"]'
+        self.title_div = '//h1[@class="page-title"]/text()'
+        self.unavailable_div = 'span[@class="label label-unavailable"]'
 
     def pause(self):
         time.sleep(3)
@@ -107,92 +119,26 @@ class AVStoreSpider(Spider):
 
     def __init__(self):
         super(AVStoreSpider, self).__init__('avstore')
+        self.price_parent_div = '//div[@class="st mainproductprice"]'
+        self.price_div = 'span[@class="pret-nou number"]'
+        self.title_div = '//h1[@class="product-title"]/text()'
 
-    def parse_data(self, url):
-        if httplib.OK != self._request_url(url):
-            return self.result.status_code
-
-        tree = html.fromstring(self.result.content)
-
-        product_node_tree = tree.xpath('//div[@class="st mainproductprice"]')
-
-        prod_price_str = ''
-        for element in product_node_tree[0].iter():
-            new_price_node = element.find('span[@class="pret-nou number"]')
-            if new_price_node is not None:
-                prod_price_str = new_price_node.text.replace('.', '').strip()
-                break
-
-        page_title = tree.xpath('//h1[@class="product-title"]/text()')
-
-        if not prod_price_str or not page_title:
-            return httplib.NO_CONTENT
-
-        self.product.price = prod_price_str.replace('.', '').strip()
-        # assume it's the first element in the array
-        self.product.name = page_title[0].strip()
-
-        return httplib.OK
 
 class EVOMagSpider(Spider):
     def __init__(self):
         super(EVOMagSpider, self).__init__('evomag')
+        self.price_parent_div = '//div[@class="price_ajax"]'
+        self.price_div = 'div[@class="pret_rons"]'
+        self.title_div = '//h1[@class="product_name"]/text()'
 
-    def parse_data(self, url):
-        if httplib.OK != self._request_url(url):
-            return self.result.status_code
-
-        tree = html.fromstring(self.result.content)
-
-        product_node_tree = tree.xpath('//div[@class="price_ajax"]')
-
-        prod_price_str = ''
-        for element in product_node_tree[0].iter():
-            new_price_node = element.find('div[@class="pret_rons"]')
-            if new_price_node is not None:
-                prod_price_str = new_price_node.text.replace('.', '').strip()
-                break
-
-        page_title = tree.xpath('//h1[@class="product_name"]/text()')
-
-        if not prod_price_str or not page_title:
-            return httplib.NO_CONTENT
-
-        self.product.price = prod_price_str.replace('.', '').strip()
-        # assume it's the first element in the array
-        self.product.name = page_title[0].strip()
-
-        return httplib.OK
 
 class CelSpider(Spider):
     def __init__(self):
         super(CelSpider, self).__init__('cel')
+        self.price_parent_div = '//div[@class="pret_tabela"]'
+        self.price_div = 'span[@class="productPrice"]'
+        self.title_div = '//h2[@class="productName"]/text()'
 
-    def parse_data(self, url):
-        if httplib.OK != self._request_url(url):
-            return self.result.status_code
-
-        tree = html.fromstring(self.result.content)
-
-        product_node_tree = tree.xpath('//div[@class="pret_tabela"]')
-
-        prod_price_str = ''
-        for element in product_node_tree[0].iter():
-            new_price_node = element.find('span[@class="productPrice"]')
-            if new_price_node is not None:
-                prod_price_str = new_price_node.text.replace('.', '').strip()
-                break
-
-        page_title = tree.xpath('//h2[@class="productName"]/text()')
-
-        if not prod_price_str or not page_title:
-            return httplib.NO_CONTENT
-
-        self.product.price = prod_price_str.replace('.', '').strip()
-        # assume it's the first element in the array
-        self.product.name = page_title[0].strip()
-
-        return httplib.OK
 
 class SpiderGenerator():
 
