@@ -139,6 +139,104 @@ class CelSpider(Spider):
         self.price_div = 'span[@class="productPrice"]'
         self.title_div = '//h2[@class="productName"]/text()'
 
+class GermanosSpider(Spider):
+
+    imgToNumber = {'/images/price/big/zero.gif':  0,
+                   '/images/price/big/one.gif':   1,
+                   '/images/price/big/two.gif':   2,
+                   '/images/price/big/three.gif': 3,
+                   '/images/price/big/four.gif':  4,
+                   '/images/price/big/five.gif':  5,
+                   '/images/price/big/six.gif':   6,
+                   '/images/price/big/seven.gif': 7,
+                   '/images/price/big/eight.gif': 8,
+                   '/images/price/big/nine.gif':  9,
+                   '/images/price/big/cent/zero.gif':  0,
+                   '/images/price/big/cent/one.gif':   1,
+                   '/images/price/big/cent/two.gif':   2,
+                   '/images/price/big/cent/three.gif': 3,
+                   '/images/price/big/cent/four.gif':  4,
+                   '/images/price/big/cent/five.gif':  5,
+                   '/images/price/big/cent/six.gif':   6,
+                   '/images/price/big/cent/seven.gif': 7,
+                   '/images/price/big/cent/eight.gif': 8,
+                   '/images/price/big/cent/nine.gif':  9
+                   }
+
+    comma = '/images/price/big/comma.gif'
+    comma_dash = '/images/price/big/comma-dash.gif'
+
+    def __init__(self):
+        super(GermanosSpider, self).__init__('germanos')
+        self.price_parent_div = '//div[@class="bigprice"]'
+        self.title_div = '//h1[@itemprop="name"]/text()'
+
+    def parse_data(self, url):
+        if httplib.OK != self._request_url(url):
+            return self.result.status_code
+
+        tree = html.fromstring(self.result.content)
+
+        product_node_tree = tree.xpath(self.price_parent_div)
+
+        prod_price = 0
+        price_data = []
+
+        element = product_node_tree[0]
+        if self.unavailable_div:
+            unavailable_node = element.find(self.unavailable_div)
+            if unavailable_node != None:
+                return data.PRODUCT_UNAVAILABLE
+        elem_subitems = element.iter()
+        for img_element in elem_subitems:
+            if img_element is not None and hasattr(img_element, 'attrib'):
+                if 'src' in img_element.attrib:
+                    print (img_element.attrib)
+                    price_data.append(img_element.attrib)
+
+        prod_price = GermanosSpider._get_price_from_array(price_data)
+        page_title = tree.xpath(self.title_div)
+
+        if not prod_price or not page_title:
+            return httplib.NO_CONTENT
+
+        self.product.price = prod_price
+        # assume it's the first element in the array
+        self.product.name = page_title[0].strip()
+
+        return httplib.OK
+
+    @staticmethod
+    def _get_price_from_array(price_data):
+        fidx = 1
+        didx = 1
+        rev = price_data[::-1]
+
+        float_nr = 0
+        decimal_nr = 0.
+        is_decimal = False
+        for item in rev:
+            if item['src'] in GermanosSpider.imgToNumber:
+                nr = GermanosSpider.imgToNumber[item['src']]
+            elif item['src'] == GermanosSpider.comma or item['src'] == GermanosSpider.comma_dash:
+                is_decimal = True
+                continue
+            else:
+                print ("Invalid number")
+                continue
+
+            if is_decimal:
+                decimal_nr += didx * nr
+                didx *= 10
+            else:
+                float_nr += fidx * nr
+                fidx *= 10
+
+        final_float = float(float_nr)/10**len(str(float_nr))
+        final_nr = final_float + decimal_nr
+        return final_nr
+
+
 
 class SpiderGenerator():
 
@@ -147,6 +245,7 @@ class SpiderGenerator():
         self.avstore = AVStoreSpider()
         self.evomag = EVOMagSpider()
         self.cel = CelSpider()
+        self.germanos = GermanosSpider()
 
     def get_spider(self, name):
         if name == "emag":
@@ -157,3 +256,5 @@ class SpiderGenerator():
             return self.evomag
         elif name == "cel":
             return self.cel
+        elif name == 'germanos':
+            return self.germanos
