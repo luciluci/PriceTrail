@@ -1,27 +1,12 @@
+{% extends 'blank.html' %}
+
 {% load staticfiles %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+{% block title %} ShoppingList:{{ data.name }}{% endblock %}
 
-    <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">-->
-    <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
-    <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>-->
-    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>-->
-    <!--<link rel="stylesheet" href="{% static 'css/reg-style.css' %}">-->
-    <!--<link rel="stylesheet" href="{% static 'css/style.css' %}">-->
-    <!--<script src="{% static 'scripts/main.js' %}"></script>-->
-
+{% block begin_javascript%}
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
     <script type="text/javascript" charset="UTF-8" src="https://www.gstatic.com/charts/45.2/loader.js"></script>
-
-
-    <!--<link id="load-css-0" rel="stylesheet" type="text/css" href="https://www.gstatic.com/charts/45.2/css/core/tooltip.css">-->
-    <!--<link id="load-css-1" rel="stylesheet" type="text/css" href="https://www.gstatic.com/charts/45.2/css/util/util.css">-->
     <script type="text/javascript" charset="UTF-8" src="https://www.gstatic.com/charts/45.2/js/jsapi_compiled_format_module.js"></script>
     <script type="text/javascript" charset="UTF-8" src="https://www.gstatic.com/charts/45.2/js/jsapi_compiled_default_module.js"></script>
     <script type="text/javascript" charset="UTF-8" src="https://www.gstatic.com/charts/45.2/js/jsapi_compiled_ui_module.js"></script>
@@ -52,10 +37,22 @@
 
             chart.draw(data, options);
         }
-</script>
+    </script>
+{% endblock %}
 
-</head>
-<body>
-    <div id="curve_chart" style="width: 1300px !important; height: 500px !important">loading...</div>
-</body>
-</html>
+{% block main_content%}
+
+<!-- BASIC FORM ELELEMNTS -->
+<div class="row mt">
+    <div class="col-lg-12">
+      <div class="form-panel panel-body" style="height: 550px">
+          <div id="curve_chart" style="height: 500px !important">loading...</div>
+          <a href="{{data.aff_url}}" target="_blank" class="btn btn-primary">Buy now</a>
+          <a id="deletebtn" class="btn btn-primary right-side" onclick="deleteProduct('{{data.id}}')">Delete</a>
+      </div>
+    </div><!-- col-lg-12-->
+</div><!-- /row -->
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

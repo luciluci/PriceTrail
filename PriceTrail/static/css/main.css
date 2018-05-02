@@ -63,3 +63,11 @@
     font-size: 14px;
     font-family: 'roboto', sans-serif;
 }
+
+.right-side{
+    float: right;
+}
+
+.width80px{
+    width: 80px;
+}

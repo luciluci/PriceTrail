@@ -174,6 +174,7 @@ def delete_product(request, id):
     request.session['unavailable_product_ids'] = unavailable_product_ids
 
     return HttpResponse('')
+    #return redirect('my-products')
 
 import locale
 #action used to add a product
@@ -294,6 +295,33 @@ def display_product(request, id):
         dprod.date_prices.append(p)
 
     return render(request, 'products/product-modal.html', {'data': dprod})
+
+#iframe to be displayed in a modal window
+def product_details_view(request, id):
+    product = Product.objects.get(id=id)
+    dprod = DisplayProduct()
+    dprod.id = product.id
+    dprod.name = product.name
+    dprod.shop = product.shop
+    dprod.url = product.url
+    dprod.price = 20
+    dprod.aff_url = affiliates.Affiliate.createAffiliateURL(dprod.url, dprod.shop)
+
+    dates_prices =  ProductPrice.objects.filter(product_id__exact=product.id)
+    for item in dates_prices:
+        p = DisplayDatePriceProduct(item.date, item.price)
+        dprod.date_prices.append(p)
+
+    product_list = filters.get_display_products_by_user(request.user.id)
+    new_products_list = filters.sort_products_by_importance(product_list)
+    (diff_products, unavailable_products, best_price_products) = filters.get_notification_products(request)
+
+    return render(request, 'products/product-details.html', {'products': new_products_list,
+                                                             'diff_products': diff_products,
+                                                             'unavailable_products': unavailable_products,
+                                                             'best_price_products': best_price_products,
+                                                             'data': dprod
+                                                         })
 
 def reset_session(request):
     session_date = request.session.get('updated_date')

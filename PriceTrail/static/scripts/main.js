@@ -69,7 +69,7 @@ function deleteProduct(pid)
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.open( "GET", '/delete-product/'+pid, false ); // false for synchronous request
         xmlHttp.send( null );
-        location.reload();
+        window.open("/my-products/", "_self");
     }
 }
 
