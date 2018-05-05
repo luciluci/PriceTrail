@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from .utils import general, affiliates
+from .utils.general import get_str_from_html
 from .email.client import EmailClient
 from spiders.GiantSpiders import SpiderGenerator, Spider
 from django.contrib import messages
@@ -182,7 +183,7 @@ def add_new_product(request):
 
     if request.method == 'POST':
         d = json.loads(request.POST['json'])
-        product_name = d['product_name']
+        product_name = get_str_from_html(d['product_name'])
         trimmedPrice = d['product_price'].replace(',', '.')
         product_price = locale.atof(trimmedPrice)
         product_url = d['product_url']

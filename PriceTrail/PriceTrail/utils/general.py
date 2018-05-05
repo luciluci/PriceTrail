@@ -14,3 +14,13 @@ def get_redirect_url(request):
     else:
         return ''
 
+def get_str_from_html(name):
+    html_txt = {'&nbsp;': ' ',
+                '&lt;': '<',
+                '&gt;': '>',
+                '&amp;': '&',
+                '&quot;': '"',
+                '&apos;': '\''}
+    for token in html_txt:
+        name = name.replace(token, html_txt[token])
+    return name
