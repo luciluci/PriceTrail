@@ -44,11 +44,41 @@
 
 <!-- BASIC FORM ELELEMNTS -->
 <div class="row mt">
-    <div class="col-lg-12">
-      <div class="form-panel panel-body" style="height: 550px">
-          <div id="curve_chart" style="height: 500px !important">loading...</div>
-          <a href="{{data.aff_url}}" target="_blank" class="btn btn-primary">Buy now</a>
-          <a id="deletebtn" class="btn btn-primary right-side" onclick="deleteProduct('{{data.id}}')">Delete</a>
+      <div class="col-md-12">
+          <div class="content-panel panel-body" style="height: 680px">
+          <div class="mb">
+            <div class="stock card">
+                <div class="stock current-price">
+                    <div class="row">
+                        <div class="info col-sm-6 col-xs-6"><abbr><i class="fa fa-star-o"></i></abbr>
+                            <time>Today</time>
+                        </div>
+                        <div class="changes col-sm-6 col-xs-6">
+                            {% if data.trend == "ASC" %}
+                            <div class="value up"><i class="fa fa-caret-up hidden-sm hidden-xs"></i>{{data.price}} RON</div>
+                            <div class="change hidden-sm hidden-xs">(+{{data.percent}}%)</div>
+                            {% elif data.trend == "DESC" %}
+                            <div class="value down"><i class="fa fa-caret-down hidden-sm hidden-xs"></i>{{data.price}} RON</div>
+                            <div class="change hidden-sm hidden-xs">(-{{data.percent}}%)</div>
+                            {% elif data.available == False %}
+                            <i class="label label-warning">unavailable</i>
+                            {% elif data.trend == "FIRST_ENTRY"%}
+                            <div class="value down"><i class="fa fa-caret-right hidden-sm hidden-xs"></i>{{data.price}} RON</div>
+                            {% else %}
+                            <div class="value down"><i class="fa fa-caret-right hidden-sm hidden-xs"></i>{{data.price}} RON</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="summary">
+                    <a href="{{data.aff_url}}" target="_blank" class="btn btn-primary">Buy now</a>
+                    <a id="deletebtn" class="btn btn-primary right-side" onclick="deleteProduct('{{data.id}}')">Delete</a>
+                    <!--<strong>18.3 M</strong> <span>SHARES TRADED</span>-->
+                </div>
+            </div>
+        </div>
+
+       <div id="curve_chart" style="height: 500px !important">loading...</div>
       </div>
     </div><!-- col-lg-12-->
 </div><!-- /row -->

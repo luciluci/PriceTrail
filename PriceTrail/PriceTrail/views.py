@@ -12,7 +12,6 @@ from django.shortcuts import render, redirect
 from TailedProducts.models import Product, UserToProduct, ProductPrice, DisplayProduct, DisplayDatePriceProduct
 from TailedProducts.helpers import filters
 
-import locale
 import json
 import httplib
 
@@ -299,18 +298,7 @@ def display_product(request, id):
 #iframe to be displayed in a modal window
 def product_details_view(request, id):
     product = Product.objects.get(id=id)
-    dprod = DisplayProduct()
-    dprod.id = product.id
-    dprod.name = product.name
-    dprod.shop = product.shop
-    dprod.url = product.url
-    dprod.price = 20
-    dprod.aff_url = affiliates.Affiliate.createAffiliateURL(dprod.url, dprod.shop)
-
-    dates_prices =  ProductPrice.objects.filter(product_id__exact=product.id)
-    for item in dates_prices:
-        p = DisplayDatePriceProduct(item.date, item.price)
-        dprod.date_prices.append(p)
+    displ_prod = filters.get_display_product_by_product(product)
 
     product_list = filters.get_display_products_by_user(request.user.id)
     new_products_list = filters.sort_products_by_importance(product_list)
@@ -320,7 +308,7 @@ def product_details_view(request, id):
                                                              'diff_products': diff_products,
                                                              'unavailable_products': unavailable_products,
                                                              'best_price_products': best_price_products,
-                                                             'data': dprod
+                                                             'data': displ_prod
                                                          })
 
 def reset_session(request):

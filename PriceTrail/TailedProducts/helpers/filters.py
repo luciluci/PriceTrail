@@ -1,5 +1,5 @@
 from operator import itemgetter, attrgetter, methodcaller
-from TailedProducts.models import Product, UserToProduct, ProductPrice, DisplayProduct
+from TailedProducts.models import Product, UserToProduct, ProductPrice, DisplayProduct, DisplayDatePriceProduct
 
 from datetime import datetime
 from PriceTrail.utils.affiliates import Affiliate
@@ -72,6 +72,27 @@ def _get_display_products_by_products(products):
         prod.aff_url = Affiliate.createAffiliateURL(prod.url, prod.shop)
         idx += 1
     return display_products
+
+def get_display_product_by_product(product):
+    prod = DisplayProduct()
+    prod.name = product.name
+    prod.url = product.url
+    prod.shop = product.shop
+    prod.id = product.id
+    prod.available = product.available
+
+    prod_dict = _compute_product_trend_price_percent(product.id)
+    prod.trend = prod_dict["trend"]
+    prod.price = prod_dict["price"]
+    prod.percent = prod_dict["percent"]
+    prod.aff_url = Affiliate.createAffiliateURL(prod.url, prod.shop)
+
+    dates_prices = ProductPrice.objects.filter(product_id__exact=product.id)
+    for item in dates_prices:
+        p = DisplayDatePriceProduct(item.date, item.price)
+        prod.date_prices.append(p)
+
+    return prod
 
 def _compute_product_trend_price_percent(product_id):
     product_prices = ProductPrice.objects.filter(product_id__exact=product_id)

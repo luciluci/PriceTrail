@@ -68,6 +68,18 @@
     float: right;
 }
 
+.left-side{
+    float: left;
+}
+
 .width80px{
     width: 80px;
+}
+
+.down {
+	color: #4fd98b !important;
+}
+
+.up {
+	color: #ff3300 !important;
 }
