@@ -10,6 +10,9 @@ import locale
 class Command(BaseCommand):
     help = 'Add price entry for all products'
 
+    def __init__(self):
+        self.logs = []
+
     def handle(self, *args, **options):
         monitored_products = Product.objects.all()
 
@@ -18,7 +21,9 @@ class Command(BaseCommand):
 
         for product in monitored_products:
             if product.shop not in data.SHOPS:
-                print('SHOP NOT SUPPORTED: ' + product.shop)
+                log = 'SHOP NOT SUPPORTED: ' + product.shop
+                self.logs.append(log)
+                print(log)
                 continue
 
             spider = spider_gen.get_spider(product.shop)
@@ -38,13 +43,15 @@ class Command(BaseCommand):
                 new_prod_price.save()
                 # update current_proce in Product table
                 self._detect_best_price(product, price)
-                print(prod.name.encode('utf-8') + ' - OK')
+                log = prod.name.encode('utf-8') + ' - OK'
             elif data.PRODUCT_UNAVAILABLE == response:
-                print(product.name.encode('utf-8') + ' - UNAVAILABLE')
+                log = product.name.encode('utf-8') + ' - UNAVAILABLE'
                 product.available = False
                 product.save()
             else:
-                print(product.name.encode('utf-8') + ' - NOK')
+                log = product.name.encode('utf-8') + ' - NOK'
+            self.logs.append(log)
+            print(log)
 
             spider.pause()
 
@@ -62,3 +69,6 @@ class Command(BaseCommand):
                 product.has_best_price = False
 
         product.save()
+
+    def get_logs(self):
+        return self.logs

@@ -327,7 +327,8 @@ from scheduler.management.commands.poll_data import Command
 def test_update_prices(request):
     cmd = Command()
     cmd.handle()
-    return HttpResponse(json.dumps(''), content_type='application/json')
+    logs = cmd.get_logs()
+    return HttpResponse(json.dumps(logs), content_type='application/json')
 
 def test_email_notifications(request):
     data = {}
