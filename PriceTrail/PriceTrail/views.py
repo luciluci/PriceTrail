@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from scheduler.management.commands.poll_data import Command
 from TailedProducts.models import Product, UserToProduct, ProductPrice, DisplayProduct, DisplayDatePriceProduct
 from TailedProducts.helpers import filters
 
@@ -323,30 +324,35 @@ def reset_session(request):
     if session_date:
         del request.session['unavailable_product_ids']
 
-from scheduler.management.commands.poll_data import Command
+
 def test_update_prices(request):
-    cmd = Command()
-    cmd.handle()
-    logs = cmd.get_logs()
+    if request.user.is_staff:
+        cmd = Command()
+        cmd.handle()
+        logs = cmd.get_logs()
+    else:
+        logs = ['user is not admin',]
     return HttpResponse(json.dumps(logs), content_type='application/json')
 
 def test_email_notifications(request):
     data = {}
-    users = User.objects.all()
-    for user in users:
-        product_list = filters.get_best_display_products_by_user(user.id)
-        data[user.username] = str(len(product_list)) + ' products'
-        if len(product_list) == 0:
-            continue
+    if request.user.is_staff:
+        users = User.objects.all()
+        for user in users:
+            product_list = filters.get_best_display_products_by_user(user.id)
+            data[user.username] = str(len(product_list)) + ' products'
+            if len(product_list) == 0:
+                continue
 
-        if user.first_name or user.last_name:
-            username = user.first_name + ' ' + user.last_name
-        else:
-            username = user.username
-        if user.email:
-            email_data = EmailClient.send_best_price_notification([user.email], product_list, username)
-            data.update(email_data)
-        else:
-            data['warn'] = 'user ' + user.username + ' does not have an email'
-
+            if user.first_name or user.last_name:
+                username = user.first_name + ' ' + user.last_name
+            else:
+                username = user.username
+            if user.email:
+                email_data = EmailClient.send_best_price_notification([user.email], product_list, username)
+                data.update(email_data)
+            else:
+                data['warn'] = 'user ' + user.username + ' does not have an email'
+    else:
+        data['err'] = 'user is not admin'
     return HttpResponse(json.dumps(data), content_type='application/json')
