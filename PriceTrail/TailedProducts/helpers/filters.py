@@ -17,6 +17,30 @@ MAX_BEST_ITEMS = 5
 def sort_products_by_importance(product_list):
     return sorted(product_list, key=attrgetter('available', 'trend'))
 
+def sort_products_by_shop_az(product_list):
+    return sorted(product_list, key=attrgetter('shop'))
+
+def sort_products_by_shop_za(product_list):
+    return sorted(product_list, key=attrgetter('shop'), reverse=True)
+
+def sort_products_by_products_az(product_list):
+    return sorted(product_list, key=attrgetter('name'))
+
+def sort_products_by_products_za(product_list):
+    return sorted(product_list, key=attrgetter('name'), reverse=True)
+
+def sort_products_by_price_az(product_list):
+    return sorted(product_list, key=attrgetter('price'))
+
+def sort_products_by_price_za(product_list):
+    return sorted(product_list, key=attrgetter('price'), reverse=True)
+
+def sort_products_by_status_az(product_list):
+    return sorted(product_list, key=attrgetter('available', 'trend'))
+
+def sort_products_by_status_za(product_list):
+    return sorted(product_list, key=attrgetter('available', 'trend'), reverse=True)
+
 def _get_product_with_highest_price_variation(user_id, by_user_id = True):
     if by_user_id == True:
         user_product_ids = UserToProduct.objects.filter(user__exact=user_id).values('product_id')

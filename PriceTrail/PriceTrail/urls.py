@@ -34,6 +34,7 @@ urlpatterns = [
     url(r'^register/$', register_view, name='register'),
     url(r'^profile/$', profile_view, name='profile'),
     url(r'^my-products/$', my_products_view, name='my-products'),
+    url(r'^my-products/(?P<filter>[\w-]+)', my_products_view, name='my-products'),
     url(r'^delete-product/(?P<id>\d+)/', delete_product, name='delete-product'),
     url(r'^add-new-product/$', add_new_product, name='add-new-product'),
     url(r'^validate-product/$', validate_product, name='validate-product'),

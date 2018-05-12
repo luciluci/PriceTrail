@@ -83,3 +83,8 @@
 .up {
 	color: #ff3300 !important;
 }
+
+.btn-empty{
+    background-color: transparent;
+    border: none;
+}

@@ -146,9 +146,62 @@ def profile_view(request):
 
 #endpoint "/my-products"
 @login_required(login_url='/login')
-def my_products_view(request):
+def my_products_view(request, filter=None):
     product_list = filters.get_display_products_by_user(request.user.id)
-    new_products_list = filters.sort_products_by_importance(product_list)
+
+    session_filter = request.session.get('sort')
+    if not session_filter:
+        if filter == 'store':
+            request.session['sort'] = 'store-az'
+        elif filter == 'products':
+            request.session['sort'] = 'products-az'
+        elif filter == 'price':
+            request.session['sort'] = 'price-az'
+        elif filter == 'status':
+            request.session['sort'] = 'status-az'
+        else:
+            request.session['sort'] = 'status-az'
+    else:
+        if filter == 'store':
+            if session_filter == 'store-az':
+                request.session['sort'] = 'store-za'
+            else:
+                request.session['sort'] = 'store-az'
+        elif filter == 'products':
+            if session_filter == 'products-az':
+                request.session['sort'] = 'products-za'
+            else:
+                request.session['sort'] = 'products-az'
+        elif filter == 'price':
+            if session_filter == 'price-az':
+                request.session['sort'] = 'price-za'
+            else:
+                request.session['sort'] = 'price-az'
+        elif filter == 'status':
+            if session_filter == 'status-az':
+                request.session['sort'] = 'status-za'
+            else:
+                request.session['sort'] = 'status-az'
+        else:
+            request.session['sort'] = 'status-az'
+
+    if request.session['sort'] == 'store-az':
+        new_products_list = filters.sort_products_by_shop_az(product_list)
+    elif request.session['sort'] == 'store-za':
+        new_products_list = filters.sort_products_by_shop_za(product_list)
+    elif request.session['sort'] == 'products-az':
+        new_products_list = filters.sort_products_by_products_az(product_list)
+    elif request.session['sort'] == 'products-za':
+        new_products_list = filters.sort_products_by_products_za(product_list)
+    elif request.session['sort'] == 'price-az':
+        new_products_list = filters.sort_products_by_price_az(product_list)
+    elif request.session['sort'] == 'price-za':
+        new_products_list = filters.sort_products_by_price_za(product_list)
+    elif request.session['sort'] == 'status-az':
+        new_products_list = filters.sort_products_by_status_az(product_list)
+    elif request.session['sort'] == 'status-za':
+        new_products_list = filters.sort_products_by_status_za(product_list)
+
     (diff_products, unavailable_products, best_price_products) = filters.get_notification_products(request)
 
     return render(request, 'products/my-products.html', {'products':new_products_list,

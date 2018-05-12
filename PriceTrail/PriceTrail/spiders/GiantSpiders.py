@@ -5,7 +5,6 @@ import time
 import httplib
 import requests
 import ssl
-import locale
 
 from PriceTrail.utils import data
 

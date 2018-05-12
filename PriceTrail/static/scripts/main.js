@@ -190,3 +190,8 @@ function btnStep3Click(){
 function editEmail(){
     document.getElementById("update-profile").removeAttr("style");
 }
+
+function gotoMyProducts(filter){
+    //window.open('http://localhost:8006/my-products/'+String(filter), "_self");
+    window.open('http://shopping-list.ro/my-products/'+String(filter), "_self");
+}

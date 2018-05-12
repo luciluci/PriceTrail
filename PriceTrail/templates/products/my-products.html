@@ -18,10 +18,10 @@
               <table class="table table-striped table-advance table-hover">
                   <thead>
                       <tr>
-                          <th><i class="fa fa-bullhorn"></i> Store</th>
-                          <th> <i class="glyphicon glyphicon-tag"></i> Product</th>
-                          <th><i class="fa fa-money"></i> Price</th>
-                          <th><i class=" fa fa-edit"></i> Status</th>
+                          <th><button class="btn-empty" onclick="gotoMyProducts('store')"><i class="fa fa-bullhorn"></i> Store</button></th>
+                          <th><button class="btn-empty" onclick="gotoMyProducts('products')"><i class="glyphicon glyphicon-tag"></i> Product</button></th>
+                          <th><button class="btn-empty" onclick="gotoMyProducts('price')"><i class="fa fa-money"></i> Price</button></th>
+                          <th><button class="btn-empty" onclick="gotoMyProducts('status')"><i class="fa fa-edit"></i> Status</button></th>
                           <th></th>
                       </tr>
                   </thead>
@@ -97,8 +97,4 @@
 {% endblock %}
 
 {% block footer %}
-{% endblock %}
-
-{% block more_js%}
-    <script src="{% static 'scripts/main.js' %}"></script>
 {% endblock %}
