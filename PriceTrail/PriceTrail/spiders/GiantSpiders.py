@@ -33,6 +33,8 @@ class Spider(object):
         self.price_div = None
         self.title_div = None
         self.unavailable_div = None
+        self.brand_div = None
+        self.brand_name = None
 
     def get_product(self):
         return self.product
@@ -96,8 +98,19 @@ class Spider(object):
             return httplib.NO_CONTENT
 
         self.product.price = prod_price_str.replace('.', '').strip()
+
         # assume it's the first element in the array
         self.product.name = page_title[0].strip()
+
+        #detect and append brand name in product name
+        if self.brand_div and self.brand_name:
+            brand_div = tree.xpath(self.brand_div)
+            if brand_div:
+                for element in brand_div[0].iter():
+                    brand_name = element.find(self.brand_name)
+                    if brand_name is not None:
+                        self.product.name = brand_name.text + ' ' + self.product.name
+                        continue
 
         return httplib.OK
 
@@ -235,6 +248,15 @@ class GermanosSpider(Spider):
         final_nr = final_float + decimal_nr
         return final_nr
 
+class QuickMobileSpider(Spider):
+
+    def __init__(self):
+        super(QuickMobileSpider, self).__init__('quickmobile')
+        self.price_parent_div = '//div[@class="priceFormat total-price price-fav"]'
+        self.price_div = 'div[@class="priceFormat total-price price-fav product-page-price"]'
+        self.title_div = '//div[@class="product-page-title page-product-title-wth"]/text()'
+        self.brand_div = '//div[@class="product-page-brand"]'
+        self.brand_name = './/a[@href]'
 
 
 class SpiderGenerator():
@@ -245,6 +267,7 @@ class SpiderGenerator():
         self.evomag = EVOMagSpider()
         self.cel = CelSpider()
         self.germanos = GermanosSpider()
+        self.quickmobile = QuickMobileSpider()
 
     def get_spider(self, name):
         if name == "emag":
@@ -257,3 +280,5 @@ class SpiderGenerator():
             return self.cel
         elif name == 'germanos':
             return self.germanos
+        elif name == 'quickmobile':
+            return self.quickmobile

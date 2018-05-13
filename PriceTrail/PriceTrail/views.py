@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 from .utils import general, affiliates
 from .utils.general import get_str_from_html
+from .utils import data
 from .email.client import EmailClient
 from spiders.GiantSpiders import SpiderGenerator, Spider
 from django.contrib import messages
