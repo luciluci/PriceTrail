@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import logging
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +26,7 @@ SECRET_KEY = 'k7tzonk#3d@ic6gar)j&$i*7oolu#=za(boh%@1d1@3p^(jh^z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["shopping-list.ro"]
+ALLOWED_HOSTS = ["localhost", "shopping-list.ro"]
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -104,6 +105,41 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'applogfile': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs.log'),
+            'maxBytes': 1024*1024*15, # 15MB
+            'backupCount': 10,
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'shopping': {
+            'handlers': ['applogfile',],
+            'level': 'WARNING',
+        },
+    }
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -132,3 +168,7 @@ STATICFILES_DIRS = (
 LOGIN_REDIRECT_URL = 'home'
 
 CORS_ORIGIN_ALLOW_ALL=True
+
+MAILCHIMP_API_KEY = 'e228573d1ae7703d4c58396c32d57702-us18'
+
+logger = logging.getLogger('shopping')

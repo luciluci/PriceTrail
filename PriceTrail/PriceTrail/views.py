@@ -44,7 +44,6 @@ def index_view_logged_out(request):
 
 
 def index_view_logged_in(request):
-
     (diff_products, unavailable_products, best_price_products) = filters.get_notification_products(request)
     total_monitored_products = filters.count_total_products_monitored_by_user(request.user.id)
 

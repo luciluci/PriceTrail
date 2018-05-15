@@ -5,6 +5,7 @@ import time
 import httplib
 import requests
 import ssl
+from PriceTrail.settings import logger
 
 from PriceTrail.utils import data
 
@@ -92,7 +93,12 @@ class Spider(object):
                 prod_price_str = new_price_node.text.replace('.', '').strip()
                 break
 
+
         page_title = tree.xpath(self.title_div)
+        if not prod_price_str:
+            logger.error("ERROR! product price not available")
+        if not page_title:
+            logger.error("ERROR! product title not available")
 
         if not prod_price_str or not page_title:
             return httplib.NO_CONTENT
@@ -110,7 +116,7 @@ class Spider(object):
                     brand_name = element.find(self.brand_name)
                     if brand_name is not None:
                         self.product.name = brand_name.text + ' ' + self.product.name
-                        continue
+                        break
 
         return httplib.OK
 
