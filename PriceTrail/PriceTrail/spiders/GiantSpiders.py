@@ -79,10 +79,13 @@ class Spider(object):
             return self.result.status_code
 
         tree = html.fromstring(self.result.content)
-
         product_node_tree = tree.xpath(self.price_parent_div)
 
+        if not product_node_tree:
+            return data.PRODUCT_UNAVAILABLE
+
         prod_price_str = ''
+
         for element in product_node_tree[0].iter():
             if self.unavailable_div:
                 unavailable_node = element.find(self.unavailable_div)
