@@ -109,7 +109,7 @@ class Spider(object):
         self.product.price = prod_price_str.replace('.', '').strip()
 
         # assume it's the first element in the array
-        self.product.name = page_title[0].strip()
+        self.product.name = page_title[-1].strip()
 
         #detect and append brand name in product name
         if self.brand_div and self.brand_name:
