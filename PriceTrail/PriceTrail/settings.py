@@ -26,7 +26,7 @@ SECRET_KEY = 'k7tzonk#3d@ic6gar)j&$i*7oolu#=za(boh%@1d1@3p^(jh^z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "shopping-list.ro"]
+ALLOWED_HOSTS = ["localhost", "shopping-list.ro", 'www.shopping-list.ro']
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'TailedProducts',
-    'scheduler',
+    'scheduler'
 ]
 
 MIDDLEWARE = [
@@ -169,6 +169,6 @@ LOGIN_REDIRECT_URL = 'home'
 
 CORS_ORIGIN_ALLOW_ALL=True
 
-MAILCHIMP_API_KEY = 'e228573d1ae7703d4c58396c32d57702-us18'
+MAILCHIMP_API_KEY = 'cd97a14809e823a17e8338b7ee507fbf-us18'
 
 logger = logging.getLogger('shopping')
