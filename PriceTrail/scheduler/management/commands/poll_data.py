@@ -44,6 +44,8 @@ class Command(BaseCommand):
                 # update current_proce in Product table
                 self._detect_best_price(product, price)
                 log = prod.name.encode('utf-8') + ' - OK'
+                product.available = True
+                product.save()
             elif data.PRODUCT_UNAVAILABLE == response:
                 log = product.name.encode('utf-8') + ' - UNAVAILABLE'
                 product.available = False
@@ -62,7 +64,7 @@ class Command(BaseCommand):
             product.best_price = live_price
             product.has_best_price = False
         else:
-            if float(live_price) < product.best_price:
+            if float(live_price) < float(product.best_price):
                 product.best_price = live_price
                 product.has_best_price = True
             else:
