@@ -4,6 +4,7 @@ from .utils import general, affiliates
 from .utils.general import get_str_from_html
 from .utils import data
 from .email.client import EmailClient
+from .email.mailchimp import ChimpyClient
 from spiders.GiantSpiders import SpiderGenerator, Spider
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -21,6 +22,13 @@ import httplib
 #endpoint "/"
 def index_view(request):
     #reset_session(request)
+
+    # chimpy_client = ChimpyClient()
+    # chimpy_client.ping()
+    # chimpy_client.send_best_price_notification('lucian_apetre@yahoo.com', 'prod', 'lucian')
+    #chimpy_client.send_best_price_notification('lucian.2.apetre@continental-corporation.com', 'prod', 'lucian')
+    #chimpy_client.test_replicate_update_campaign()
+
     if request.user.is_authenticated():
         return index_view_logged_in(request)
     else:
@@ -389,6 +397,9 @@ def test_update_prices(request):
 
 def test_email_notifications(request):
     data = {}
+    chimpy_client = ChimpyClient()
+    chimpy_client.ping()
+
     if request.user.is_staff:
         users = User.objects.all()
         for user in users:
@@ -402,8 +413,11 @@ def test_email_notifications(request):
             else:
                 username = user.username
             if user.email:
-                email_data = EmailClient.send_best_price_notification([user.email], product_list, username)
-                data.update(email_data)
+                #email_data = EmailClient.send_best_price_notification([user.email], product_list, username)
+                #data.update(email_data)
+                val = chimpy_client.send_best_price_notification(user.email, product_list, username)
+                data['email sent'] = val
+
             else:
                 data['warn'] = 'user ' + user.username + ' does not have an email'
     else:

@@ -7,13 +7,35 @@ import socket
 import smtplib
 import os
 
+class EmailFormatter:
+    @staticmethod
+    def create_html_notification(products, username):
+        data = {}
+        data['status'] = 'success'
+
+        email_data = {"products": products, 'username': username}
+        fileaddr = 'templates/emails/newsletter-mailchimp.html'
+        html_message = EmailFormatter._create_generic_html_message(email_data, fileaddr)
+        return html_message
+
+    @staticmethod
+    def _create_generic_html_message(data, fileaddr):
+        template_dir = os.path.join(BASE_DIR, fileaddr)
+
+        email_template = open(template_dir, 'r')
+        template = Template(email_template.read())
+
+        context = Context(data)
+
+        return template.render(context)
+
 class EmailClient:
     @staticmethod
     def send_best_price_notification(to_emails, products, username):
         data = {}
         data['error'] = 'None'
 
-        emaildata = {"products": products}
+        emaildata = {"products": products, 'username': username}
         fileaddr = 'templates/emails/newsletter.html'
         html_message = EmailClient._create_generic_html_message(emaildata, fileaddr)
 
