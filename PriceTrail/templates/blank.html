@@ -44,16 +44,13 @@
       TOP BAR CONTENT & NOTIFICATIONS
       *********************************************************************************************************************************************************** -->
       <!--header start-->
+    {% block header %}
     <header class="header black-bg">
-            {% if user.is_authenticated %}
               <div class="sidebar-toggle-box">
                   <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
               </div>
-            {% endif %}
-            <!--logo start-->
             <a href="/" class="logo"> <b><i class="fa fa-tags"></i> shopping list.ro</b> </a>
             <!--logo end-->
-            {% if user.is_authenticated %}
             <div class="nav notify-row" id="top_menu">
                 <!--  notification start -->
                 <ul class="nav top-menu">
@@ -162,6 +159,7 @@
                 </ul>
                 <!--  notification end -->
             </div>
+          {% if identified_user %}
             <div class="top-menu">
             	<!--<ul class="nav pull-right top-menu">-->
                 <ul class="nav navbar-nav navbar-right pull-right pull-down">
@@ -170,24 +168,17 @@
             </div>
           {% else %}
             <div class="top-menu">
-            	<!--<ul class="nav pull-right top-menu">-->
-                    <!--<li><a class="logout" href="/login">Login</a></li>-->
-                    <!--<li class="active"><a href="#home">Home<span class="sr-only">(current)</span></a></li>-->
-            	<!--</ul>-->
                 <ul class="nav navbar-nav navbar-right pull-right pull-down">
-                    <!--<li class="active"><a href="/#about-id">About<span class="sr-only">(current)</span></a></li>-->
-                    <!--<li><a href="/#notification-id">Notification</a></li>-->
-                    <!--<li><a href="/#products-id">Products</a></li>-->
                     <li><a href="/login">Login</a></li>
                     <li><a href="/register">Register</a></li>
                 </ul>
             </div>
           {% endif %}
         </header>
-      <!--header end-->
+    {% endblock %}
 
+    {% block sidebar %}
     <section id="container" >
-      {% if user.is_authenticated %}
       <aside>
           <div id="sidebar"  class="nav-collapse ">
               <!-- sidebar menu start-->
@@ -234,20 +225,20 @@
               <!-- sidebar menu end-->
           </div>
       </aside>
-      {% endif %}
     </section>
+    {% endblock %}
     <!--sidebar end-->
 
-    {% if user.is_authenticated %}
-        <section id="main-content">
-          <section class="wrapper site-min-height">
-    {% endif %}
+    {% block include_in_main_section_start %}
+    <section id="main-content">
+       <section class="wrapper site-min-height">
+    {% endblock %}
           {% block main_content%}
           {% endblock %}
-    {% if user.is_authenticated %}
-          </section>
-        </section>
-    {% endif %}
+    {% block include_in_main_section_end %}
+       </section>
+    </section>
+    {% endblock %}
 
       {% block footer %}
       <!--footer start-->

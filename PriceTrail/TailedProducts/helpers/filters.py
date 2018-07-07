@@ -1,8 +1,11 @@
 from operator import itemgetter, attrgetter, methodcaller
-from TailedProducts.models import Product, UserToProduct, ProductPrice, DisplayProduct, DisplayDatePriceProduct
-
-from datetime import datetime
+from TailedProducts.models import Product, UserToProduct, ProductPrice, DisplayProduct, DisplayDatePriceProduct, CookieUser
 from PriceTrail.utils.affiliates import Affiliate
+from PriceTrail.settings import logger
+
+from datetime import datetime, date
+from django.contrib.auth.models import User
+import random
 
 def get_current_date():
     now = datetime.now()
@@ -210,6 +213,7 @@ def count_total_products_monitored_by_user(user_id):
     product = UserToProduct.objects.filter(user_id__exact=user_id)
     return product.count()
 
+
 #return list of <product ids> with today's best_price
 def get_ids_of_best_price_products(user_id = None):
 
@@ -220,6 +224,51 @@ def get_ids_of_best_price_products(user_id = None):
     best_price_ids = [x.id for x in products_all if x.has_best_price == True]
     return best_price_ids
 
+
 def get_best_display_products_by_user(user_id = None):
     best_prods_ids = get_ids_of_best_price_products(user_id)
     return _create_display_products_by_ids(best_prods_ids)
+
+
+#return user from cookie id
+#in case there is already an entry in CookieUser with the same cookie id return the user associated to it
+def get_unidentified_user_from_cookie(cookie_id, username=None):
+    if not cookie_id:
+        logger.error('create_user_from_cookie: invalid cookie id')
+    cookie_user_rows = CookieUser.objects.filter(cookie_id__exact=cookie_id)
+    if len(cookie_user_rows) == 0:
+        #check if the username is already created
+        if username:
+            user_rows = User.objects.filter(username__exact=username)
+            if len(cookie_user_rows) == 0:
+                user = _create_unidentified_user(username)
+            else:
+                user = user_rows[0]
+        else:
+            username = 'unidentifieduser' + random.randint(1, 1000) + '_' + str(date.today())
+            user = _create_unidentified_user(username)
+        #create a CookieUser entry
+        if user:
+            cookie_user = CookieUser()
+            cookie_user.cookie_id = cookie_id
+            cookie_user.user = user
+            cookie_user.save()
+    return user
+
+
+# create a user by username only
+# used especially for unregistered users
+def _create_unidentified_user(username):
+    if not username:
+        logger.error('create_unidentified_user: user cannot be created because username is empty')
+        return None
+    user = User.objects.create_user(username)
+    user.save()
+    return user
+
+
+def is_user_identified(user):
+    usr = CookieUser.objects.get(user=user)
+    if usr:
+        return False
+    return True

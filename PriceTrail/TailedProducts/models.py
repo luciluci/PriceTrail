@@ -21,9 +21,15 @@ class ProductPrice(models.Model):
     date = models.DateField(auto_now=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
+
+class CookieUser(models.Model):
+    cookie_id = models.CharField(max_length=50, primary_key=True, null=False, default=1)
+    user = models.ForeignKey(User, default=None)
+
+
 class UserToProduct(models.Model):
     product = models.ForeignKey(Product, default=1)
-    user = models.ForeignKey(User, default=1)
+    user = models.ForeignKey(User, default=None, null=True)
 
 #object to be displayed and cached
 class DisplayProduct():

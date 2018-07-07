@@ -1,10 +1,10 @@
 from __future__ import unicode_literals
 
 from .utils import general, affiliates
-from .utils.general import get_str_from_html
+from .utils.general import get_str_from_html, get_cookie_id, login_unidentified_user
 from .utils import data
 from .email.client import EmailClient
-from spiders.GiantSpiders import SpiderGenerator, Spider
+from .spiders.GiantSpiders import SpiderGenerator, Spider
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -24,6 +24,7 @@ def index_view(request):
     if request.user.is_authenticated():
         return index_view_logged_in(request)
     else:
+        login_unidentified_user(request)
         return index_view_logged_out(request)
 
 
@@ -58,8 +59,12 @@ def index_view_logged_in(request):
                                            })
 
 
-@login_required(login_url='/login')
+# @login_required(login_url='/login')
 def dashboard_view(request):
+    #login unidentified users
+    if not request.user.is_authenticated():
+        if not filters.is_user_identified(request.user):
+            login_unidentified_user(request)
 
     (diff_products, unavailable_products, best_price_products) = filters.get_notification_products(request)
     total_monitored_products = filters.count_total_products_monitored_by_user(request.user.id)
@@ -71,13 +76,13 @@ def dashboard_view(request):
                                                    'total_monitored_products': total_monitored_products,
                                                    'most_changed_product': max_var_product,
                                                    'least_changed_product': min_var_product,
-                                                   'best_price_products': best_price_products
+                                                   'best_price_products': best_price_products,
+                                                   'identified_user': filters.is_user_identified(request.user)
                                                    })
 
 
 #endpoint "/login"
 def login_view(request):
-
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -132,8 +137,13 @@ def register_view(request):
 
 
 #endpoint "/profile"
-@login_required(login_url='/login')
+# @login_required(login_url='/login')
 def profile_view(request):
+    # login unidentified users
+    if not request.user.is_authenticated():
+        if not filters.is_user_identified(request.user):
+            login_unidentified_user(request)
+
     product_list = filters.get_display_products_by_user(request.user.id)
     (diff_products, unavailable_products, best_price_products) = filters.get_notification_products(request)
 
@@ -145,8 +155,13 @@ def profile_view(request):
 
 
 #endpoint "/my-products"
-@login_required(login_url='/login')
+# @login_required(login_url='/login')
 def my_products_view(request, filter=None):
+    # login unidentified users
+    if not request.user.is_authenticated():
+        if not filters.is_user_identified(request.user):
+            login_unidentified_user(request)
+
     product_list = filters.get_display_products_by_user(request.user.id)
 
     session_filter = request.session.get('sort')
