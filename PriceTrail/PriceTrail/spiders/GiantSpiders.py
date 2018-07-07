@@ -203,6 +203,8 @@ class GermanosSpider(Spider):
         prod_price = 0
         price_data = []
 
+        if not product_node_tree:
+           return data.PRODUCT_UNAVAILABLE
         element = product_node_tree[0]
         if self.unavailable_div:
             unavailable_node = element.find(self.unavailable_div)
