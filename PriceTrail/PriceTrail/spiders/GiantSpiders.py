@@ -75,8 +75,9 @@ class Spider(object):
         self.unavailable_div = unavailable_div
 
     def parse_data(self, url):
-        if httplib.OK != self._request_url(url):
-            return self.result.status_code
+        status = self._request_url(url)
+        if httplib.OK != status:
+            return status
 
         tree = html.fromstring(self.result.content)
         product_node_tree = tree.xpath(self.price_parent_div)
@@ -205,6 +206,7 @@ class GermanosSpider(Spider):
 
         if not product_node_tree:
            return data.PRODUCT_UNAVAILABLE
+
         element = product_node_tree[0]
         if self.unavailable_div:
             unavailable_node = element.find(self.unavailable_div)
