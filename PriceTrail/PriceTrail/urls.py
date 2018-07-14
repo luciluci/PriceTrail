@@ -22,7 +22,7 @@ from .views import validate_product, display_product
 from .views import index_view, login_view, register_view, profile_view
 #products related views
 from .views import my_products_view, delete_product, add_new_product, dashboard_view, test_email_notifications, edit_profile_view, product_details_view, \
-                   test_update_prices
+                   test_update_prices, test_update_all_prices
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -47,5 +47,6 @@ urlpatterns = [
 
     #superuser endpoints
     url(r'^test_notifications/$', test_email_notifications, name='test-view'),
-    url(r'^test_update_prices/$', test_update_prices, name='update-prices'),
+    url(r'^test_update_prices/(?P<id>\w+)/', test_update_prices, name='update-prices'),
+    url(r'^test_update_all_prices/$', test_update_all_prices, name='update-all-prices'),
 ]

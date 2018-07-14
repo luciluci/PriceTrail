@@ -377,11 +377,19 @@ def reset_session(request):
     if session_date:
         del request.session['unavailable_product_ids']
 
-
-def test_update_prices(request):
+def test_update_all_prices(request):
     if request.user.is_staff:
         cmd = Command()
         cmd.handle()
+        logs = cmd.get_logs()
+    else:
+        logs = ['user is not admin',]
+    return HttpResponse(json.dumps(logs), content_type='application/json')
+
+def test_update_prices(request, id):
+    if request.user.is_staff:
+        cmd = Command()
+        cmd.handle(id)
         logs = cmd.get_logs()
     else:
         logs = ['user is not admin',]

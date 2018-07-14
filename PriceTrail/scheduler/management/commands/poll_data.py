@@ -25,6 +25,18 @@ class Command(BaseCommand):
                 self.logs.append(log)
                 print(log)
                 continue
+            if len(args) > 0:
+                if args[0] != data.ALL_SHOPS:
+                    for shop in args:
+                        if shop not in data.SHOPS:
+                            log = 'INVALID SHOP: ' + shop
+                            print(log)
+                            continue
+                    if product.shop not in args:
+                        log = 'SHOP SKIPPED AT THIS ITERATION: ' + product.shop
+                        print(log)
+                        continue
+
 
             spider = spider_gen.get_spider(product.shop)
             response = spider.parse_data(product.url)
