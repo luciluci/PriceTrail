@@ -26,7 +26,7 @@ SECRET_KEY = 'k7tzonk#3d@ic6gar)j&$i*7oolu#=za(boh%@1d1@3p^(jh^z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "shopping-list.ro", 'www.shopping-list.ro']
+ALLOWED_HOSTS = ["localhost", "shopping-list.ro", 'www.shopping-list.ro', '127.0.0.1']
 
 CORS_ORIGIN_ALLOW_ALL = True
 

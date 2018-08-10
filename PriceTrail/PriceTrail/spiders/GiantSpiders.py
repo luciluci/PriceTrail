@@ -194,8 +194,9 @@ class GermanosSpider(Spider):
         self.title_div = '//h1[@itemprop="name"]/text()'
 
     def parse_data(self, url):
-        if httplib.OK != self._request_url(url):
-            return self.result.status_code
+        status = self._request_url(url)
+        if httplib.OK != status:
+            return status
 
         tree = html.fromstring(self.result.content)
 
