@@ -33,6 +33,8 @@ def get_str_from_html(name):
 def get_cookie_id(http_cookie_val):
     temp_split = str.split(http_cookie_val, "=")
     if len(temp_split) < 3:
+        if len(temp_split) == 2:
+            return temp_split[1]
         return None
     temp_split = str.split(temp_split[1], ';')
     if len(temp_split) < 2:
