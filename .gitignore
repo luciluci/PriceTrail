@@ -1,17 +1,1 @@
-CronJob/*
-Doodle/*
-Store/*
-Tutorial_Django/*
-simple-django-login/*
-static/*
-simple-django-login/*
-venv/*
-tutorial/*
-
-#sources
 *.pyc
-*.DS_Store
-Templates/*
-test/*
-PriceTrail/PriceTrail/*.pyc
-Tutorial_Django
