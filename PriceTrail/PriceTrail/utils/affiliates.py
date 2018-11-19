@@ -10,11 +10,7 @@ class Affiliate:
     def createAffiliateURL(url, shop):
         if shop == 'evomag':
             return EVOMAG_AFFILIATE_STR + url
-        elif shop == 'cel':
-            return CEL_AFFILIATE_URL + url
         elif shop == 'germanos':
             return GERMANOS_AFFILIATE_URL + url
-        elif shop == 'quickmobile':
-            return QUICKMOBILE_AFFILIATE_URL + url
         else:
             return url

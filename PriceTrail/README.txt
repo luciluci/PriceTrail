@@ -1,5 +1,11 @@
 TO DOs:
 
+
+NEW:
+1. most visited product
+2. most expensive product visited
+3. products from the most visited store
+
 * product name should not have characters like '&amp;'
     they must be replaced
 * split notification products from 'list display' products, since the most of the data is redundant
@@ -84,3 +90,14 @@ Theme:
 Bug:
 * if product not added in step 2, the next button will be unavailable.
 it should become available after another product is added.
+
+Windows venv installation:
+1. run venv for Windows:
+    $ venvWin/Scripts/activate
+2. once in venv, install additional packages:
+    $ pip install Django==1.11
+    $ pip install django-cors-headers
+    $ pip install lxml
+    $ pip install requests
+3. serve all static files
+    $ python manage.py collectstatic
