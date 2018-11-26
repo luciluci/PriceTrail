@@ -5,8 +5,8 @@ import time
 import httplib
 import requests
 import ssl
+import locale
 from PriceTrail.settings import logger
-
 from PriceTrail.utils import data
 
 class Product():
@@ -32,6 +32,7 @@ class Spider(object):
         # locale.setlocale(locale.LC_ALL, 'fr_FR')
         self.price_parent_div = None
         self.price_div = None
+        self.title_parent_div = None
         self.title_div = None
         self.unavailable_div = None
         self.brand_div = None
@@ -68,11 +69,45 @@ class Spider(object):
     def pause(self):
         time.sleep(2)
 
+    def filter_price(self, price):
+        return price
+
+    def filter_title(self, title, tree):
+        return title
+
     def config_spider(self, price_parent_div, price_div, title_div, unavailable_div = None):
         self.price_parent_div = price_parent_div
         self.price_div = price_div
         self.title_div = title_div
         self.unavailable_div = unavailable_div
+
+    def _get_price(self, content_tree):
+        price_parent_node = content_tree.xpath(self.price_parent_div)
+
+        if not price_parent_node:
+            return None
+
+        for element in price_parent_node[0].iter():
+            new_price_node = element.find(self.price_div)
+
+            if new_price_node is not None:
+                if new_price_node.text:
+                    return new_price_node.text.replace('.', '').strip()
+        return None
+
+    def _get_title(self, content_tree):
+        title_parent_node = content_tree.xpath(self.title_parent_div)
+
+        if not title_parent_node:
+            return None
+
+        for element in title_parent_node[0].iter():
+            title_node = element.find(self.title_div)
+
+            if title_node is not None:
+                if title_node.text:
+                    return title_node.text.strip()
+        return None
 
     def parse_data(self, url):
         status = self._request_url(url)
@@ -80,47 +115,18 @@ class Spider(object):
             return status
 
         tree = html.fromstring(self.result.content)
-        product_node_tree = tree.xpath(self.price_parent_div)
 
-        if not product_node_tree:
+        # get price
+        price = self._get_price(tree)
+        if not price:
             return data.PRODUCT_UNAVAILABLE
+        self.product.price = self.filter_price(price)
 
-        prod_price_str = ''
-
-        for element in product_node_tree[0].iter():
-            if self.unavailable_div:
-                unavailable_node = element.find(self.unavailable_div)
-                if unavailable_node != None:
-                    return data.PRODUCT_UNAVAILABLE
-            new_price_node = element.find(self.price_div)
-            if new_price_node is not None:
-                prod_price_str = new_price_node.text.replace('.', '').strip()
-                break
-
-
-        page_title = tree.xpath(self.title_div)
-        if not prod_price_str:
-            logger.error("ERROR! product price not available")
-        if not page_title:
-            logger.error("ERROR! product title not available")
-
-        if not prod_price_str or not page_title:
-            return httplib.NO_CONTENT
-
-        self.product.price = prod_price_str.replace('.', '').strip()
-
-        # assume it's the first element in the array
-        self.product.name = page_title[-1].strip()
-
-        #detect and append brand name in product name
-        if self.brand_div and self.brand_name:
-            brand_div = tree.xpath(self.brand_div)
-            if brand_div:
-                for element in brand_div[0].iter():
-                    brand_name = element.find(self.brand_name)
-                    if brand_name is not None:
-                        self.product.name = brand_name.text + ' ' + self.product.name
-                        break
+        # get title
+        title = self._get_title(tree)
+        if not title:
+            return data.PRODUCT_UNAVAILABLE
+        self.product.name = self.filter_title(title, tree)
 
         return httplib.OK
 
@@ -143,7 +149,10 @@ class AVStoreSpider(Spider):
         super(AVStoreSpider, self).__init__('avstore')
         self.price_parent_div = '//div[@class="st mainproductprice"]'
         self.price_div = 'span[@class="pret-nou number"]'
-        self.title_div = '//h1[@class="product-title"]/text()'
+
+        self.title_parent_div = '//div[@id="detalii"]'
+        self.title_div = 'h1[@class="product-title"]'
+        # self.title_div = '//h1[@class="product-title"]/text()'
 
 
 class EVOMagSpider(Spider):
@@ -151,7 +160,10 @@ class EVOMagSpider(Spider):
         super(EVOMagSpider, self).__init__('evomag')
         self.price_parent_div = '//div[@class="price_ajax"]'
         self.price_div = 'div[@class="pret_rons"]'
-        self.title_div = '//h1[@class="product_name"]/text()'
+
+        self.title_parent_div = '//div[@class="product_right_inside slim"]'
+        # self.title_div = '//h1[@class="product_name"]/text()'
+        self.title_div = 'h1[@class="product_name"]'
 
 
 class CelSpider(Spider):
@@ -159,7 +171,11 @@ class CelSpider(Spider):
         super(CelSpider, self).__init__('cel')
         self.price_parent_div = '//div[@class="pret_tabela"]'
         self.price_div = 'span[@class="productPrice"]'
-        self.title_div = '//h2[@class="productName"]/text()'
+
+        #self.title_div = '//h2[@class="productName"]/text()'
+        self.title_parent_div = '//div[@class="productWrapper"]'
+        self.title_div = 'h2[@class="productName"]'
+
 
 class GermanosSpider(Spider):
 
@@ -191,7 +207,10 @@ class GermanosSpider(Spider):
     def __init__(self):
         super(GermanosSpider, self).__init__('germanos')
         self.price_parent_div = '//div[@class="bigprice"]'
-        self.title_div = '//h1[@itemprop="name"]/text()'
+
+        # self.title_div = '//h1[@itemprop="name"]/text()'
+        self.title_parent_div = '//form[@id="productForm"]'
+        self.title_div = 'h1[@itemprop="name"]'
 
     def parse_data(self, url):
         status = self._request_url(url)
@@ -221,14 +240,13 @@ class GermanosSpider(Spider):
                     price_data.append(img_element.attrib)
 
         prod_price = GermanosSpider._get_price_from_array(price_data)
-        page_title = tree.xpath(self.title_div)
-
-        if not prod_price or not page_title:
-            return httplib.NO_CONTENT
-
         self.product.price = prod_price
-        # assume it's the first element in the array
-        self.product.name = page_title[0].strip()
+
+        # get title
+        title = self._get_title(tree)
+        if not title:
+            return data.PRODUCT_UNAVAILABLE
+        self.product.name = title
 
         return httplib.OK
 
@@ -268,9 +286,44 @@ class QuickMobileSpider(Spider):
         super(QuickMobileSpider, self).__init__('quickmobile')
         self.price_parent_div = '//div[@class="priceFormat total-price price-fav"]'
         self.price_div = 'div[@class="priceFormat total-price price-fav product-page-price"]'
-        self.title_div = '//div[@class="product-page-title page-product-title-wth"]/text()'
+
+        # self.title_div = '//div[@class="product-page-title page-product-title-wth"]/text()'
+        self.title_parent_div = '//div[@class="product-details-padding visible-xs visible-sm"]'
+        self.title_div = 'div[@class="product-page-title"]'
+
         self.brand_div = '//div[@class="product-page-brand"]'
         self.brand_name = './/a[@href]'
+
+    def filter_title(self, title, tree):
+        # detect and append brand name in product name
+        brand_div = tree.xpath(self.brand_div)
+        if brand_div:
+            for element in brand_div[0].iter():
+                brand_name = element.find(self.brand_name)
+                if brand_name is not None:
+                    title = brand_name.text.strip() + ' ' + title.strip()
+                    break
+        return title
+
+
+class OtterSpider(Spider):
+    def __init__(self):
+        super(OtterSpider, self).__init__('otter')
+        self.price_parent_div = '//div[@class="product-details-container"]'
+        self.price_div = 'span[@class="price"]'
+
+        # absolute path to title's parent div
+        self.title_parent_div = '//div[@id="nume_produs"]'
+        # relative path to title's parent div
+        self.title_div = 'span[@class="h1"]'
+
+    # price looks like: u'799,99 RON'
+    def filter_price(self, price):
+        price_tokens = price.split('RON')
+        price = price_tokens[0]
+        trimmedPrice = price.replace(',', '.')
+        price = locale.atof(trimmedPrice)
+        return price
 
 
 class SpiderGenerator():
@@ -282,6 +335,7 @@ class SpiderGenerator():
         self.cel = CelSpider()
         self.germanos = GermanosSpider()
         self.quickmobile = QuickMobileSpider()
+        self.otter = OtterSpider()
 
     def get_spider(self, name):
         if name == "emag":
@@ -296,3 +350,5 @@ class SpiderGenerator():
             return self.germanos
         elif name == 'quickmobile':
             return self.quickmobile
+        elif name == 'otter':
+            return self.otter

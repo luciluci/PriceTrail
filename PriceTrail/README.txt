@@ -101,3 +101,13 @@ Windows venv installation:
     $ pip install requests
 3. serve all static files
     $ python manage.py collectstatic
+
+LXML implementation:
+1. //div[@class="product-page-brand"] refers to absolut location of the element
+    mainly it will extracted from the root node
+
+OBSERVATIONS:
+1. elefant shop has js that loads price AFTER page load, so the price tag is empty when page loads
+possible solution:
+    * wait 1-2 seconds when the req is done
+    * maybe put the prosuct in basket and extract the price from the basket
