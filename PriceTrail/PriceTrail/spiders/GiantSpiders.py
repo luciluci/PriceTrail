@@ -326,6 +326,18 @@ class OtterSpider(Spider):
         return price
 
 
+class RomstalSpider(Spider):
+    def __init__(self):
+        super(RomstalSpider, self).__init__('romstal')
+        self.price_parent_div = '//span[@id="prdView_price"]'
+        self.price_div = 'span[@class="prdPrice"]'
+
+        # absolute path to title's parent div
+        self.title_parent_div = '//div[@class="viewProductMain"]'
+        # relative path to title's parent div
+        self.title_div = 'h1[@class="viewProductTitle"]'
+
+
 class SpiderGenerator():
 
     def __init__(self):
@@ -336,6 +348,7 @@ class SpiderGenerator():
         self.germanos = GermanosSpider()
         self.quickmobile = QuickMobileSpider()
         self.otter = OtterSpider()
+        self.romstal = RomstalSpider()
 
     def get_spider(self, name):
         if name == "emag":
@@ -352,3 +365,5 @@ class SpiderGenerator():
             return self.quickmobile
         elif name == 'otter':
             return self.otter
+        elif name == 'romstal':
+            return self.romstal
