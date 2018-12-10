@@ -177,6 +177,17 @@ class CelSpider(Spider):
         self.title_div = 'h2[@class="productName"]'
 
 
+class VexioSpider(Spider):
+    def __init__(self):
+        super(VexioSpider, self).__init__('vexio')
+        self.price_parent_div = '//div[@class="h3 price-value"]'
+        self.price_div = 'span[@id="price-value"]'
+
+        #self.title_div = '//h2[@class="productName"]/text()'
+        self.title_parent_div = '//div[@class="name col-xs-12"]'
+        self.title_div = 'h1[@itemprop="name"]'
+
+
 class GermanosSpider(Spider):
 
     imgToNumber = {'/images/price/big/zero.gif':  0,
@@ -349,6 +360,7 @@ class SpiderGenerator():
         self.quickmobile = QuickMobileSpider()
         self.otter = OtterSpider()
         self.romstal = RomstalSpider()
+        self.vexio = VexioSpider()
 
     def get_spider(self, name):
         if name == "emag":
@@ -367,3 +379,5 @@ class SpiderGenerator():
             return self.otter
         elif name == 'romstal':
             return self.romstal
+        elif name == 'vexio':
+            return self.vexio
